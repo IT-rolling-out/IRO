@@ -1,0 +1,19 @@
+﻿            [
+                {
+                    cultureName:"ru-RU",
+                    strings:[
+                        "привет",
+                        "что",
+                        "мир"                        
+                    ]
+                },
+                {
+                    cultureName:"en-US",
+                    strings:[
+                        "hello",
+                        "---",
+                        "world"                       
+                    ]
+                }
+
+            ]

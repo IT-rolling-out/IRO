@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.0.3</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection\ItRollingOut.Tools.Reflection.csproj" />
+    <ProjectReference Include="..\..\Storage\ItRollingOut.Tools.Storage\ItRollingOut.Tools.Storage.csproj" />
+    <ProjectReference Include="..\ItRollingOut.Tools\ItRollingOut.Tools.csproj" />
+  </ItemGroup>
+
+</Project>
