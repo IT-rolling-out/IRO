@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 
 namespace ItRollingOut.Reflection.CodeGen
 {

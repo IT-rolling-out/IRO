@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ItRollingOut.Common.Diagnostics
+namespace ItRollingOut.Common.Services
 {
     public static class CommonHelpers
     {

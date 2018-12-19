@@ -1,5 +1,5 @@
-using ItRollingOut.Common.Diagnostics;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
+using ItRollingOut.Common.Services;
 using ChinhDo.Transactions;
 using System;
 using System.Collections.Generic;

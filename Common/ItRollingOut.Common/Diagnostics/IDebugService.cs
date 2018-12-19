@@ -1,4 +1,4 @@
-namespace ItRollingOut.Common.Diagnostics
+namespace ItRollingOut.Common.Services
 {
     public interface IDebugService
     {

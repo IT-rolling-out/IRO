@@ -14,7 +14,7 @@ using ItRollingOut.PureBinding;
 using ItRollingOut.PureBinding.SwaggerSupport;
 using ItRollingOut.Reflection.CodeGen;
 using ItRollingOut.Reflection.SummarySearch;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 using GlobalExceptionHandler.WebApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;

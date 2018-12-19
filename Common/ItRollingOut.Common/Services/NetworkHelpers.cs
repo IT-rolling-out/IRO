@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
-namespace ItRollingOut.Common.Diagnostics
+namespace ItRollingOut.Common.Services
 {
     public static class NetworkHelpers
     {

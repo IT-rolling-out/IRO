@@ -1,6 +1,6 @@
 ﻿using ItRollingOut.PureBinding.Metadata;
 using ItRollingOut.Reflection.CodeGen;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;

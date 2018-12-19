@@ -1,4 +1,4 @@
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 using System;
 using System.Collections.Generic;
 

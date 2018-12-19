@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ItRollingOut.Common.Diagnostics
+namespace ItRollingOut.Common.Services
 {
     public static class TextExtensions
     {

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace ItRollingOut.Common.Diagnostics
+namespace ItRollingOut.Common.Services
 {
     public static class ProcessExtension
     {

@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 
 namespace ItRollingOut.Storage.WithLiteDB
 {

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace ItRollingOut.Common.Diagnostics
+namespace ItRollingOut.Common.Services
 {
     public static class EnvironmentVariables
     {

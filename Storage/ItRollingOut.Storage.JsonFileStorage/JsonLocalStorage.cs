@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 
 namespace ItRollingOut.Storage.JsonFileStorage
 {

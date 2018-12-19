@@ -4,9 +4,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using ItRollingOut.Storage;
-using ItRollingOut.Common.Diagnostics;
+using ItRollingOut.Common.Services;
 using ItRollingOut.Reflection.ModelBinders;
 using ItRollingOut.Reflection;
+using ItRollingOut.Common.Services;
 
 namespace ItRollingOut.CmdLine
 {
