@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection\ItRollingOut.Tools.Reflection.csproj" />
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection\ItRollingOut.Reflection.csproj" />
   </ItemGroup>
 
 </Project>

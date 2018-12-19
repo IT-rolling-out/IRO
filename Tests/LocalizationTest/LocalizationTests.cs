@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using ItRollingOut.Tools.Localization;
+using ItRollingOut.Localization;
 using System.Globalization;
 
-namespace ItRollingOut.Tools.Tests
+namespace ItRollingOut.Tests
 {
     public class LocalizationTests
     {

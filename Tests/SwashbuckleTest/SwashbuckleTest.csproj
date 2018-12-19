@@ -22,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MvcPart\ItRollingOut.Tools.CoolSwagger\ItRollingOut.Tools.CoolSwagger.csproj" />
-    <ProjectReference Include="..\..\MvcPart\ItRollingOut.Tools.MvcExceptionHandler\ItRollingOut.Tools.MvcExceptionHandler.csproj" />
-    <ProjectReference Include="..\..\MvcPart\ItRollingOut.Tools.PureBinding\ItRollingOut.Tools.PureBinding.csproj" />
-    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection.CodeGen\ItRollingOut.Tools.Reflection.CodeGen.csproj" />
-    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection.SummaryWithReflection\ItRollingOut.Tools.Reflection.SummarySearch.csproj" />
+    <ProjectReference Include="..\..\MvcPart\ItRollingOut.CoolSwagger\ItRollingOut.CoolSwagger.csproj" />
+    <ProjectReference Include="..\..\MvcPart\ItRollingOut.MvcExceptionHandler\ItRollingOut.MvcExceptionHandler.csproj" />
+    <ProjectReference Include="..\..\MvcPart\ItRollingOut.PureBinding\ItRollingOut.PureBinding.csproj" />
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection.CodeGen\ItRollingOut.Reflection.CodeGen.csproj" />
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection.SummaryWithReflection\ItRollingOut.Reflection.SummarySearch.csproj" />
   </ItemGroup>
 
 </Project>

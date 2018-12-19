@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\ItRollingOut.Tools.Localization\ItRollingOut.Tools.Localization.csproj" />
+    <ProjectReference Include="..\..\Common\ItRollingOut.Localization\ItRollingOut.Localization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

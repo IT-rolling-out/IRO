@@ -1,4 +1,4 @@
-﻿using ItRollingOut.Tools.Reflection.Map.Metadata;
+﻿using ItRollingOut.Reflection.Map.Metadata;
 using System;
 
 namespace ReflectionMapTest

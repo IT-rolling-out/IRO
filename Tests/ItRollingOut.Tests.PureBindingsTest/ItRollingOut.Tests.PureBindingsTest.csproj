@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MvcPart\ItRollingOut.Tools.MvcPart\ItRollingOut.Tools.MvcPart.csproj" />
-    <ProjectReference Include="..\..\MvcPart\ItRollingOut.Tools.PureBinding\ItRollingOut.Tools.PureBinding.csproj" />
-    <ProjectReference Include="..\..\Storage\ItRollingOut.Tools.Storage.JsonFileStorage\ItRollingOut.Tools.Storage.JsonFileStorage.csproj" />
-    <ProjectReference Include="..\..\Storage\ItRollingOut.Tools.Storage\ItRollingOut.Tools.Storage.csproj" />
+    <ProjectReference Include="..\..\MvcPart\ItRollingOut.MvcPart\ItRollingOut.MvcPart.csproj" />
+    <ProjectReference Include="..\..\MvcPart\ItRollingOut.PureBinding\ItRollingOut.PureBinding.csproj" />
+    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage.JsonFileStorage\ItRollingOut.Storage.JsonFileStorage.csproj" />
+    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage\ItRollingOut.Storage.csproj" />
     <ProjectReference Include="..\IocTests\IocTests.csproj" />
   </ItemGroup>
 

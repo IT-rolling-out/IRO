@@ -1,4 +1,4 @@
-﻿using ItRollingOut.Tools.MvcExceptionHandler.Services;
+﻿using ItRollingOut.MvcExceptionHandler.Services;
 using System;
 
 namespace AlgorithmsTest.TreeAlgoriths

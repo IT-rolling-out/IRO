@@ -1,5 +1,5 @@
-﻿using ItRollingOut.Tools.Reflection.Map;
-using ItRollingOut.Tools.Reflection.ModelBinders;
+﻿using ItRollingOut.Reflection.Map;
+using ItRollingOut.Reflection.ModelBinders;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

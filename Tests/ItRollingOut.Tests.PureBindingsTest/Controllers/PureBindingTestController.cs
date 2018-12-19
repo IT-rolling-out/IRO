@@ -1,4 +1,4 @@
-using ItRollingOut.Tools.PureBinding.Metadata;
+using ItRollingOut.PureBinding.Metadata;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItRollingOut.Tests.PureBindingsTest.Controllers

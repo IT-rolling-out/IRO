@@ -1,5 +1,5 @@
-﻿using ItRollingOut.Tools.MvcPart;
-using ItRollingOut.Tools.PureBinding.Metadata;
+﻿using ItRollingOut.MvcPart;
+using ItRollingOut.PureBinding.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using SwashbuckleTest.Exceptions;
 using System;

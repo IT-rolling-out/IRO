@@ -58,17 +58,17 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection.Map.Metadata\ItRollingOut.Tools.Reflection.Map.Metadata.csproj">
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection.Map.Metadata\ItRollingOut.Reflection.Map.Metadata.csproj">
       <Project>{B7491877-F1B1-4DF9-94EC-19B9B367EB87}</Project>
-      <Name>ItRollingOut.Tools.Reflection.Map.Metadata</Name>
+      <Name>ItRollingOut.Reflection.Map.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection.Map\ItRollingOut.Tools.Reflection.Map.csproj">
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection.Map\ItRollingOut.Reflection.Map.csproj">
       <Project>{a46d5001-685b-4ec6-a735-708c13e805bf}</Project>
-      <Name>ItRollingOut.Tools.Reflection.Map</Name>
+      <Name>ItRollingOut.Reflection.Map</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Reflection\ItRollingOut.Tools.Reflection\ItRollingOut.Tools.Reflection.csproj">
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection\ItRollingOut.Reflection.csproj">
       <Project>{C8E36F8E-0550-4422-A492-B220D3F8DB7A}</Project>
-      <Name>ItRollingOut.Tools.Reflection</Name>
+      <Name>ItRollingOut.Reflection</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

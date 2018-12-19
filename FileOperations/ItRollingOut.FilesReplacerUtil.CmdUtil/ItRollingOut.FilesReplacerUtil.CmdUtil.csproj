@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ApplicationIcon />
+    <Win32Resource />
+    <Version>1.0.3</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\ItRollingOut.CmdLine\ItRollingOut.CmdLine.csproj" />
+    <ProjectReference Include="..\..\Common\ItRollingOut.Common\ItRollingOut.Common.csproj" />
+    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage.JsonFileStorage\ItRollingOut.Storage.JsonFileStorage.csproj" />
+    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage\ItRollingOut.Storage.csproj" />
+    <ProjectReference Include="..\ItRollingOut.FilesReplacerUtil\ItRollingOut.FilesReplacerUtil.csproj" />
+  </ItemGroup>
+
+</Project>

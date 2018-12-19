@@ -1,5 +1,5 @@
-using ItRollingOut.Tools.CmdLine;
-using ItRollingOut.Tools.Storage;
+using ItRollingOut.CmdLine;
+using ItRollingOut.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

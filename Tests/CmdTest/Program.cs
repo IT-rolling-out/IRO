@@ -1,6 +1,6 @@
-﻿using ItRollingOut.Tools.CmdLine;
-using ItRollingOut.Tools.Storage;
-using ItRollingOut.Tools.Storage.JsonFileStorage;
+﻿using ItRollingOut.CmdLine;
+using ItRollingOut.Storage;
+using ItRollingOut.Storage.JsonFileStorage;
 using System;
 using System.Diagnostics;
 using System.IO;

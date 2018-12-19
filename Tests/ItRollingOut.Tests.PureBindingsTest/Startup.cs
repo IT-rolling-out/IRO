@@ -1,7 +1,7 @@
 ﻿using ItRollingOut.CustomIoc;
-using ItRollingOut.Tools.PureBinding;
-using ItRollingOut.Tools.Storage;
-using ItRollingOut.Tools.Storage.JsonFileStorage;
+using ItRollingOut.PureBinding;
+using ItRollingOut.Storage;
+using ItRollingOut.Storage.JsonFileStorage;
 using IocTests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
