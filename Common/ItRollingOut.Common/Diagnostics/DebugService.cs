@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace ItRollingOut.Common.Services
+namespace ItRollingOut.Common.Diagnostics
 {
     public class DebugService : IDebugService
     {

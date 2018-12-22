@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using ItRollingOut.Common.Diagnostics;
 
 namespace ItRollingOut.ImprovedFileOperations
 {
