@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>Configurable and comfortable webview wrapper for xamarin android and ios (and maybe wpf) WebView controls.</Description>
-  </PropertyGroup>
-
-</Project>

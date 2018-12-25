@@ -154,7 +154,7 @@ namespace ItRollingOut.CmdLine
         {
             //Else, will be converted by json.
             //
-            this.WriteLine(
+            WriteLine(
                 $"Difficult type. Will be opened in json editor. ",
                 ConsoleColor.Yellow
                 );            
@@ -183,7 +183,7 @@ namespace ItRollingOut.CmdLine
                 return cachedValue;
             }
 
-            this.ReadLine();
+            ReadLine();
             
             bool isAccept;
             string editedJson = null;
@@ -196,8 +196,8 @@ namespace ItRollingOut.CmdLine
             {
                 editedJson = ConsoleHandler.ReadJson(jsonPrototypeString);               
 
-                this.Write("Accept changes? Press y/n (y): ", ConsoleColor.Yellow);
-                isAccept = this.ReadLine().Trim().StartsWith("n");
+                Write("Accept changes? Press y/n (y): ", ConsoleColor.Yellow);
+                isAccept = ReadLine().Trim().StartsWith("n");
             } while (isAccept);
              
 
@@ -222,7 +222,7 @@ namespace ItRollingOut.CmdLine
                 cachedValueInHint = cachedValueInHint.Substring(0, 80) + "... ";
             }
 
-            this.Write(
+            Write(
                 $"Input ({cachedValueInHint}): ",
                 ConsoleColor.Yellow
                 );
@@ -231,7 +231,7 @@ namespace ItRollingOut.CmdLine
             string val = "";
             if (!options.UseAutoread)
             {
-                val= this.ReadLine();
+                val= ReadLine();
             }
 
             

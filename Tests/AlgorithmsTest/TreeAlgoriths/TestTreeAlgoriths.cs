@@ -1,7 +1,7 @@
-﻿using ItRollingOut.MvcExceptionHandler.Services;
-using System;
+﻿using System;
+using ItRollingOut.Reflection;
 
-namespace AlgorithmsTest.TreeAlgoriths
+namespace IRO_Tests.AlgorithmsTest.TreeAlgoriths
 {
     static class TestTreeAlgoriths
     {

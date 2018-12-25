@@ -211,7 +211,7 @@ namespace ItRollingOut.ImprovedFileOperations
                         _txFileManager.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
                     }
 
-                    string[] files = System.IO.Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
+                    string[] files = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
                     foreach (var newPath in files)
                     {
                         _Copy(

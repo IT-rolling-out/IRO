@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
-namespace SwashbuckleTest.Exceptions
+namespace IRO_Tests.SwashbuckleTest.Exceptions
 {
     public class ClientException : Exception
     {

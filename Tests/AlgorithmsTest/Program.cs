@@ -1,7 +1,7 @@
-﻿using AlgorithmsTest.TreeAlgoriths;
-using System;
+﻿using System;
+using IRO_Tests.AlgorithmsTest.TreeAlgoriths;
 
-namespace AlgorithmsTest
+namespace IRO_Tests.AlgorithmsTest
 {
     class Program
     {

@@ -1,7 +1,7 @@
 using ItRollingOut.PureBinding.Metadata;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ItRollingOut.Tests.PureBindingsTest.Controllers
+namespace IRO_Tests.PureBindingsTest.Controllers
 {
     //Здесь показан пример работы с библиотекой PureBinding. Работает она почти так же, как FromForm,
     //но при этом позволяет получить значения параметров из json, если он был передан в запросе.

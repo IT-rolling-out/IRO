@@ -1,16 +1,15 @@
-﻿using ItRollingOut.CustomIoc;
+﻿using System;
+using ItRollingOut.CustomIoc;
 using ItRollingOut.PureBinding;
 using ItRollingOut.Storage;
 using ItRollingOut.Storage.JsonFileStorage;
-using IocTests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System;
 
-namespace ItRollingOut.Tests.PureBindingsTest
+namespace IRO_Tests.PureBindingsTest
 {
     public class Startup
     {

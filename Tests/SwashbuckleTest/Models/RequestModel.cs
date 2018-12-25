@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SwashbuckleTest.Models
+namespace IRO_Tests.SwashbuckleTest.Models
 {
     /*
     * По итогам теста сгенерированного c# не поддерживается:

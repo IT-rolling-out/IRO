@@ -1,4 +1,4 @@
-﻿namespace ItRollingOut.Tests.PureBindingsTest.Controllers
+﻿namespace IRO_Tests.PureBindingsTest.Controllers
 {
     public class PureBindingTestModel
     {

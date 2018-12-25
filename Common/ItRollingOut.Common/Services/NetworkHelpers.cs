@@ -19,7 +19,7 @@ namespace ItRollingOut.Common.Services
             string res = null;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url));
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
                 request.Method = "GET";
                 request.Timeout = timeoutSeconds * 1000;
 

@@ -1,11 +1,10 @@
+using System;
+using IRO_Tests.SwashbuckleTest.Models;
 using ItRollingOut.MvcPart;
 using ItRollingOut.PureBinding.Metadata;
 using Microsoft.AspNetCore.Mvc;
-using SwashbuckleTest.Models;
-using System;
-using System.Collections.Generic;
 
-namespace SwashbuckleTest.Controllers
+namespace IRO_Tests.SwashbuckleTest.Controllers
 {
     //Здесь показан пример работы с библиотекой PureBinding. Работает она почти так же, как FromForm,
     //но при этом позволяет получить значения параметров из json, если он был передан в запросе.

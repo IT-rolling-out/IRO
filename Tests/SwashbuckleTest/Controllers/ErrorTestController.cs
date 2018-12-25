@@ -1,13 +1,8 @@
-﻿using ItRollingOut.MvcPart;
-using ItRollingOut.PureBinding.Metadata;
+﻿using System.Threading.Tasks;
+using IRO_Tests.SwashbuckleTest.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using SwashbuckleTest.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SwashbuckleTest.Controllers
+namespace IRO_Tests.SwashbuckleTest.Controllers
 {
     [Route("err/[action]")]
     [ApiController]

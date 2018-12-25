@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("SiteToApp.Plugins.FrequentlyUsed.Droid.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("ItRollingOut.Xamarin.Droid.Resource", IsApplication=false)]
 
-namespace SiteToApp.Plugins.FrequentlyUsed.Droid
+namespace ItRollingOut.Xamarin.Droid
 {
 	
 	

@@ -61,11 +61,11 @@ namespace ItRollingOut.CmdLine
         {
             get
             {
-                return StorageHardDrive.Get<string>(this.GetType().Name + ".last_cmd_params").Result;
+                return StorageHardDrive.Get<string>(GetType().Name + ".last_cmd_params").Result;
             }
             set
             {
-                StorageHardDrive.Set(this.GetType().Name + ".last_cmd_params", value);
+                StorageHardDrive.Set(GetType().Name + ".last_cmd_params", value);
             }
         }
 
@@ -95,7 +95,7 @@ namespace ItRollingOut.CmdLine
         public virtual void OnStart()
         {
             Cmd.WriteLine(
-                $"You have been opened command line '{this.GetType().Name}'. Write 'help' to open commands list.",
+                $"You have been opened command line '{GetType().Name}'. Write 'help' to open commands list.",
                 ConsoleColor.Magenta
                 );
         }

@@ -81,7 +81,7 @@ namespace ItRollingOut.Xamarin.Droid
         {
             Srv.GuiContext.Invoke(() =>
             {
-                Toast.MakeText(Android.App.Application.Context, msg, ToastLength.Long).Show();
+                Toast.MakeText(Application.Context, msg, ToastLength.Long).Show();
             });
         }
     }

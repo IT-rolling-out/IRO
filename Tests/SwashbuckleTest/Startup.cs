@@ -1,39 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
+using IRO_Tests.SwashbuckleTest.Exceptions;
 using ItRollingOut.CoolSwagger;
-using ItRollingOut.MvcExceptionHandler;
 using ItRollingOut.MvcExceptionHandler.Models;
 using ItRollingOut.MvcExceptionHandler.Services;
 using ItRollingOut.MvcPart;
 using ItRollingOut.PureBinding;
 using ItRollingOut.PureBinding.SwaggerSupport;
-using ItRollingOut.Reflection.CodeGen;
-using ItRollingOut.Reflection.SummarySearch;
-using ItRollingOut.Common.Services;
-using GlobalExceptionHandler.WebApi;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using SwashbuckleTest.Exceptions;
-using SwashbuckleTest.Models;
 
-namespace SwashbuckleTest
+namespace IRO_Tests.SwashbuckleTest
 {
     public class Startup
     {
@@ -174,31 +159,26 @@ namespace SwashbuckleTest
                 s.Mapping((builder) =>
                 {
                     //Регистрируем исключение по http коду
-                    builder.Register(
-                        httpCode: 500,
+                    ErrorInfoBuilderExtensions.Register(builder, httpCode: 500,
                         errorKey: "InternalServerError"
                         );
-                    builder.Register(
-                        httpCode: 403,
+                    ErrorInfoBuilderExtensions.Register(builder, httpCode: 403,
                         errorKey: "Forbidden"
                         );
-                    builder.Register(
-                        httpCode: 401,
+                    ErrorInfoBuilderExtensions.Register(builder, httpCode: 401,
                         errorKey: "Unauthorized"
                         );
-                    builder.Register(
-                        httpCode: 400,
+                    ErrorInfoBuilderExtensions.Register(builder, httpCode: 400,
                         errorKey: "BadRequest"
                         );
 
                     //Регистрируем исключение, явно указывая ErrorKey.
-                    builder.Register<ArgumentNullException>(
-                        httpCode: 555,
+                    ErrorInfoBuilderExtensions.Register<ArgumentNullException>(builder, httpCode: 555,
                         errorKey: "CustomErrorKey"
                         );
 
                     //Регистрируем исключение автоматически указав ErrorKey - "NullReference" и используя http код по-умолчанию.
-                    builder.Register<NullReferenceException>();
+                    ErrorInfoBuilderExtensions.Register<NullReferenceException>(builder);
 
                     //Альтернативный способ регистрации.
                     builder.Register(new ErrorInfo()
@@ -214,8 +194,7 @@ namespace SwashbuckleTest
                     //    httpCode: 411,
                     //    errorKeyPrefix: "BaseEx_"
                     //    );
-                    builder.RegisterAllAssignable<ClientException>(
-                        httpCode: 422,
+                    ErrorInfoBuilderExtensions.RegisterAllAssignable<ClientException>(builder, httpCode: 422,
                         errorKeyPrefix: "ClientEx_"
                         );                    
                 });

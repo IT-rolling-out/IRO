@@ -1,13 +1,12 @@
-﻿using ItRollingOut.MvcExceptionHandler.Models;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.IO;
+﻿using System;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+using ItRollingOut.MvcExceptionHandler.Models;
+using ItRollingOut.MvcExceptionHandler.Services;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
-namespace ItRollingOut.MvcExceptionHandler.Services
+namespace ItRollingOut.MvcExceptionHandler
 {
     class ExHandlerMiddleware
     {

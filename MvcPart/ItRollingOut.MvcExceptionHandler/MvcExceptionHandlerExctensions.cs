@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 
-namespace ItRollingOut.MvcExceptionHandler.Services
+namespace ItRollingOut.MvcExceptionHandler
 {
     public static class MvcExceptionHandlerExctensions
     {

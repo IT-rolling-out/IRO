@@ -1,12 +1,7 @@
-using ItRollingOut.CustomIoc;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using ItRollingOut.CustomIoc;
 
-namespace IocTests
+namespace IRO_Tests.IocTests
 {
     public class IocTest
     {

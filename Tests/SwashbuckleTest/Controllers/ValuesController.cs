@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using IRO_Tests.SwashbuckleTest.Models;
 using ItRollingOut.CoolSwagger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using SwashbuckleTest.Models;
 
-namespace SwashbuckleTest.Controllers
+namespace IRO_Tests.SwashbuckleTest.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]    

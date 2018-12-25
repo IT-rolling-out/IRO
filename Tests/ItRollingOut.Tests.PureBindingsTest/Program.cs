@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace ItRollingOut.Tests.PureBindingsTest
+namespace IRO_Tests.PureBindingsTest
 {
     public class Program
     {

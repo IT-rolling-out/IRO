@@ -1,4 +1,4 @@
-﻿namespace SwashbuckleTest.Models
+﻿namespace IRO_Tests.SwashbuckleTest.Models
 {
     public class CustomClass:BaseCustomClass
     {

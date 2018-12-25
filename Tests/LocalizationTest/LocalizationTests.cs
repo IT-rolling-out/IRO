@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using ItRollingOut.Localization;
+﻿using System.Collections.Generic;
 using System.Globalization;
+using ItRollingOut.Localization;
+using Xunit;
 
-namespace ItRollingOut.Tests
+namespace IRO_Tests.LocalizationTest
 {
     public class LocalizationTests
     {

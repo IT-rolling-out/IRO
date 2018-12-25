@@ -1,12 +1,10 @@
-﻿using ItRollingOut.CmdLine;
+﻿using System.IO;
+using System.Reflection;
+using ItRollingOut.CmdLine;
 using ItRollingOut.Storage;
 using ItRollingOut.Storage.JsonFileStorage;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 
-namespace CmdTest
+namespace IRO_Tests.CmdTest
 {
     class Program
     {

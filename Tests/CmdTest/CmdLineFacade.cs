@@ -1,11 +1,8 @@
-using ItRollingOut.CmdLine;
-using ItRollingOut.Storage;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+using ItRollingOut.CmdLine;
 
-namespace CmdTest
+namespace IRO_Tests.CmdTest
 {
     public class CmdLineFacade : CommandLineBase
     {

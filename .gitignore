@@ -33,3 +33,6 @@ packages/
 /publish_to_nugetorg.cmd
 **/wwwroot
 local_nuget_path.txt
+
+#resources
+**/Resources/Resource.Designer.cs

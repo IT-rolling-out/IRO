@@ -55,7 +55,7 @@ namespace ItRollingOut.Reflection.CodeGen
             }
             catch (Exception ex)
             {
-                throw new CodeGenException($"Exception in {this.GetType().Name}.", ex);
+                throw new CodeGenException($"Exception in {GetType().Name}.", ex);
             }
         }
 
