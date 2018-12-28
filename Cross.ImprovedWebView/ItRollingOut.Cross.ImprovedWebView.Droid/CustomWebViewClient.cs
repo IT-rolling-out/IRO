@@ -24,8 +24,6 @@ namespace ItRollingOut.Cross.ImprovedWebView.Droid
         {
             base.OnPageFinished(view, url);
 
-            
-
             var args = _errorLoadArgs
                 ?? new LoadFinishedEventArgs()
                 {

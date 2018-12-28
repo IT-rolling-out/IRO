@@ -225,7 +225,7 @@ namespace ItRollingOut.FilesReplacerUtil
                 );
 
             //Задаем все пути относительно файла настроект.
-            if (!ImprovedPath.IsFullPath(_settings.OutputDir.DirPath))
+            if (_settings.OutputDir!=null && !ImprovedPath.IsFullPath(_settings.OutputDir.DirPath))
             {
                 _settings.OutputDir.DirPath = Path.Combine(
                     _settingsFileDirectoryPath,
@@ -245,7 +245,7 @@ namespace ItRollingOut.FilesReplacerUtil
 
         void ThrowIfWrongDirInfo(FilesReplacerSettings settings)
         {
-            if (settings.OutputDir.DirInfoMarks == null)
+            if (settings.OutputDir?.DirInfoMarks == null)
                 return;
             foreach (var mark in settings.OutputDir.DirInfoMarks)
             {

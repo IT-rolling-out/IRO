@@ -37,19 +37,18 @@ namespace ItRollingOut.FilesReplacerUtil.CmdUtil
             var assemblyFile = Assembly.GetExecutingAssembly().Location;
             var assemblyFileName = Path.GetFileName(assemblyFile);
             var appDir = assemblyFile.Remove(assemblyFile.Length - assemblyFileName.Length);
-            var pathToDir = Path.Combine(appDir, ".\\cmd\\");
+            var pathToDir = Path.Combine(appDir, "cmd");
 
             string script = $"\ncall dotnet \"{assemblyFile}\" %*" +
                 $"\npause";
 
-            if (!Directory.Exists("cmd"))
+            if (!Directory.Exists(pathToDir))
             {
-                Directory.CreateDirectory("cmd");
+                Directory.CreateDirectory(pathToDir);
             }
             File.WriteAllText(
-                Path.Combine(appDir,"cmd/files_replacer.cmd"), 
+                Path.Combine(pathToDir,"files_replacer.cmd"), 
                 script);
-
             
             EnvironmentVariables.AddToPathVariable(pathToDir);
             Cmd.WriteLine("Added to Path.");
@@ -106,6 +105,7 @@ namespace ItRollingOut.FilesReplacerUtil.CmdUtil
         {
             var settings = ResolveSettings(path, ref path);
             var fr = new FilesReplacer(settings, path);
+            Cmd.WriteLine("Searching files, please wait...");
             var foundFilesWithCopyDestinations = fr.FindWithCopyDestinations();
             var listStr = CopiedFilesListToString(foundFilesWithCopyDestinations);
             Cmd.WriteLine("Found files and their copy destinations.");
@@ -123,6 +123,7 @@ namespace ItRollingOut.FilesReplacerUtil.CmdUtil
         {
             var settings = ResolveSettings(path, ref path);
             var fr = new FilesReplacer(settings, path);
+            Cmd.WriteLine("Searching files, please wait...");
             var foundFiles = fr.Find();
             Cmd.WriteLine("Files that will be deleted.");
             Cmd.WriteLine(foundFiles, prettyJson: true);
@@ -139,6 +140,7 @@ namespace ItRollingOut.FilesReplacerUtil.CmdUtil
         {
             var settings = ResolveSettings(path, ref path);
             var fr = new FilesReplacer(settings, path);
+            Cmd.WriteLine("Searching files, please wait...");
             var foundFiles = fr.Find();
             Cmd.WriteLine("Found files.");
             Cmd.WriteLine(foundFiles, prettyJson: true);

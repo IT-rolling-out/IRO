@@ -7,6 +7,11 @@ using ItRollingOut.Cross.ImprovedWebView.Plugins;
 
 namespace ItRollingOut.Cross.ImprovedWebView
 {
+    public interface IWebViewWrap
+    {
+    
+    }
+
     public abstract class WebViewWrap:IDisposable
     {
         public bool IsDisposed { get; private set; }
