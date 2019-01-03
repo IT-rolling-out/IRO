@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Common", "Common\ItRollingOut.Common\ItRollingOut.Common.csproj", "{52DBA08F-AD9B-4438-94ED-710EEB5B47F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Common", "Common\IRO.Common\IRO.Common.csproj", "{52DBA08F-AD9B-4438-94ED-710EEB5B47F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CCD136CE-A389-464D-9F0F-88F6CAC00412}"
 EndProject
@@ -15,29 +15,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MvcPart", "MvcPart", "{E7F8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomIoc", "CustomIoc", "{E2104BBE-9E87-4547-8D49-597D1768F71B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.PureBindingsTest", "Tests\ItRollingOut.Tests.PureBindingsTest\IRO_Tests.PureBindingsTest.csproj", "{D28099FE-0FF0-4E29-8580-2629F369D92E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.PureBindingsTest", "Tests\IRO.Tests.PureBindingsTest\IRO_Tests.PureBindingsTest.csproj", "{D28099FE-0FF0-4E29-8580-2629F369D92E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection", "Reflection\ItRollingOut.Reflection\ItRollingOut.Reflection.csproj", "{C8E36F8E-0550-4422-A492-B220D3F8DB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection", "Reflection\IRO.Reflection\IRO.Reflection.csproj", "{C8E36F8E-0550-4422-A492-B220D3F8DB7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection.SummarySearch", "Reflection\ItRollingOut.Reflection.SummaryWithReflection\ItRollingOut.Reflection.SummarySearch.csproj", "{A0016FB8-B617-4335-9C74-56BCADE6509A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.SummarySearch", "Reflection\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj", "{A0016FB8-B617-4335-9C74-56BCADE6509A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.MvcPart", "MvcPart\ItRollingOut.MvcPart\ItRollingOut.MvcPart.csproj", "{FC0D84C8-2F40-44EC-84DC-5DA395007A31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.MvcPart", "MvcPart\IRO.MvcPart\IRO.MvcPart.csproj", "{FC0D84C8-2F40-44EC-84DC-5DA395007A31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.PureBinding", "MvcPart\ItRollingOut.PureBinding\ItRollingOut.PureBinding.csproj", "{15029C9F-20A6-4EAF-93C2-CD99B10452D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.PureBinding", "MvcPart\IRO.PureBinding\IRO.PureBinding.csproj", "{15029C9F-20A6-4EAF-93C2-CD99B10452D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.CustomIoc", "CustomIoc\ItRollingOut.CustomIoc\ItRollingOut.CustomIoc.csproj", "{22AA9D30-A0BE-464A-89E7-5C371BAEFD92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CustomIoc", "CustomIoc\IRO.CustomIoc\IRO.CustomIoc.csproj", "{22AA9D30-A0BE-464A-89E7-5C371BAEFD92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileOperations", "FileOperations", "{238F0AA8-E751-40AE-9ABC-6CCB9FB04BF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.ImprovedFileOperations", "FileOperations\ItRollingOut.ImprovedFileOperations\ItRollingOut.ImprovedFileOperations.csproj", "{87CF3BD3-1467-4B60-9C16-A36AE364FBB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.ImprovedFileOperations", "FileOperations\IRO.ImprovedFileOperations\IRO.ImprovedFileOperations.csproj", "{87CF3BD3-1467-4B60-9C16-A36AE364FBB0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.SwashbuckleTest", "Tests\SwashbuckleTest\IRO_Tests.SwashbuckleTest.csproj", "{2E389120-CFB4-4449-BD8A-C81897433D91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.CoolSwagger", "MvcPart\ItRollingOut.CoolSwagger\ItRollingOut.CoolSwagger.csproj", "{481382A9-EEB0-491F-9DBF-CC954AADB62F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CoolSwagger", "MvcPart\IRO.CoolSwagger\IRO.CoolSwagger.csproj", "{481382A9-EEB0-491F-9DBF-CC954AADB62F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection.CodeGen", "Reflection\ItRollingOut.Reflection.CodeGen\ItRollingOut.Reflection.CodeGen.csproj", "{A6C54B09-1DEE-4BBB-809B-3D06152AB39D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.CodeGen", "Reflection\IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj", "{A6C54B09-1DEE-4BBB-809B-3D06152AB39D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.MvcExceptionHandler", "MvcPart\ItRollingOut.MvcExceptionHandler\ItRollingOut.MvcExceptionHandler.csproj", "{E3D63875-0DD5-40A8-9490-3D6C1EC96AEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.MvcExceptionHandler", "MvcPart\IRO.MvcExceptionHandler\IRO.MvcExceptionHandler.csproj", "{E3D63875-0DD5-40A8-9490-3D6C1EC96AEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

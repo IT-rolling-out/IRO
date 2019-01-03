@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.CmdLine", "Common\ItRollingOut.CmdLine\ItRollingOut.CmdLine.csproj", "{842F7620-085C-4DEF-B206-2F50259C5DCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CmdLine", "Common\IRO.CmdLine\IRO.CmdLine.csproj", "{842F7620-085C-4DEF-B206-2F50259C5DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Common", "Common\ItRollingOut.Common\ItRollingOut.Common.csproj", "{52DBA08F-AD9B-4438-94ED-710EEB5B47F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Common", "Common\IRO.Common\IRO.Common.csproj", "{52DBA08F-AD9B-4438-94ED-710EEB5B47F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Storage", "Storage\ItRollingOut.Storage\ItRollingOut.Storage.csproj", "{C9205D3F-4F2A-4932-94ED-37C8A8F4E97B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Storage", "Storage\IRO.Storage\IRO.Storage.csproj", "{C9205D3F-4F2A-4932-94ED-37C8A8F4E97B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Storage.JsonFileStorage", "Storage\ItRollingOut.Storage.JsonFileStorage\ItRollingOut.Storage.JsonFileStorage.csproj", "{E8056F3A-5CEC-491E-9B96-984BAB32AA1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Storage.JsonFileStorage", "Storage\IRO.Storage.JsonFileStorage\IRO.Storage.JsonFileStorage.csproj", "{E8056F3A-5CEC-491E-9B96-984BAB32AA1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Storage.WithLiteDB", "Storage\ItRollingOut.Storage.WithLiteDB\ItRollingOut.Storage.WithLiteDB.csproj", "{DAA72853-BDCB-4D05-9FE5-254DD8115648}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Storage.WithLiteDB", "Storage\IRO.Storage.WithLiteDB\IRO.Storage.WithLiteDB.csproj", "{DAA72853-BDCB-4D05-9FE5-254DD8115648}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Localization", "Common\ItRollingOut.Localization\ItRollingOut.Localization.csproj", "{CD3CF8E5-EC81-457D-A769-FD010378D120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Localization", "Common\IRO.Localization\IRO.Localization.csproj", "{CD3CF8E5-EC81-457D-A769-FD010378D120}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO_Tests.ReflectionMapTest", "Tests\ReflectionMapTest\IRO_Tests.ReflectionMapTest.csproj", "{05F1941A-441F-411E-BBCC-26E3BA288AD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO_Tests.ReflectionMapTest", "Tests\IRO_Tests.ReflectionMapTest\IRO_Tests.ReflectionMapTest.csproj", "{05F1941A-441F-411E-BBCC-26E3BA288AD9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CCD136CE-A389-464D-9F0F-88F6CAC00412}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.LocalizationTest", "Tests\LocalizationTest\IRO_Tests.LocalizationTest.csproj", "{7AA2E5B6-3077-49A4-9BE7-9459C7085223}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.LocalizationTest", "Tests\IRO_Tests.LocalizationTest\IRO_Tests.LocalizationTest.csproj", "{7AA2E5B6-3077-49A4-9BE7-9459C7085223}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.CmdTest", "Tests\CmdTest\IRO_Tests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.CmdTest", "Tests\IRO_Tests.CmdTest\IRO_Tests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{7F497377-DC0C-4D28-9B3C-250B06D88790}"
 EndProject
@@ -33,41 +33,41 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MvcPart", "MvcPart", "{E7F8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomIoc", "CustomIoc", "{E2104BBE-9E87-4547-8D49-597D1768F71B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.PureBindingsTest", "Tests\ItRollingOut.Tests.PureBindingsTest\IRO_Tests.PureBindingsTest.csproj", "{D28099FE-0FF0-4E29-8580-2629F369D92E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.PureBindingsTest", "Tests\IRO_Tests.PureBindingsTest\IRO_Tests.PureBindingsTest.csproj", "{D28099FE-0FF0-4E29-8580-2629F369D92E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection", "Reflection\ItRollingOut.Reflection\ItRollingOut.Reflection.csproj", "{C8E36F8E-0550-4422-A492-B220D3F8DB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection", "Reflection\IRO.Reflection\IRO.Reflection.csproj", "{C8E36F8E-0550-4422-A492-B220D3F8DB7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection.Map", "Reflection\ItRollingOut.Reflection.Map\ItRollingOut.Reflection.Map.csproj", "{A46D5001-685B-4EC6-A735-708C13E805BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.Map", "Reflection\IRO.Reflection.Map\IRO.Reflection.Map.csproj", "{A46D5001-685B-4EC6-A735-708C13E805BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection.Map.Metadata", "Reflection\ItRollingOut.Reflection.Map.Metadata\ItRollingOut.Reflection.Map.Metadata.csproj", "{B7491877-F1B1-4DF9-94EC-19B9B367EB87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.Map.Metadata", "Reflection\IRO.Reflection.Map.Metadata\IRO.Reflection.Map.Metadata.csproj", "{B7491877-F1B1-4DF9-94EC-19B9B367EB87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection.SummarySearch", "Reflection\ItRollingOut.Reflection.SummaryWithReflection\ItRollingOut.Reflection.SummarySearch.csproj", "{A0016FB8-B617-4335-9C74-56BCADE6509A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.SummarySearch", "Reflection\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj", "{A0016FB8-B617-4335-9C74-56BCADE6509A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.MvcPart", "MvcPart\ItRollingOut.MvcPart\ItRollingOut.MvcPart.csproj", "{FC0D84C8-2F40-44EC-84DC-5DA395007A31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.MvcPart", "MvcPart\IRO.MvcPart\IRO.MvcPart.csproj", "{FC0D84C8-2F40-44EC-84DC-5DA395007A31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.PureBinding", "MvcPart\ItRollingOut.PureBinding\ItRollingOut.PureBinding.csproj", "{15029C9F-20A6-4EAF-93C2-CD99B10452D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.PureBinding", "MvcPart\IRO.PureBinding\IRO.PureBinding.csproj", "{15029C9F-20A6-4EAF-93C2-CD99B10452D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.CustomIoc", "CustomIoc\ItRollingOut.CustomIoc\ItRollingOut.CustomIoc.csproj", "{22AA9D30-A0BE-464A-89E7-5C371BAEFD92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CustomIoc", "CustomIoc\IRO.CustomIoc\IRO.CustomIoc.csproj", "{22AA9D30-A0BE-464A-89E7-5C371BAEFD92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileOperations", "FileOperations", "{238F0AA8-E751-40AE-9ABC-6CCB9FB04BF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.FilesReplacerUtil", "FileOperations\ItRollingOut.FilesReplacerUtil\ItRollingOut.FilesReplacerUtil.csproj", "{7A6D2B89-EC23-469B-AFE4-0C75DD492605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.FilesReplacerUtil", "FileOperations\IRO.FilesReplacerUtil\IRO.FilesReplacerUtil.csproj", "{7A6D2B89-EC23-469B-AFE4-0C75DD492605}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.FilesReplacerUtil.CmdUtil", "FileOperations\ItRollingOut.FilesReplacerUtil.CmdUtil\ItRollingOut.FilesReplacerUtil.CmdUtil.csproj", "{A977FCA1-E69C-4989-9698-1166069A9530}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.FilesReplacerUtil.CmdUtil", "FileOperations\IRO.FilesReplacerUtil.CmdUtil\IRO.FilesReplacerUtil.CmdUtil.csproj", "{A977FCA1-E69C-4989-9698-1166069A9530}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.ImprovedFileOperations", "FileOperations\ItRollingOut.ImprovedFileOperations\ItRollingOut.ImprovedFileOperations.csproj", "{87CF3BD3-1467-4B60-9C16-A36AE364FBB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.ImprovedFileOperations", "FileOperations\IRO.ImprovedFileOperations\IRO.ImprovedFileOperations.csproj", "{87CF3BD3-1467-4B60-9C16-A36AE364FBB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.IocTests", "Tests\IocTests\IRO_Tests.IocTests.csproj", "{CE8854AB-1713-484E-AA49-1B88459865C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.IocTests", "Tests\IRO_Tests.IocTests\IRO_Tests.IocTests.csproj", "{CE8854AB-1713-484E-AA49-1B88459865C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.SwashbuckleTest", "Tests\SwashbuckleTest\IRO_Tests.SwashbuckleTest.csproj", "{2E389120-CFB4-4449-BD8A-C81897433D91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.SwashbuckleTest", "Tests\IRO_Tests.SwashbuckleTest\IRO_Tests.SwashbuckleTest.csproj", "{2E389120-CFB4-4449-BD8A-C81897433D91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.CoolSwagger", "MvcPart\ItRollingOut.CoolSwagger\ItRollingOut.CoolSwagger.csproj", "{481382A9-EEB0-491F-9DBF-CC954AADB62F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CoolSwagger", "MvcPart\IRO.CoolSwagger\IRO.CoolSwagger.csproj", "{481382A9-EEB0-491F-9DBF-CC954AADB62F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Reflection.CodeGen", "Reflection\ItRollingOut.Reflection.CodeGen\ItRollingOut.Reflection.CodeGen.csproj", "{A6C54B09-1DEE-4BBB-809B-3D06152AB39D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.CodeGen", "Reflection\IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj", "{A6C54B09-1DEE-4BBB-809B-3D06152AB39D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.MvcExceptionHandler", "MvcPart\ItRollingOut.MvcExceptionHandler\ItRollingOut.MvcExceptionHandler.csproj", "{E3D63875-0DD5-40A8-9490-3D6C1EC96AEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.MvcExceptionHandler", "MvcPart\IRO.MvcExceptionHandler\IRO.MvcExceptionHandler.csproj", "{E3D63875-0DD5-40A8-9490-3D6C1EC96AEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.AlgorithmsTest", "Tests\AlgorithmsTest\IRO_Tests.AlgorithmsTest.csproj", "{FD0D28B0-4DC8-49CA-9C1E-3766A4595934}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.AlgorithmsTest", "Tests\IRO_Tests.AlgorithmsTest\IRO_Tests.AlgorithmsTest.csproj", "{FD0D28B0-4DC8-49CA-9C1E-3766A4595934}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cross.ImprovedWebView", "Cross.ImprovedWebView", "{948DD564-29DD-4A76-94B8-919926E61678}"
 EndProject
@@ -76,13 +76,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cross", "Cross", "{5DDBE88D
 		Cross\README.txt = Cross\README.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Cross", "Cross\ItRollingOut.Cross\ItRollingOut.Cross.csproj", "{ACB64B71-9F2E-4F2E-8829-F1217A7578F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Cross", "Cross\IRO.Cross\IRO.Cross.csproj", "{ACB64B71-9F2E-4F2E-8829-F1217A7578F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItRollingOut.Cross.Droid", "Cross\ItRollingOut.Cross.Droid\ItRollingOut.Cross.Droid.csproj", "{C1170A52-E2D5-41D1-9F11-DEE3B82A4C0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Cross.Droid", "Cross\IRO.Cross.Droid\IRO.Cross.Droid.csproj", "{C1170A52-E2D5-41D1-9F11-DEE3B82A4C0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItRollingOut.Cross.ImprovedWebView.Droid", "Cross.ImprovedWebView\ItRollingOut.Cross.ImprovedWebView.Droid\ItRollingOut.Cross.ImprovedWebView.Droid.csproj", "{07D9DD53-EA6F-4AAA-ADA4-3A769E8F47C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Cross.ImprovedWebView.Droid", "Cross.ImprovedWebView\IRO.Cross.ImprovedWebView.Droid\IRO.Cross.ImprovedWebView.Droid.csproj", "{07D9DD53-EA6F-4AAA-ADA4-3A769E8F47C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItRollingOut.Cross.ImprovedWebView", "Cross.ImprovedWebView\ItRollingOut.Cross.ImprovedWebView\ItRollingOut.Cross.ImprovedWebView.csproj", "{2EDC26AE-1CCF-4281-9DD8-41718810F169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Cross.ImprovedWebView", "Cross.ImprovedWebView\IRO.Cross.ImprovedWebView\IRO.Cross.ImprovedWebView.csproj", "{2EDC26AE-1CCF-4281-9DD8-41718810F169}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO_Tests.WebViewAndroidTest", "Tests\IRO_Tests.WebViewAndroidTest\IRO_Tests.WebViewAndroidTest.csproj", "{3BC0AC7E-3B3B-4D3F-9CC0-B2BDECC460A6}"
 EndProject

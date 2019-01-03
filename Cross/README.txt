@@ -4,9 +4,9 @@
 
 Теперь все тулзы, которые имеют несколько реализаций и .net standard абстракцию мы скидываем сюда. 
 Ну например, такой трифорс:
-ItRollingOut.Cross.CoolWebView
-ItRollingOut.Cross.CoolWebView.Droid
-ItRollingOut.Cross.CoolWebView.IOS
+IRO.Cross.CoolWebView
+IRO.Cross.CoolWebView.Droid
+IRO.Cross.CoolWebView.IOS
 
 От обычных либ отличается тем, что 
 1. тут реализация в первую очередь зависит от платформы 

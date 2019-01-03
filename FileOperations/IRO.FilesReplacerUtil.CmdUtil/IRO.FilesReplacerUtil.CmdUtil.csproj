@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ApplicationIcon />
+    <Win32Resource />
+    <Version>1.0.3</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\IRO.CmdLine\IRO.CmdLine.csproj" />
+    <ProjectReference Include="..\..\Common\IRO.Common\IRO.Common.csproj" />
+    <ProjectReference Include="..\..\Storage\IRO.Storage.JsonFileStorage\IRO.Storage.JsonFileStorage.csproj" />
+    <ProjectReference Include="..\..\Storage\IRO.Storage\IRO.Storage.csproj" />
+    <ProjectReference Include="..\IRO.FilesReplacerUtil\IRO.FilesReplacerUtil.csproj" />
+  </ItemGroup>
+
+</Project>
