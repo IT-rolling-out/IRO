@@ -15,11 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CustomIoc\ItRollingOut.CustomIoc\ItRollingOut.CustomIoc.csproj" />
     <ProjectReference Include="..\..\MvcPart\ItRollingOut.MvcPart\ItRollingOut.MvcPart.csproj" />
     <ProjectReference Include="..\..\MvcPart\ItRollingOut.PureBinding\ItRollingOut.PureBinding.csproj" />
-    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage.JsonFileStorage\ItRollingOut.Storage.JsonFileStorage.csproj" />
-    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage\ItRollingOut.Storage.csproj" />
-    <ProjectReference Include="..\IocTests\IRO_Tests.IocTests.csproj" />
   </ItemGroup>
 
 </Project>

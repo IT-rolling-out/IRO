@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\ItRollingOut.Localization\ItRollingOut.Localization.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="translate.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

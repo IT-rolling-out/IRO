@@ -1,8 +1,6 @@
 ﻿using System;
 using ItRollingOut.CustomIoc;
 using ItRollingOut.PureBinding;
-using ItRollingOut.Storage;
-using ItRollingOut.Storage.JsonFileStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +16,6 @@ namespace IRO_Tests.PureBindingsTest
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            StorageHardDrive.InitDependencies(new JsonLocalStorage());
         }
 
         public IConfiguration Configuration { get; }
@@ -61,8 +58,6 @@ namespace IRO_Tests.PureBindingsTest
             _rootServiceProvider=app.ApplicationServices;
             IocGlob.Ioc.Build();
 
-            //Еще тест
-            IocTest.Run();
         }
     }
 }

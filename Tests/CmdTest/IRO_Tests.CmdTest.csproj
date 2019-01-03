@@ -5,10 +5,4 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\ItRollingOut.CmdLine\ItRollingOut.CmdLine.csproj" />
-    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage.JsonFileStorage\ItRollingOut.Storage.JsonFileStorage.csproj" />
-    <ProjectReference Include="..\..\Storage\ItRollingOut.Storage\ItRollingOut.Storage.csproj" />
-  </ItemGroup>
-
 </Project>

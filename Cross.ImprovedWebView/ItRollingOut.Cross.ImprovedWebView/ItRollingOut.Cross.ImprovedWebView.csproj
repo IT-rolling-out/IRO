@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Reflection\ItRollingOut.Reflection.Map\ItRollingOut.Reflection.Map.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using IRO_Tests.SwashbuckleTest.Exceptions;
 using ItRollingOut.CoolSwagger;
+using ItRollingOut.MvcExceptionHandler;
 using ItRollingOut.MvcExceptionHandler.Models;
 using ItRollingOut.MvcExceptionHandler.Services;
 using ItRollingOut.MvcPart;
