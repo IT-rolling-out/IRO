@@ -8,7 +8,7 @@ dotnet clean $path;
 $cleanStatus=$lastexitcode;
 echo "Cleaned.";
 pause;
-$IsRelease = Read-Host "Please enter 'y' if is wan`t to build in release mode: "
+$IsRelease = Read-Host "Please enter 'y' if you wan't to build in release mode: "
 if($IsRelease -eq 'y'){
 dotnet build $path --configuration Release
 echo 'Builded in Release mode.';
