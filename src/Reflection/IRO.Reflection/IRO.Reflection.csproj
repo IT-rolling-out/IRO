@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>3.0.0</Version>
+    <Description>Просто агрегирует все сборки из неймспейса Reflection.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj" />
+    <ProjectReference Include="..\IRO.Reflection.Core\IRO.Reflection.Core.csproj" />
+    <ProjectReference Include="..\IRO.Reflection.Map.Metadata\IRO.Reflection.Map.Metadata.csproj" />
+    <ProjectReference Include="..\IRO.Reflection.Map\IRO.Reflection.Map.csproj" />
+    <ProjectReference Include="..\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj" />
+  </ItemGroup>
+
+</Project>
