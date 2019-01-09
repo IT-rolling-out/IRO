@@ -1,7 +1,6 @@
-using System;
 using System.Reflection;
 
-namespace IRO.Reflection
+namespace IRO.Reflection.Core
 {
     public class Parameter
     {

@@ -1,8 +1,8 @@
 ﻿using IRO.Reflection.Map;
-using IRO.Reflection.ModelBinders;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using IRO.Reflection.Core.ModelBinders;
 
 namespace ReflectionMapTest
 {

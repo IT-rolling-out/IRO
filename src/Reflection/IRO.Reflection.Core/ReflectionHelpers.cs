@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace IRO.Reflection
+namespace IRO.Reflection.Core
 {
 
     public static class ReflectionHelpers

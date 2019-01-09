@@ -1,5 +1,5 @@
 ﻿using IRO.CmdLine.Json;
-using IRO.Reflection;
+using IRO.Reflection.Core;
 using IRO.Storage;
 using System;
 using System.Reflection;

@@ -28,11 +28,15 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 .vs/
+
 #Nuget packages folder
 packages/
-/publish_to_nugetorg.cmd
-**/wwwroot
-local_nuget_path.txt
 
 #resources
 **/Resources/Resource.Designer.cs
+
+#Custom
+output/
+**/wwwroot
+local_nuget_path.txt
+publish_to_nugetorg.cmd

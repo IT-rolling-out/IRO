@@ -1,6 +1,6 @@
 using System;
 
-namespace IRO.Reflection
+namespace IRO.Reflection.Core
 {
     [Flags]
     public enum SelectorFlags

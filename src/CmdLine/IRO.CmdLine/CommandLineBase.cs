@@ -5,9 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using IRO.Storage;
 using IRO.Common.Services;
-using IRO.Reflection.ModelBinders;
-using IRO.Reflection;
-using IRO.Common.Services;
+using IRO.Reflection.Core.ModelBinders;
+using IRO.Reflection.Core;
 
 namespace IRO.CmdLine
 {

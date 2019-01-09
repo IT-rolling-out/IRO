@@ -1,4 +1,4 @@
-﻿namespace IRO.Reflection
+﻿namespace IRO.Reflection.Core
 {
     public struct TypeNamingSettings
     {

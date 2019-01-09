@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IRO.Reflection.ModelBinders
+namespace IRO.Reflection.Core.ModelBinders
 {
 
     public class CmdStringToParamsBindings : BaseParamsBindings

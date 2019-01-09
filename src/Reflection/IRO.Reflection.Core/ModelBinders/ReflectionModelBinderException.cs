@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
-namespace IRO.Reflection.ModelBinders
+namespace IRO.Reflection.Core.ModelBinders
 {
     public class ReflectionModelBinderException : Exception
     {

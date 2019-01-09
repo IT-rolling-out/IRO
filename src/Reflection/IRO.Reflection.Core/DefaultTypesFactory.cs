@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IRO.Reflection
+namespace IRO.Reflection.Core
 {
     internal class DefaultTypesFactory
     {

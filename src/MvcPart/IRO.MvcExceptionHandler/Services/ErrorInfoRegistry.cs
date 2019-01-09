@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using IRO.Reflection;
+using IRO.Reflection.Core;
 
 namespace IRO.MvcExceptionHandler.Services
 {

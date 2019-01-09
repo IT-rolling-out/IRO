@@ -1,10 +1,8 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Newtonsoft.Json;
 
-namespace IRO.Reflection.ModelBinders
+namespace IRO.Reflection.Core.ModelBinders
 {
     public class JsonToParamsBindings:BaseParamsBindings
     {

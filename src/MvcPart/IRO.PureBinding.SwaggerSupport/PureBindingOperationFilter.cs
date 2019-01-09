@@ -45,7 +45,7 @@ namespace IRO.PureBinding.SwaggerSupport
 
             var modelGenInp = new ModelsGeneratorInput()
             {
-                Params = new List<IRO.Reflection.Parameter>(),
+                Params = new List<IRO.Reflection.Core.Parameter>(),
                 ModelName=modelName
             };
             foreach (var param in methodInfo.GetParameters())
@@ -53,7 +53,7 @@ namespace IRO.PureBinding.SwaggerSupport
                 var attr=param.GetCustomAttribute<FromPureBindingAttribute>();
                 if (attr == null)
                     continue;
-                var customParam = new IRO.Reflection.Parameter();
+                var customParam = new IRO.Reflection.Core.Parameter();
                 customParam.ParamName=attr.ParameterName ?? param.Name;
                 customParam.Info = param;
                 modelGenInp.Params.Add(customParam);

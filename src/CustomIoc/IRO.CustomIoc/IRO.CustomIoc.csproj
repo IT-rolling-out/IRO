@@ -9,11 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IRO.Reflection.Core" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Reflection\IRO.Reflection\IRO.Reflection.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <Description>Некоторые утилиты для упрощения кодогенерации c#. Например, простой метод компиляции, контекст c# файла  (для управления using), генератор моделей c# в рантайме. Тянет за собой Microsoft.CodeAnalysis.CSharp, потому рекомендуется использовать исключительно на сервере или десктопе.</Description>
   </PropertyGroup>
 

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Reflection" Version="1.0.6" />
+    <PackageReference Include="IRO.Reflection.Core" Version="3.0.1" />
     <PackageReference Include="IRO.Storage" Version="1.0.7" />
   </ItemGroup>
 

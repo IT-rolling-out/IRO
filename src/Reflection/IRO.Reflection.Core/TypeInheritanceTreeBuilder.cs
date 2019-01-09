@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IRO.Common.Algorithms;
 
-namespace IRO.Reflection
+namespace IRO.Reflection.Core
 {
     public class TypeInheritanceTreeBuilder
     {

@@ -1,9 +1,9 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace IRO.Reflection.ModelBinders
+namespace IRO.Reflection.Core.ModelBinders
 {
     public class BaseParamsBindings
     {
