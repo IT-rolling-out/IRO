@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IRO.FileIO.ImprovedFileOperations\IRO.FileIO.ImprovedFileOperations.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\Build\Local.NetStandard.props" />
+</Project>

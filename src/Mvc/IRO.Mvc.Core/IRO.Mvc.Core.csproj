@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.0.1</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <RootNamespace>IRO.Mvc</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IRO.Common" Version="1.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1-beta1" />
+  </ItemGroup>
+
+</Project>

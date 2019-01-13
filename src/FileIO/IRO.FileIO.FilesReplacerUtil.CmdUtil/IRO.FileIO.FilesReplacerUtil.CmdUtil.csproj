@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IRO.CmdLine" Version="2.2.1" />
+    <PackageReference Include="IRO.Storage.JsonFileStorage" Version="1.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IRO.FileIO.FilesReplacerUtil\IRO.FileIO.FilesReplacerUtil.csproj" />
+  </ItemGroup>
+
+</Project>

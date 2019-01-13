@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.0.1</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Description>Глобальный обработчик исключений для asp.net. Также поддерживает обработку http кодов. Работает совместно с DevExceptionPage.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IRO.Reflection" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0-preview3-35497" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IRO.Mvc.Core\IRO.Mvc.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Newtonsoft.Json</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controllers\DevExceptionsPageController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
