@@ -5,8 +5,6 @@ set Configuration=%3
 set AbsoluteOutDir=%ProjectDir%%OutDir%
 set ScriptPath=%~dp0
 set NugetDirPath=%ScriptPath%..\output\nuget\
-echo.
-echo ----- AFTER BUILDING SCRIPT STARTED ----- 
 echo %ScriptPath%
 echo Name: copy_to_output_nuget.cmd
 echo Current time: %date% %time%
@@ -18,5 +16,4 @@ IF "%Configuration%"=="Debug" (
     set IsRelease=0
 )
 copy_nupkgs %ProjectDir% %NugetDirPath% %IsRelease% 1
-echo ----- FINISHED -----
 echo.

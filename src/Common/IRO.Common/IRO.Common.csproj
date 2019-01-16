@@ -8,6 +8,7 @@
       Есть generic Tree.
 </Description>
     <PackageIconUrl>https://gitlab.com/KogerCoder/sharedresources/raw/master/iro_nuget_logo.png</PackageIconUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,6 @@
   <Import Project="..\build\Local.AfterBuild.props" />
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd ..\..\..\scripts&#xD;&#xA;copy_nupkgs__build_event $(OutDir) $(ProjectDir) $(Configuration)&#xD;&#xA;pushd $(ProjectDir)" />
+    <Exec Command="echo.&#xD;&#xA;echo ----- AFTER BUILDING SCRIPT STARTED ----- &#xD;&#xA;echo CREATING NUPKG FILE&#xD;&#xA;dotnet pack $(ProjectDir) -c $(Configuration) --no-build&#xD;&#xA;cd ..\..\..\scripts&#xD;&#xA;call copy_nupkgs__build_event $(OutDir) $(ProjectDir) $(Configuration)&#xD;&#xA;pushd $(ProjectDir)&#xD;&#xA;echo Delete own nupkg.&#xD;&#xA;set BuildDir=$(ProjectDir)bin\$(Configuration)&#xD;&#xA;echo %BuildDir%&#xD;&#xA;call FORFILES /P &quot;%BuildDir%&quot; /M &quot;*.nupkg&quot; /S /C &quot;cmd /c del @file&quot;&#xD;&#xA;echo ----- BUILDING SCRIPT FINISHED -----&#xD;&#xA;echo." />
   </Target>
 </Project>
