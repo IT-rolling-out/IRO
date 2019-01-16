@@ -1,4 +1,5 @@
 @echo off
+cd ..\src
 echo Found files:
 FORFILES /M "*.nupkg" /S /C "cmd /c echo @file"
 echo.

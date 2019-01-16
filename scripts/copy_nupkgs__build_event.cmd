@@ -13,16 +13,10 @@ echo Current time: %date% %time%
 echo WARNING! Nuget package will be builded after execution of current file (if it launched from build events). So, you will always get previous version of package.
 echo Will copy all .nupkg to output dir.
 echo Build output path: '%AbsoluteOutDir%'
-echo Found nuget files:
-FORFILES /P %ProjectDir% /M "*.nupkg" /S /C "cmd /c echo @file"
-set NotReplaceModifier=/XF /XN /XO
+set IsRelease=1
 IF "%Configuration%"=="Debug" (
-    echo "Copy without replacement (debug)."	
-) ELSE (
-    echo "Copy with replacement (release)."
-	set NotReplaceModifier=/IS
+    set IsRelease=0
 )
-FORFILES /P %ProjectDir% /M "*.nupkg" /S /C "cmd /c robocopy @path/.. %NugetDirPath% @file %NotReplaceModifier%"
-echo Copied!
+copy_nupkgs %ProjectDir% %NugetDirPath% %IsRelease% 1
 echo ----- FINISHED -----
 echo.
