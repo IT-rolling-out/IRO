@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using IRO.Mvc.Core;
 
 namespace IRO.Mvc.PureBinding.JsonBinding
 {

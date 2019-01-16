@@ -1,7 +1,7 @@
 ﻿using IRO.Common.Services;
 using Microsoft.AspNetCore.Http;
 
-namespace IRO.Mvc
+namespace IRO.Mvc.Core
 {
     public static class MvcExtensions
     {

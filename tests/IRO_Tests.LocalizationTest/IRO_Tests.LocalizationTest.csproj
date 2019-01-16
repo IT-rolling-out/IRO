@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\IRO.Localization\IRO.Localization.csproj" />
+    <ProjectReference Include="..\..\src\Localization\IRO.Localization\IRO.Localization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

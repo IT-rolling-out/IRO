@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,5 +8,4 @@
     <ProjectReference Include="..\..\Reflection\IRO.Reflection.Map\IRO.Reflection.Map.csproj" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
  </Project>

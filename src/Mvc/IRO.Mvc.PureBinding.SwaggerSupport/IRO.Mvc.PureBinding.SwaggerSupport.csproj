@@ -2,10 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Интегрирует PureBinding c Swashbuckle.</Description>
   </PropertyGroup>
 
@@ -15,8 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Reflection\IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj" />
     <ProjectReference Include="..\IRO.Mvc.CoolSwagger\IRO.Mvc.CoolSwagger.csproj" />
     <ProjectReference Include="..\IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj" />
   </ItemGroup>
-<Import Project="..\Build\Local.NetStandard.props" /> 
+
  </Project>

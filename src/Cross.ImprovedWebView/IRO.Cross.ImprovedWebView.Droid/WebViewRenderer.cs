@@ -5,6 +5,7 @@ using Android.Util;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
+using IRO.Cross.ImprovedWebView.Droid.Resources;
 
 namespace IRO.Cross.ImprovedWebView.Droid
 {

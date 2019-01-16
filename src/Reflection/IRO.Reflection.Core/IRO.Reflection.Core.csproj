@@ -2,17 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.1</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Базовые утилиты для упрощения работы с рефлексией.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Common" Version="1.1.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\IRO.Common\IRO.Common.csproj" />
+  </ItemGroup>
+
  </Project>

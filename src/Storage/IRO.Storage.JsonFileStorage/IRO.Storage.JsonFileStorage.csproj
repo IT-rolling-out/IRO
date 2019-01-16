@@ -2,10 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.7</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,5 +13,4 @@
     <ProjectReference Include="..\IRO.Storage\IRO.Storage.csproj" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
  </Project>

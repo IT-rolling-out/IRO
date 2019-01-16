@@ -1,0 +1,14 @@
+<!-- Imported before all csproj items. Here better to define variables or default properties. -->
+<Project>
+  <PropertyGroup>
+    <IsPrefixed>$(MSBuildProjectName.StartsWith('IRO.'))</IsPrefixed>
+  </PropertyGroup>
+
+  <!-- Use default settings: comments generation, build packege, etc. -->
+  <PropertyGroup Condition="$(IsPrefixed)">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+</Project>

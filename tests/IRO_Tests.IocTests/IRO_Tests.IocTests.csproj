@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CustomIoc\IRO.CustomIoc\IRO.CustomIoc.csproj" />
+    <ProjectReference Include="..\..\src\CustomIoc\IRO.CustomIoc\IRO.CustomIoc.csproj" />
   </ItemGroup>
 
 </Project>

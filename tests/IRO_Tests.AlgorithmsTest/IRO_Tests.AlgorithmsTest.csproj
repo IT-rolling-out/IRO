@@ -6,6 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Reflection" Version="1.0.6" />
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Core\IRO.Reflection.Core.csproj" />
   </ItemGroup>
 </Project>

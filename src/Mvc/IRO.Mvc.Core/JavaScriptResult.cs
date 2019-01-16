@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRO.Mvc
+namespace IRO.Mvc.Core
 {
     public class JavaScriptResult : ContentResult
     {

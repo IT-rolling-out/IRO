@@ -8,6 +8,7 @@ using IRO.Mvc.MvcExceptionHandler;
 using IRO.Mvc.MvcExceptionHandler.Models;
 using IRO.Mvc.MvcExceptionHandler.Services;
 using IRO.Mvc;
+using IRO.Mvc.Core;
 using IRO.Mvc.PureBinding;
 using IRO.Mvc.PureBinding.SwaggerSupport;
 using Microsoft.AspNetCore.Builder;

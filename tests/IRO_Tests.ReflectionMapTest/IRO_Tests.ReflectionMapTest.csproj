@@ -58,17 +58,21 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRO.Reflection.Map.Metadata\IRO.Reflection.Map.Metadata.csproj">
-      <Project>{86550D70-1785-418A-933A-65B0F25FF3A2}</Project>
-      <Name>IRO.Reflection.Map.Metadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRO.Reflection.Map\IRO.Reflection.Map.csproj">
-      <Project>{7b346ee5-dcbc-4e71-be4b-5e6c0ded91fe}</Project>
-      <Name>IRO.Reflection.Map</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRO.Reflection.Core\IRO.Reflection.Core.csproj">
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Core\IRO.Reflection.Core.csproj">
       <Project>{AD0908EA-4FD4-414E-B2D1-5CFD33935BE9}</Project>
       <Name>IRO.Reflection.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Map.Metadata\IRO.Reflection.Map.Metadata.csproj">
+      <Project>{C414DFAC-B31C-4BF5-AE2C-DACDC12DA357}</Project>
+      <Name>IRO.Reflection.Map.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Map\IRO.Reflection.Map.csproj">
+      <Project>{5B3BC9EF-1450-4A72-84DD-0A44B232F061}</Project>
+      <Name>IRO.Reflection.Map</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection\IRO.Reflection.csproj">
+      <Project>{49f58238-f918-40ee-9ab9-17cb3b4b4cf7}</Project>
+      <Name>IRO.Reflection</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

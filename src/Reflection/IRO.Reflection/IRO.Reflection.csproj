@@ -2,11 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.0.1</Version>
     <Description>Просто агрегирует все сборки из неймспейса Reflection.</Description>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,5 +13,5 @@
     <ProjectReference Include="..\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
+
  </Project>

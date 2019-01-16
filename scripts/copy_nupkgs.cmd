@@ -24,10 +24,10 @@ IF NOT "%PausesDisabled%"=="1" (
 )
 IF "%IsRelease%"=="1" (
     echo "Release. Copy with replacement."
-	FORFILES /P %SearchDir% /M "*.nupkg" /S /C "cmd /c robocopy @path/.. %OutputDir% @file /IS"
+	FORFILES /P %SearchDir% /M "*.nupkg" /S /C "cmd /c robocopy @path/.. %OutputDir% @file /IS  /NJH /NJS /nc /ns /np"
 ) ELSE (
     echo "Debug. Copy without replacement."	
-	FORFILES /P %SearchDir% /M "*.nupkg" /S /C "cmd /c robocopy @path/.. %OutputDir% @file /XF /XN /XO"
+	FORFILES /P %SearchDir% /M "*.nupkg" /S /C "cmd /c robocopy @path/.. %OutputDir% @file /XF /XN /XO  /NJH /NJS /nc /ns /np"
 )
 echo Copied!
 

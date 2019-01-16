@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IRO.Cross.ImprovedWebView\IRO.Cross.ImprovedWebView.csproj">
-      <Project>{2edc26ae-1ccf-4281-9dd8-41718810f169}<Import Project="..\Build\Local.NetStandard.props" /> 
+      <Project>{2edc26ae-1ccf-4281-9dd8-41718810f169}
  </Project>
       <Name>IRO.Cross.ImprovedWebView</Name>
     </ProjectReference>
@@ -93,5 +93,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-<Import Project="..\Build\Local.NetStandard.props" /> 
  </Project>

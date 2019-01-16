@@ -2,16 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.2.1</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Reflection.Core" Version="3.0.1" />
-    <PackageReference Include="IRO.Storage" Version="1.0.7" />
+    <ProjectReference Include="..\..\Common\IRO.Common\IRO.Common.csproj" />
+    <ProjectReference Include="..\..\Reflection\IRO.Reflection.Core\IRO.Reflection.Core.csproj" />
+    <ProjectReference Include="..\..\Storage\IRO.Storage\IRO.Storage.csproj" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
- </Project>
+
+</Project>

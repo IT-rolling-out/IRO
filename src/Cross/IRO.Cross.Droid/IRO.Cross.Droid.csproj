@@ -80,5 +80,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-<Import Project="..\Build\Local.NetStandard.props" /> 
  </Project>

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using IRO.FileIO.ImprovedFileOperations;
 
 namespace IRO.Mvc.CoolSwagger
 {
@@ -38,7 +39,7 @@ namespace IRO.Mvc.CoolSwagger
 
         public static void IncludeAllAvailableXmlComments(this SwaggerGenOptions opt)
         {
-            var xmlFiles=ImprovedFileOperations.ImprovedFile.Search(
+            var xmlFiles=ImprovedFile.Search(
                 AppContext.BaseDirectory,
                 new List<Regex> { new Regex("\\.[Xx][Mm][Ll]$") }
                 );

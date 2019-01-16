@@ -1,4 +1,5 @@
 ﻿using IRO.Mvc;
+using IRO.Mvc.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IRO.Mvc.CoolSwagger

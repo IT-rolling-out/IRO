@@ -2,23 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Надстройка над Swashbuckle c добавлением некоторых важных функций.</Description>
-    <PackageIconUrl></PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.ImprovedFileOperations" Version="1.0.2" />
-    <PackageReference Include="IRO.Reflection" Version="3.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="4.5.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\FileIO\IRO.FileIO.ImprovedFileOperations\IRO.FileIO.ImprovedFileOperations.csproj" />
+    <ProjectReference Include="..\..\Reflection\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj" />
     <ProjectReference Include="..\IRO.Mvc.Core\IRO.Mvc.Core.csproj" />
   </ItemGroup>
 
@@ -31,5 +26,4 @@
     </Reference>
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
  </Project>

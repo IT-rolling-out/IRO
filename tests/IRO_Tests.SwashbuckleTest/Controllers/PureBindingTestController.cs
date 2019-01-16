@@ -1,6 +1,7 @@
 using System;
 using IRO_Tests.SwashbuckleTest.Models;
 using IRO.Mvc;
+using IRO.Mvc.Core;
 using IRO.Mvc.PureBinding.Metadata;
 using Microsoft.AspNetCore.Mvc;
 

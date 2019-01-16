@@ -3,6 +3,7 @@ using IRO.Common.Collections;
 using IRO.Mvc;
 using IRO.Mvc.MvcExceptionHandler.Models;
 using System;
+using IRO.Mvc.Core;
 using IRO.Mvc.MvcExceptionHandler.Controllers;
 
 namespace IRO.Mvc.MvcExceptionHandler.Services

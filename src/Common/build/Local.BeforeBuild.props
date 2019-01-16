@@ -1,8 +1,0 @@
-<!-- Common settings for all projects, that will create nuget package. -->
-<Project>
-  <!-- Defined here will be overrided by Common.BeforeBuild.props values. Can be overrided in csproj. -->
-  
-  <Import Project="..\..\..\build\Common.BeforeBuild.props" />
-
-  <!-- Defined here will override Common.BeforeBuild.props values. Can be overrided in csproj. -->
-</Project>

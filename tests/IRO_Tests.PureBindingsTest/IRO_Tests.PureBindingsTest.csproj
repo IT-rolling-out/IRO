@@ -9,14 +9,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.CustomIoc" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0-preview3-35497" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0-preview3-35497" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0-preview3-35497" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IRO.Mvc\IRO.Mvc.csproj" />
+    <ProjectReference Include="..\..\src\CustomIoc\IRO.CustomIoc\IRO.CustomIoc.csproj" />
+    <ProjectReference Include="..\..\src\Mvc\IRO.Mvc\IRO.Mvc.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,16 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Reflection.Core" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Reflection\IRO.Reflection.Core\IRO.Reflection.Core.csproj" />
+  </ItemGroup>
+
  </Project>

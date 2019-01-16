@@ -10,11 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Storage.JsonFileStorage" Version="1.0.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\IRO.CmdLine\IRO.CmdLine.csproj" />
+    <ProjectReference Include="..\..\src\CmdLine\IRO.CmdLine\IRO.CmdLine.csproj" />
+    <ProjectReference Include="..\..\src\Storage\IRO.Storage.JsonFileStorage\IRO.Storage.JsonFileStorage.csproj" />
   </ItemGroup>
 
   

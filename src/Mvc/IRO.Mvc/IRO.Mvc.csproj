@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>Агрегирует все сборки для mvc.</Description>
-    <Version>2.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,5 +13,4 @@
     <ProjectReference Include="..\IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj" />
   </ItemGroup>
 
-<Import Project="..\Build\Local.NetStandard.props" /> 
  </Project>

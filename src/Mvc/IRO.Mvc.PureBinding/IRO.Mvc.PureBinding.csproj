@@ -2,10 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Свой биндер моделей для методов в контроллерах. Позволяет получать</Description>
   </PropertyGroup>
 
@@ -17,5 +13,5 @@
   <ItemGroup>
     <ProjectReference Include="..\IRO.Mvc.Core\IRO.Mvc.Core.csproj" />
   </ItemGroup>
-<Import Project="..\Build\Local.NetStandard.props" /> 
+
  </Project>
