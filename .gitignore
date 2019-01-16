@@ -38,5 +38,5 @@ packages/
 #Custom
 output/
 **/wwwroot
-local_nuget_path.txt
 publish_to_nugetorg.cmd
+scripts/localData/*

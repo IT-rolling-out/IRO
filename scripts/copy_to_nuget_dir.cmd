@@ -1,5 +1,6 @@
 @echo off
-set /p NugetPath=<local_nuget_path.txt
+cd ../
+set /p NugetPath=<scripts/localData/local_nuget_path.txt
 echo Path of yor local nuget dir: '%NugetPath%'
 echo Warning! 
 echo Don`t continue if it`s empty. 

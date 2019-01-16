@@ -15,4 +15,8 @@
   </ItemGroup>
 
   <Import Project="..\build\Local.AfterBuild.props" />
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd ..\..\..\scripts&#xD;&#xA;copy_to_output_nuget.cmd $(OutDir) $(ProjectDir) $(Configuration)&#xD;&#xA;pushd $(ProjectDir)" />
+  </Target>
 </Project>
