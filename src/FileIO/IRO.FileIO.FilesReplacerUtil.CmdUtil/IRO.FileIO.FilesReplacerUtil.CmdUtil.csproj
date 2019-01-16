@@ -15,5 +15,4 @@
   <ItemGroup>
     <ProjectReference Include="..\IRO.FileIO.FilesReplacerUtil\IRO.FileIO.FilesReplacerUtil.csproj" />
   </ItemGroup>
-
-</Project>
+ </Project>

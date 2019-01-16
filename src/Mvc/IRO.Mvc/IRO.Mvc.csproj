@@ -16,4 +16,5 @@
     <ProjectReference Include="..\IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj" />
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

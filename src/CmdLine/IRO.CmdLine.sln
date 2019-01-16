@@ -7,7 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CmdLine", "IRO.CmdLine\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.CmdTest", "Tests\IRO_Tests.CmdTest\IRO_Tests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F553F711-1614-48CB-A17F-38346B5FB158}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F553F711-1614-48CB-A17F-38346B5FB158}"
+EndProject
+
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{89473878-A5C0-46DB-B734-98B04539D3B5}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Local.Base.props = Build\Local.Base.props
+		Build\Local.NetStandard.props = Build\Local.NetStandard.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

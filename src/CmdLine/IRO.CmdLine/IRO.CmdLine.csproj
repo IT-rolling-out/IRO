@@ -13,4 +13,5 @@
     <PackageReference Include="IRO.Storage" Version="1.0.7" />
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

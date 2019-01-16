@@ -31,4 +31,5 @@
     </Reference>
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

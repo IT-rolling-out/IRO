@@ -6,4 +6,5 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

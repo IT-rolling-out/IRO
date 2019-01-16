@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.Core", "IRO.Reflection.Core\IRO.Reflection.Core.csproj", "{AD0908EA-4FD4-414E-B2D1-5CFD33935BE9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{12219122-B929-4AF5-8C95-1630C48153B1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{12219122-B929-4AF5-8C95-1630C48153B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.CodeGen", "IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj", "{A89B27DD-444E-4DE0-9E61-CC837ECDA9FB}"
 EndProject
@@ -18,6 +18,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO_Tests.ReflectionMapTest", "Tests\IRO_Tests.ReflectionMapTest\IRO_Tests.ReflectionMapTest.csproj", "{05F1941A-441F-411E-BBCC-26E3BA288AD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Reflection", "IRO.Reflection\IRO.Reflection.csproj", "{49F58238-F918-40EE-9AB9-17CB3B4B4CF7}"
+EndProject
+
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{89473878-A5C0-46DB-B734-98B04539D3B5}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Local.Base.props = Build\Local.Base.props
+		Build\Local.NetStandard.props = Build\Local.NetStandard.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

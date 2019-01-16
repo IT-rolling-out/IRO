@@ -17,4 +17,5 @@
     <ProjectReference Include="..\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj" />
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

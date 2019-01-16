@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc.MvcExceptionHandler
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc.PureBinding", "IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj", "{E314F491-E694-4E01-AC89-278ABE6B5A1F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{50C0B1D4-72FB-4F12-B6C9-62CD88CFB53E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{50C0B1D4-72FB-4F12-B6C9-62CD88CFB53E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.PureBindingsTest", "Tests\IRO_Tests.PureBindingsTest\IRO_Tests.PureBindingsTest.csproj", "{914C1631-89F0-43C8-8C7E-6149D6DACD0E}"
 EndProject
@@ -20,6 +20,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Mvc", "IRO.Mvc\IRO.Mvc.csproj", "{8683C09F-1DD0-4E45-A14C-6A74C026EBB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Mvc.PureBinding.SwaggerSupport", "IRO.Mvc.PureBinding.SwaggerSupport\IRO.Mvc.PureBinding.SwaggerSupport.csproj", "{E23A72A6-7970-4484-A32C-22EC4ABA7882}"
+EndProject
+
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{89473878-A5C0-46DB-B734-98B04539D3B5}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Local.Base.props = Build\Local.Base.props
+		Build\Local.NetStandard.props = Build\Local.NetStandard.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

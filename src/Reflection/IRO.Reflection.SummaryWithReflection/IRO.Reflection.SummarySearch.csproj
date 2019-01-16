@@ -9,4 +9,5 @@
     <Description>Позволяет работать с summary xml файлами через классы из System.Reflection.</Description>
   </PropertyGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

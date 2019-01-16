@@ -8,5 +8,5 @@
     <ProjectReference Include="..\IRO.FileIO.ImprovedFileOperations\IRO.FileIO.ImprovedFileOperations.csproj" />
   </ItemGroup>
 
-  <Import Project="..\Build\Local.NetStandard.props" />
-</Project>
+  <Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

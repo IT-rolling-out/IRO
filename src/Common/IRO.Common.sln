@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Common", "IRO.Common\IR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.AlgorithmsTest", "Tests\IRO_Tests.AlgorithmsTest\IRO_Tests.AlgorithmsTest.csproj", "{0FA63731-C833-403A-88F1-0029BF34ACF1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53691452-2A49-4820-B7C2-9FE34CB76253}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{53691452-2A49-4820-B7C2-9FE34CB76253}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{89473878-A5C0-46DB-B734-98B04539D3B5}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Local.AfterBuild.props = Build\Local.AfterBuild.props
+		build\Local.BeforeBuild.props = build\Local.BeforeBuild.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

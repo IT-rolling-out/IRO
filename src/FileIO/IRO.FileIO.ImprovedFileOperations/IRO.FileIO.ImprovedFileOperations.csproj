@@ -9,5 +9,5 @@
     <PackageReference Include="TxFileManager" Version="1.3.0" />
   </ItemGroup>
 
-  <Import Project="..\Build\Local.NetStandard.props" />
-</Project>
+  <Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

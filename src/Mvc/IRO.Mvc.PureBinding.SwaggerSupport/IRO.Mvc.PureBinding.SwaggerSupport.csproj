@@ -18,4 +18,5 @@
     <ProjectReference Include="..\IRO.Mvc.CoolSwagger\IRO.Mvc.CoolSwagger.csproj" />
     <ProjectReference Include="..\IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj" />
   </ItemGroup>
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

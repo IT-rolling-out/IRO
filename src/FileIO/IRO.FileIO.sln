@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.FileIO.FilesReplacerUti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.FileIO.FilesReplacerUtil", "IRO.FileIO.FilesReplacerUtil\IRO.FileIO.FilesReplacerUtil.csproj", "{882A9F2D-BFC7-4790-8705-67B24250C147}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{89473878-A5C0-46DB-B734-98B04539D3B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{89473878-A5C0-46DB-B734-98B04539D3B5}"
 	ProjectSection(SolutionItems) = preProject
 		Build\Local.Base.props = Build\Local.Base.props
 		Build\Local.NetStandard.props = Build\Local.NetStandard.props

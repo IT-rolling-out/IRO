@@ -22,4 +22,5 @@
     <ProjectReference Include="..\IRO.Common\IRO.Common.csproj" />
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

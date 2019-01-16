@@ -8,4 +8,5 @@
     <ProjectReference Include="..\..\Reflection\IRO.Reflection.Map\IRO.Reflection.Map.csproj" />
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

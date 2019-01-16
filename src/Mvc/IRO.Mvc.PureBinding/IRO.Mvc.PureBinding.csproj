@@ -17,4 +17,5 @@
   <ItemGroup>
     <ProjectReference Include="..\IRO.Mvc.Core\IRO.Mvc.Core.csproj" />
   </ItemGroup>
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

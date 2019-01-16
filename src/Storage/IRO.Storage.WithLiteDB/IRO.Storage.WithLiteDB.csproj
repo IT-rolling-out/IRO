@@ -18,4 +18,5 @@
     <ProjectReference Include="..\IRO.Storage\IRO.Storage.csproj" />
   </ItemGroup>
 
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>

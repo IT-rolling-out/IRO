@@ -67,7 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IRO.Cross\IRO.Cross.csproj">
-      <Project>{acb64b71-9f2e-4f2e-8829-f1217a7578f3}</Project>
+      <Project>{acb64b71-9f2e-4f2e-8829-f1217a7578f3}
+ </Project>
       <Name>IRO.Cross</Name>
     </ProjectReference>
   </ItemGroup>
@@ -79,4 +80,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-</Project>
+<Import Project="..\Build\Local.NetStandard.props" /> 
+ </Project>
