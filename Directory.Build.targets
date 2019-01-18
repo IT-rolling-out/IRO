@@ -1,7 +1,7 @@
 <!-- Imported in end of csproj. Here better to override some items. -->
 <Project>
 
-  <PropertyGroup Condition="$(IsPrefixed)">
+  <PropertyGroup Condition="$(IsNuPackage)">
     <Version>20.1.1</Version>
     <PackageIconUrl>https://gitlab.com/KogerCoder/sharedresources/raw/master/iro_nuget_logo.png</PackageIconUrl>
   </PropertyGroup>

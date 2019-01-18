@@ -90,6 +90,7 @@ $global:Path="$PSScriptRoot\IRO.sln";
 $global:IsRelease="";
 $global:Configuration="";
 
+# Cleaning
 $WantRemoveNupkgFromSrc = ReadBool "Want to remove all .nupkg files from '.\src' before build? ";
 if($WantRemoveNupkgFromSrc){
   scripts\delete_nupkgs__src.cmd
@@ -97,11 +98,28 @@ if($WantRemoveNupkgFromSrc){
   pause;  
 }
 
+# Build
 AskConfiguration;
 dotnet build $global:Path --configuration $global:Configuration /clp:ErrorsOnly
 WriteOperationResultByExitCode "Solution build status: " $lastexitcode
 pause;
 
+# Tests
+$WantExUnitTests = ReadBool "Want execute unit tests? "
+if($WantExUnitTests){
+  $testRes=0;
+  Get-ChildItem "$PSScriptRoot\tests" -Recurse -Filter "*UnitTest*.csproj" | 
+  Foreach-Object {    
+    dotnet test $_.FullName --verbosity  m
+	if($lastexitcode){
+	  $testRes=1;
+	}
+  }
+  WriteOperationResultByExitCode "Tests execution status: " $testRes;
+  pause;
+}
+
+# Copy nugets to output/nuget
 $WantClearOutputNuget = ReadBool "Want clear '.\output\nupkg' and fill with new builded packages? "
 if($WantClearOutputNuget){
   if(Test-Path -Path "$PSScriptRoot\output\nuget"){

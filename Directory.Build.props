@@ -1,11 +1,21 @@
 <!-- Imported before all csproj items. Here better to define variables or default properties. -->
 <Project>
   <PropertyGroup>
-    <IsPrefixed>$(MSBuildProjectName.StartsWith('IRO.'))</IsPrefixed>
+    <IsTest>false</IsTest>
+    <IsNuPackage>false</IsNuPackage>
   </PropertyGroup>
 
+  <PropertyGroup Condition = "($(MSBuildProjectName.StartsWith('IRO.SlnTests')) Or $(MSBuildProjectName.StartsWith('IRO.SlnUnitTests')))">
+    <IsTest>true</IsTest>
+  </PropertyGroup>
+
+  <PropertyGroup  Condition = "$(MSBuildProjectName.StartsWith('IRO.')) And !$(IsTest)" >
+    <IsNuPackage>true</IsNuPackage>
+  </PropertyGroup>
+
+
   <!-- Use default settings: comments generation, build packege, etc. -->
-  <PropertyGroup Condition="$(IsPrefixed)">
+  <PropertyGroup Condition="$(IsNuPackage)">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>

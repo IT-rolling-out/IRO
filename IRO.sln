@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CmdLine", "src\CmdLine\IRO.CmdLine\IRO.CmdLine.csproj", "{842F7620-085C-4DEF-B206-2F50259C5DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.CmdTest", "tests\IRO_Tests.CmdTest\IRO_Tests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.CmdTest", "tests\IRO.SlnTests.CmdTest\IRO.SlnTests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CmdLine", "CmdLine", "{CCC15F0E-D147-40E5-BA81-C1841A6C0BB2}"
 EndProject
@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.CodeGen", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection.SummarySearch", "src\Reflection\IRO.Reflection.SummaryWithReflection\IRO.Reflection.SummarySearch.csproj", "{08DD194A-F43B-4E04-B684-6D7E00242E61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO_Tests.ReflectionMapTest", "tests\IRO_Tests.ReflectionMapTest\IRO_Tests.ReflectionMapTest.csproj", "{05F1941A-441F-411E-BBCC-26E3BA288AD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.SlnTests.ReflectionMapTest", "tests\IRO.SlnTests.ReflectionMapTest\IRO.SlnTests.ReflectionMapTest.csproj", "{05F1941A-441F-411E-BBCC-26E3BA288AD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Reflection", "src\Reflection\IRO.Reflection\IRO.Reflection.csproj", "{49F58238-F918-40EE-9AB9-17CB3B4B4CF7}"
 EndProject
@@ -38,9 +38,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc.MvcExceptionHandler
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc.PureBinding", "src\Mvc\IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj", "{E314F491-E694-4E01-AC89-278ABE6B5A1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.PureBindingsTest", "tests\IRO_Tests.PureBindingsTest\IRO_Tests.PureBindingsTest.csproj", "{914C1631-89F0-43C8-8C7E-6149D6DACD0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.PureBindingsTest", "tests\IRO.SlnTests.PureBindingsTest\IRO.SlnTests.PureBindingsTest.csproj", "{914C1631-89F0-43C8-8C7E-6149D6DACD0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.SwashbuckleTest", "tests\IRO_Tests.SwashbuckleTest\IRO_Tests.SwashbuckleTest.csproj", "{A68A6623-C845-4ADC-A074-A99F51A7145B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.SwashbuckleTest", "tests\IRO.SlnTests.SwashbuckleTest\IRO.SlnTests.SwashbuckleTest.csproj", "{A68A6623-C845-4ADC-A074-A99F51A7145B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc", "src\Mvc\IRO.Mvc\IRO.Mvc.csproj", "{8683C09F-1DD0-4E45-A14C-6A74C026EBB0}"
 EndProject
@@ -70,13 +70,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Cross", "src\Cross\IRO.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Cross.ImprovedWebView", "src\Cross.ImprovedWebView\IRO.Cross.ImprovedWebView\IRO.Cross.ImprovedWebView.csproj", "{F0D9F60F-F0D2-48D6-B735-FDCB063F151F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.AlgorithmsTest", "tests\IRO_Tests.AlgorithmsTest\IRO_Tests.AlgorithmsTest.csproj", "{E48358E2-D941-491D-88B4-6FF115090899}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.AlgorithmsTest", "tests\IRO.SlnTests.AlgorithmsTest\IRO.SlnTests.AlgorithmsTest.csproj", "{E48358E2-D941-491D-88B4-6FF115090899}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO_Tests.WebViewAndroidTest", "tests\IRO_Tests.WebViewAndroidTest\IRO_Tests.WebViewAndroidTest.csproj", "{3BC0AC7E-3B3B-4D3F-9CC0-B2BDECC460A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.SlnTests.WebViewAndroidTest", "tests\IRO.SlnTests.WebViewAndroidTest\IRO.SlnTests.WebViewAndroidTest.csproj", "{3BC0AC7E-3B3B-4D3F-9CC0-B2BDECC460A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.IocTests", "tests\IRO_Tests.IocTests\IRO_Tests.IocTests.csproj", "{C79A06AF-1F83-4F3F-8E8E-7EEB44CBF160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.IocTests", "tests\IRO.SlnTests.IocTests\IRO.SlnTests.IocTests.csproj", "{C79A06AF-1F83-4F3F-8E8E-7EEB44CBF160}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO_Tests.LocalizationTest", "tests\IRO_Tests.LocalizationTest\IRO_Tests.LocalizationTest.csproj", "{79F441B9-B5EB-424C-8956-C2B0B679DEC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnUnitTests.LocalizationTest", "tests\IRO.SlnUnitTests.LocalizationTest\IRO.SlnUnitTests.LocalizationTest.csproj", "{79F441B9-B5EB-424C-8956-C2B0B679DEC1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Storage", "src\Storage\IRO.Storage\IRO.Storage.csproj", "{8F1FA595-9B70-4306-9E25-3786B7D4183A}"
 EndProject
@@ -108,10 +108,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BF3E
 		scripts\copy_nupkgs__all_release_to_output.cmd = scripts\copy_nupkgs__all_release_to_output.cmd
 		scripts\copy_nupkgs__build_event.cmd = scripts\copy_nupkgs__build_event.cmd
 		scripts\copy_nupkgs__global_folder.cmd = scripts\copy_nupkgs__global_folder.cmd
-		scripts\delete_nupkgs__outputdir.ps1 = scripts\delete_nupkgs__outputdir.ps1
 		scripts\delete_nupkgs__src.cmd = scripts\delete_nupkgs__src.cmd
 		scripts\rename_files.cmd = scripts\rename_files.cmd
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.SlnUnitTests", "tests\IRO.SlnUnitTests\IRO.SlnUnitTests.csproj", "{37859EE7-7887-4159-BAF4-E13A730A4863}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +258,10 @@ Global
 		{C414DFAC-B31C-4BF5-AE2C-DACDC12DA357}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C414DFAC-B31C-4BF5-AE2C-DACDC12DA357}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C414DFAC-B31C-4BF5-AE2C-DACDC12DA357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37859EE7-7887-4159-BAF4-E13A730A4863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37859EE7-7887-4159-BAF4-E13A730A4863}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37859EE7-7887-4159-BAF4-E13A730A4863}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37859EE7-7887-4159-BAF4-E13A730A4863}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -297,6 +302,7 @@ Global
 		{5B3BC9EF-1450-4A72-84DD-0A44B232F061} = {2BB7CE1D-D45C-4B42-AE7E-BC88AB9B5590}
 		{C414DFAC-B31C-4BF5-AE2C-DACDC12DA357} = {2BB7CE1D-D45C-4B42-AE7E-BC88AB9B5590}
 		{BF3E8F4E-C26A-45F1-A53B-36C7AC98D0E2} = {645B685D-30B9-41AE-A709-35A4F5231558}
+		{37859EE7-7887-4159-BAF4-E13A730A4863} = {78FAC66F-3AC1-489E-9D43-A25CD0C27FC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA15EAC1-7737-46A9-9AE6-6D25A5CD34E0}
