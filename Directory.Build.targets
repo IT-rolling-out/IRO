@@ -4,8 +4,6 @@
   <PropertyGroup Condition="$(IsPrefixed)">
     <Version>20.1.1</Version>
     <PackageIconUrl>https://gitlab.com/KogerCoder/sharedresources/raw/master/iro_nuget_logo.png</PackageIconUrl>
-
-    <PackageOutputDir>output</PackageOutputDir>
   </PropertyGroup>
   
 </Project>
