@@ -104,9 +104,10 @@ pause;
 
 $WantClearOutputNuget = ReadBool "Want clear '.\output\nupkg' and fill with new builded packages? "
 if($WantClearOutputNuget){
-  rd "$PSScriptRoot\output\nuget" -recurse;  
-  CustomWrite "Removed old." Green
-  pause;
+  if(Test-Path -Path "$PSScriptRoot\output\nuget"){
+    rd "$PSScriptRoot\output\nuget" -recurse;  
+	CustomWrite "Removed old." Green	
+  }    
   scripts\copy_nupkgs.cmd "$PSScriptRoot\src\" "$PSScriptRoot\output\nuget\" $global:IsRelease 1
   CustomWrite "Copied." Green
 }
