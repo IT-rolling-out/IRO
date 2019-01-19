@@ -3,6 +3,7 @@ using IRO.Reflection.Core;
 using IRO.Storage;
 using System;
 using System.Reflection;
+using IRO.Storage.DefaultStorages;
 
 namespace IRO.CmdLine
 {
@@ -11,37 +12,9 @@ namespace IRO.CmdLine
     /// </summary>
     public class CmdLineExtension
     {
-        #region Static part
-        static CmdLineExtension _inst;
-        public static CmdLineExtension Inst
-        {
-            get
-            {
-                if (_inst == null)
-                {
-                    throw new Exception("Before use CmdLineExtension.Inst you must init it.");
-                }
-                return _inst;
-            }
-        }
+        public IKeyValueStorage Storage { get; }
 
-        /// <summary>
-        /// Init singleton console. You can access it through CmdLineExtension.Inst .
-        /// </summary>
-        /// <param name="consoleHandler">If null, will use default handler.</param>
-        public static void Init(IConsoleHandler consoleHandler=null)
-        {
-            if (_inst != null)
-            {
-                throw new Exception("Console was inited before.");
-            }
-            _inst = new CmdLineExtension(
-                consoleHandler ?? new DefaultConsoleHandler()
-                );
-        }
-        #endregion       
-
-        public IConsoleHandler ConsoleHandler { get; private set; }
+        public IConsoleHandler ConsoleHandler { get; }
 
         /// <summary>
         /// Для сложных методов, типа считывания сложных типов через json editor вы можете отключить исключения. Тогда, к примеру, если пользователь допустит 
@@ -49,8 +22,9 @@ namespace IRO.CmdLine
         /// </summary>
         public bool ThrowConsoleParseExeptions { get; } = false;       
 
-        public CmdLineExtension(IConsoleHandler consoleHandler)
+        public CmdLineExtension(IConsoleHandler consoleHandler, IKeyValueStorage storage=null)
         {
+            Storage = storage ?? new FileStorage("CmdLineStorage.json");
             if (consoleHandler == null)
                 throw new NullReferenceException();
             ConsoleHandler = consoleHandler;
@@ -69,10 +43,10 @@ namespace IRO.CmdLine
         /// <summary>
         /// Отличается от стандартного метода Console тем, что если передаваемый объект не IConvertible, то он будет сериализирован в json строку.
         /// </summary>
-        public void WriteLine(object objToWrite, ConsoleColor? cc = null, bool prettyJson = false)
+        public void WriteLine(object objToWrite, ConsoleColor? cc = null)
         {
             ConsoleHandler.WriteLine(
-                JsonSerializeHelper.Inst.ToConvertibleOrJson(objToWrite, new JsonSerializeOptions() { WithNormalFormating = prettyJson }),
+                JsonSerializeHelper.Inst.ToConvertibleOrJson(objToWrite),
                 cc
                 );
         }
@@ -81,10 +55,10 @@ namespace IRO.CmdLine
         /// <summary>
         /// Отличается от стандартного метода Console тем, что если передаваемый объект не IConvertible, то он будет сериализирован в json строку.
         /// </summary>
-        public void Write(object objToWrite, ConsoleColor? cc = null, bool prettyJson = false)
+        public void Write(object objToWrite, ConsoleColor? cc = null)
         {
             ConsoleHandler.Write(
-                JsonSerializeHelper.Inst.ToConvertibleOrJson(objToWrite, new JsonSerializeOptions() { WithNormalFormating = prettyJson }),
+                JsonSerializeHelper.Inst.ToConvertibleOrJson(objToWrite),
                 cc
                 );
         }
@@ -121,7 +95,7 @@ namespace IRO.CmdLine
                 WriteLine($"Resource '{longResName}' with type " +
                     $"{objectType.GetNormalTypeName(false)} requested.", ConsoleColor.Yellow);               
 
-                string cachedValueString = StorageHardDrive.Get<string>(longResName).Result;
+                string cachedValueString = Storage.GetOrDefault<string>(longResName).Result;
 
                 if (typeof(IConvertible).IsAssignableFrom(objectType))
                 {
@@ -173,14 +147,7 @@ namespace IRO.CmdLine
             }
             catch
             {
-                ConstructorInfo ctor = objectType.GetConstructor(new Type[] { });
-                cachedValue = ctor.Invoke(new object[] { });
-            }
-
-            //Если автоматическое считывание, то возвращаем закешированное значение.
-            if (options.UseAutoread)
-            {
-                return cachedValue;
+                cachedValue = ReflectionHelpers.CreateTypeExample(objectType);
             }
 
             ReadLine();
@@ -189,8 +156,7 @@ namespace IRO.CmdLine
             string editedJson = null;
             string jsonPrototypeString = JsonSerializeHelper.Inst.ToJson(
                 objectType,
-                cachedValue,
-                new JsonSerializeOptions() { WithNormalFormating = true }
+                cachedValue
                 );
             do
             {
@@ -205,7 +171,7 @@ namespace IRO.CmdLine
 
             //Convert again to normal parse json.
             if(options.SaveToCache)
-                StorageHardDrive.Set(longResName, JsonSerializeHelper.Inst.ToJson(objectType, res));
+                Storage.Set(longResName, JsonSerializeHelper.Inst.ToJson(objectType, res));
             return res;
             //
             //Else, will be converted by json.
@@ -229,12 +195,6 @@ namespace IRO.CmdLine
 
             //Если автоматическое считывание, то возвращаем закешированное значение.
             string val = "";
-            if (!options.UseAutoread)
-            {
-                val= ReadLine();
-            }
-
-            
             if (val=="" && cachedValue != null)
             {
                 val = cachedValue;
@@ -242,7 +202,7 @@ namespace IRO.CmdLine
             else
             {
                 if (options.SaveToCache)
-                    StorageHardDrive.Set(longResName, val);
+                    Storage.Set(longResName, val);
             }
 
 

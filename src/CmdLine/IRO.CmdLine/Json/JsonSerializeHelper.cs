@@ -18,16 +18,6 @@ namespace IRO.CmdLine.Json
 
         public static JsonSerializeHelper Inst { get;}
 
-        static JsonSerializeOptions defOptions = new JsonSerializeOptions();
-        static JsonSerializerSettings settingsIgnoreDefaults = new JsonSerializerSettings()
-        {
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-            NullValueHandling = NullValueHandling.Ignore,
-            ReferenceLoopHandling= ReferenceLoopHandling.Ignore
-        };
-        static JsonSerializerSettings settingsIncludeDefaults = new JsonSerializerSettings( );
-        static IContractResolver defCintractResolver=new CamelCasePropertyNamesContractResolver();
-
         public T FromJson<T>(string json)
         {
             return (T)FromJson(typeof(T), json);
@@ -42,7 +32,7 @@ namespace IRO.CmdLine.Json
         /// Если тип IConvertible, то будет конвертирован через Convert.ToString,
         /// иначе - сериализирован в json.
         /// </summary>
-        public string ToConvertibleOrJson(object obj, JsonSerializeOptions jsonSerializeOptions = null)
+        public string ToConvertibleOrJson(object obj)
         {
             Type objType = obj?.GetType();
             if (obj!=null && typeof(IConvertible).IsAssignableFrom(objType))
@@ -51,7 +41,7 @@ namespace IRO.CmdLine.Json
             }
             else
             {
-                return ToJson(objType, obj, jsonSerializeOptions);
+                return ToJson(objType, obj);
             }
         }
 
@@ -73,20 +63,24 @@ namespace IRO.CmdLine.Json
         }
 
 
-        public string ToJson<T>(T obj, JsonSerializeOptions jsonSerializeOptions = null)
+        public string ToJson<T>(T obj)
         {
-            return ToJson(typeof(T), obj, jsonSerializeOptions);
+            return ToJson(typeof(T), obj);
         }
 
-        public string ToJson(Type objType, object obj, JsonSerializeOptions jsonSerializeOptions = null)
+        public string ToJson(Type objType, object obj)
         {
-            jsonSerializeOptions = jsonSerializeOptions ?? defOptions;
-            JsonSerializerSettings settings = jsonSerializeOptions.IgnoreDefaultValues ? settingsIgnoreDefaults : settingsIncludeDefaults;
-            settings.ContractResolver = defCintractResolver;
+            var settings = new JsonSerializerSettings()
+            {
+                DefaultValueHandling = DefaultValueHandling.Include,
+                NullValueHandling = NullValueHandling.Include,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver= new CamelCasePropertyNamesContractResolver(),
+                Formatting=Formatting.Indented
+            };
             return JsonConvert.SerializeObject(
                 obj,
                 objType,
-                jsonSerializeOptions.WithNormalFormating ? Formatting.Indented : new Formatting(),
                 settings
                 );
         }

@@ -6,7 +6,7 @@ namespace IRO.SlnTests.CmdTest
 {
     public class CmdLineFacade : CommandLineBase
     {
-        public CmdLineFacade(CmdLineExtension cmdLineExtension = null) : base(cmdLineExtension)
+        public CmdLineFacade() : base(null)
         {
         }
 
@@ -25,7 +25,7 @@ namespace IRO.SlnTests.CmdTest
                 {nameof(boolParam), boolParam},
                 {nameof(strParam),strParam },
                 {nameof(intParam),intParam }
-            }, prettyJson: true);
+            });
         }
     }   
 }

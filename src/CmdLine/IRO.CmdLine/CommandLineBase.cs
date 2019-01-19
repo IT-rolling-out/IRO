@@ -46,7 +46,7 @@ namespace IRO.CmdLine
 
         public CmdLineExtension Cmd { get; private set; }
 
-        public Dictionary<string, ResolvedCmdInfo> CmdNameAndInfo { get; } = new Dictionary<string, ResolvedCmdInfo>();
+        public Dictionary<string, ResolvedCmdInfo> CmdNameAndInfo { get; }
 
         public event Action OnQuit;
 
@@ -61,17 +61,21 @@ namespace IRO.CmdLine
         {
             get
             {
-                return StorageHardDrive.Get<string>(GetType().Name + ".last_cmd_params").Result;
+                return Cmd.Storage.GetOrDefault<string>(GetType().Name + ".last_cmd_params").Result;
             }
             set
             {
-                StorageHardDrive.Set(GetType().Name + ".last_cmd_params", value);
+                Cmd.Storage.Set(GetType().Name + ".last_cmd_params", value);
             }
         }
 
-        public CommandLineBase(CmdLineExtension cmdLineExtension = null)
+        public CommandLineBase():this(null)
         {
-            Cmd = cmdLineExtension ?? CmdLineExtension.Inst;
+        }
+
+        public CommandLineBase(CmdLineExtension cmdLineExtension)
+        {
+            Cmd = cmdLineExtension ?? new CmdLineExtension(new DefaultConsoleHandler());
             CmdNameAndInfo = CreateReflectionDict();
         }
 

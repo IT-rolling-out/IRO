@@ -126,7 +126,7 @@ namespace IRO.FileIO.FilesReplacerUtil.CmdUtil
             Cmd.WriteLine("Searching files, please wait...");
             var foundFiles = fr.Find();
             Cmd.WriteLine("Files that will be deleted.");
-            Cmd.WriteLine(foundFiles, prettyJson: true);
+            Cmd.WriteLine(foundFiles);
             bool cont = dontAsk || ReadResource<bool>("Continue?");
             if (cont)
             {
@@ -143,7 +143,7 @@ namespace IRO.FileIO.FilesReplacerUtil.CmdUtil
             Cmd.WriteLine("Searching files, please wait...");
             var foundFiles = fr.Find();
             Cmd.WriteLine("Found files.");
-            Cmd.WriteLine(foundFiles, prettyJson: true);
+            Cmd.WriteLine(foundFiles);
         }
 
         string CopiedFilesListToString(List<Tuple<string, string>> list)

@@ -24,7 +24,7 @@
     <DefaultAsmVersion>1.0.1</DefaultAsmVersion>
 
     <AsmVersion_Cache>1.0.1</AsmVersion_Cache>
-    <AsmVersion_CmdLine>$(DefaultAsmVersion)</AsmVersion_CmdLine>
+    <AsmVersion_CmdLine>2.0.1</AsmVersion_CmdLine>
     <AsmVersion_Common>$(DefaultAsmVersion)</AsmVersion_Common>    
     <AsmVersion_Cross>$(DefaultAsmVersion)</AsmVersion_Cross>
     <AsmVersion_Cross_ImprovedWebView>$(DefaultAsmVersion)</AsmVersion_Cross_ImprovedWebView>

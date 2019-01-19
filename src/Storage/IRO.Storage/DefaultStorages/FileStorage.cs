@@ -66,6 +66,7 @@ namespace IRO.Storage.DefaultStorages
         /// <returns></returns>
         public async Task Set(string key, object value)
         {
+            Exception exception = null;
             await Task.Run(() =>
             {
                 try
@@ -94,9 +95,13 @@ namespace IRO.Storage.DefaultStorages
                 }
                 catch (Exception ex)
                 {
-                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
+                    exception = ex;
                 }
             }).ConfigureAwait(false);
+            if (exception != null)
+            {
+                throw new StorageException(string.Format(ExceptionMsgTemplate, key), exception);
+            }
         }
 
         /// <summary>
@@ -105,7 +110,8 @@ namespace IRO.Storage.DefaultStorages
         /// </summary>
         public async Task<object> Get(Type type, string key)
         {
-            return await Task.Run(() =>
+            Exception exception = null;
+            var res = await Task.Run(() =>
             {
                 try
                 {
@@ -113,14 +119,21 @@ namespace IRO.Storage.DefaultStorages
                 }
                 catch (Exception ex)
                 {
-                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
+                    exception = ex;
+                    return null;
                 }
             }).ConfigureAwait(false);
+            if (exception != null)
+            {
+                throw new StorageException(string.Format(ExceptionMsgTemplate, key), exception);
+            }
+            return res;
         }
 
         public async Task<bool> ContainsKey(string key)
         {
-            return await Task.Run(() =>
+            Exception exception = null;
+            var res = await Task.Run(() =>
             {
                 try
                 {
@@ -132,9 +145,15 @@ namespace IRO.Storage.DefaultStorages
                 }
                 catch (Exception ex)
                 {
-                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
+                    exception = ex;
+                    return false;
                 }
             }).ConfigureAwait(false);
+            if (exception != null)
+            {
+                throw new StorageException(string.Format(ExceptionMsgTemplate, key), exception);
+            }
+            return res;
         }
 
         public Task Clear()
@@ -203,12 +222,12 @@ namespace IRO.Storage.DefaultStorages
             try
             {
                 CommonHelpers.TryReadAllText(_storageFilePath, out string strFromFile, TimeoutSeconds);
-                res = (Dictionary<string, string>) _serializer.Deserialize(
+                res = (Dictionary<string, string>)_serializer.Deserialize(
                     typeof(Dictionary<string, string>),
                     strFromFile
                 );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //if (File.Exists(_storageFilePath))
                 //{

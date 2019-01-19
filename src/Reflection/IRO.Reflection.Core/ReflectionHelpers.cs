@@ -222,16 +222,6 @@ namespace IRO.Reflection.Core
         {
             try
             {
-                if (typeof(IEnumerable).IsAssignableFrom(t) && t.IsGenericType)
-                {
-                    var elType = t.GetGenericArguments()[0];
-                    var resList = TryCreate(t) as IList
-                        ?? CreateListNonGeneric(elType);
-                    resList.Add(
-                        CreateTypeExample(elType)
-                        );
-                    return resList;
-                }
                 if (typeof(IDictionary).IsAssignableFrom(t) && t.IsGenericType)
                 {
                     var keyType = t.GetGenericArguments()[0];
@@ -243,6 +233,16 @@ namespace IRO.Reflection.Core
                         CreateTypeExample(valType)
                         );
                     return resDict;
+                }
+                if (typeof(IEnumerable).IsAssignableFrom(t) && t.IsGenericType)
+                {
+                    var elType = t.GetGenericArguments()[0];
+                    var resList = TryCreate(t) as IList
+                        ?? CreateListNonGeneric(elType);
+                    resList.Add(
+                        CreateTypeExample(elType)
+                        );
+                    return resList;
                 }
                 return Activator.CreateInstance(t);
             }
