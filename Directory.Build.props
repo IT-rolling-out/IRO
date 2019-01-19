@@ -22,7 +22,7 @@
   <!-- Category versions list. Use it in target projects and to set nuget dependencies. -->
   <PropertyGroup>
     <!-- Use current same version for all or define special for category-->
-    <DefaultAsmVersion>2.0.0</DefaultAsmVersion>
+    <DefaultAsmVersion>1.0.1</DefaultAsmVersion>
 
     <AsmVersion_CmdLine>$(DefaultAsmVersion)</AsmVersion_CmdLine>
     <AsmVersion_Common>$(DefaultAsmVersion)</AsmVersion_Common>    
@@ -33,6 +33,6 @@
     <AsmVersion_Localization>$(DefaultAsmVersion)</AsmVersion_Localization>
     <AsmVersion_Mvc>$(DefaultAsmVersion)</AsmVersion_Mvc>
     <AsmVersion_Reflection>$(DefaultAsmVersion)</AsmVersion_Reflection>
-    <AsmVersion_Storage>$(DefaultAsmVersion)</AsmVersion_Storage>   
+    <AsmVersion_Storage>2.0.2</AsmVersion_Storage>   
   </PropertyGroup>
 </Project>

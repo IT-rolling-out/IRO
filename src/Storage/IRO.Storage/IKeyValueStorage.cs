@@ -8,7 +8,8 @@ namespace IRO.Storage
         /// <summary>
         /// Return value if exists or throw exception.
         /// </summary>
-        Task<T> Get<T>(string key);
+        /// <param name="type">Type of returned object.</param>
+        Task<object> Get(Type type, string key);
 
         /// <summary>
         /// If value is 'null', then method will remove that value from the dictionary.

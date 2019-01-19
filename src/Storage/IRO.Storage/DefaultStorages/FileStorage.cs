@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using IRO.Common.Services;
+using IRO.Storage.Exceptions;
 
 namespace IRO.Storage.DefaultStorages
 {
@@ -12,6 +14,7 @@ namespace IRO.Storage.DefaultStorages
     /// </summary>
     public class FileStorage : IKeyValueStorage
     {
+        const string ExceptionMsgTemplate = "Error with '{0}' in file storage.";
         const int TimeoutSeconds = 30;
         readonly object _locker = new object();
         readonly string _storageFilePath;
@@ -33,12 +36,12 @@ namespace IRO.Storage.DefaultStorages
         /// <summary>
         /// </summary>
         /// <param name="storageName">Storage name</param>
-        public FileStorage(string storageName) 
+        public FileStorage(string storageName)
             : this(storageName, AppDomain.CurrentDomain.BaseDirectory)
         {
         }
 
-        public FileStorage(string storageName, string path) 
+        public FileStorage(string storageName, string path)
             : this(storageName, path, new JsonStorageSerializer())
         {
 
@@ -64,24 +67,31 @@ namespace IRO.Storage.DefaultStorages
         {
             await Task.Run(() =>
             {
-                lock (_locker)
+                try
                 {
-                    LoadStorageState();
-
-                    if (value == null)
+                    lock (_locker)
                     {
-                        _storageDict.Remove(key);
-                    }
-                    else
-                    {
-                        _storageDict[key] = value;
-                    }
+                        LoadStorageState();
 
-                    string serializedDict = _serializer.Serialize(
-                       _storageDict
-                       );
+                        if (value == null)
+                        {
+                            _storageDict.Remove(key);
+                        }
+                        else
+                        {
+                            _storageDict[key] = value;
+                        }
 
-                    SaveStorageState(serializedDict);
+                        string serializedDict = _serializer.Serialize(
+                            _storageDict
+                        );
+
+                        SaveStorageState(serializedDict);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
                 }
             }).ConfigureAwait(false);
         }
@@ -90,17 +100,17 @@ namespace IRO.Storage.DefaultStorages
         /// Method is synchronized with Set. 
         /// If key doesn't exist, then method will return null for reference type or default value for value types.
         /// </summary>
-        public async Task<T> Get<T>(string key)
+        public async Task<object> Get(Type type, string key)
         {
             return await Task.Run(() =>
             {
                 try
                 {
-                    return (T)LocalGet(key, typeof(T));
+                    return PrivateGet(type, key);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    throw new Exception($"Can`t resolve value by key '{key}' in file storage.", ex);
+                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
                 }
             }).ConfigureAwait(false);
         }
@@ -109,10 +119,17 @@ namespace IRO.Storage.DefaultStorages
         {
             return await Task.Run(() =>
             {
-                lock (_locker)
+                try
                 {
-                    LoadStorageState();
-                    return _storageDict.ContainsKey(key);
+                    lock (_locker)
+                    {
+                        LoadStorageState();
+                        return _storageDict.ContainsKey(key);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
                 }
             }).ConfigureAwait(false);
         }
@@ -121,13 +138,20 @@ namespace IRO.Storage.DefaultStorages
         {
             lock (_locker)
             {
-                _storageDict?.Clear();
-                SaveStorageState("{}");
+                try
+                {
+                    _storageDict?.Clear();
+                    SaveStorageState("{}");
+                }
+                catch (Exception ex)
+                {
+                    throw new StorageException("Cleaning exception.", ex);
+                }
             }
             return Task.FromResult<object>(null);
         }
 
-        object LocalGet(string key, Type t)
+        object PrivateGet(Type type, string key)
         {
             lock (_locker)
             {
@@ -146,7 +170,7 @@ namespace IRO.Storage.DefaultStorages
                     throw new Exception();
                 }
                 var str = _serializer.Serialize(origValue);
-                var value = _serializer.Deserialize(t, str);
+                var value = _serializer.Deserialize(type, str);
                 return value;
             }
         }
@@ -209,6 +233,11 @@ namespace IRO.Storage.DefaultStorages
         {
             CommonHelpers.TryCreateFileIfNotExists(_syncFilePath);
             CommonHelpers.TryWriteAllText(_syncFilePath, newIteration.ToString(), TimeoutSeconds);
+        }
+
+        void ThrowWrappedError(Exception ex, string key)
+        {
+
         }
     }
 }
