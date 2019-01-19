@@ -104,7 +104,7 @@ namespace IRO.SlnUnitTests.Storage
 
                 //await storage.Clear();
                 await storage.Set(prevKey, null);
-                var prevVal = await storage.GetOrNull<string>(prevKey);
+                var prevVal = await storage.GetOrDefault<string>(prevKey);
                 if (prevVal != null)
                 {
                     Assert.Fail($"Not null value after cleaning. Iteration {i}.");

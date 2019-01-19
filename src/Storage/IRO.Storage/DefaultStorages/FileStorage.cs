@@ -10,6 +10,8 @@ namespace IRO.Storage.DefaultStorages
 {
     /// <summary>
     /// Storage in file.
+    /// <para></para>
+    /// Use its own unlimited cache to store object, that will be serialized (store all data in memory and sync with hard drive).
     /// </summary>
     public class FileStorage : IKeyValueStorage
     {
