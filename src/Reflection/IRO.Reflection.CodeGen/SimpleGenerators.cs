@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IRO.Common.Services;
+using IRO.Common.Text;
 
 namespace IRO.Reflection.CodeGen
 {

@@ -1,4 +1,4 @@
-﻿namespace IRO.SlnUnitTests.MyStorage
+﻿namespace IRO.SlnUnitTests.Storage
 {
     class ComplexType
     {

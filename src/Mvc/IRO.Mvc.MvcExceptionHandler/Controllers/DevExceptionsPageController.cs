@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
+using IRO.Common.Text;
 
 namespace IRO.Mvc.MvcExceptionHandler.Controllers
 {

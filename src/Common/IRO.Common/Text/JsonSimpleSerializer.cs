@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using Newtonsoft.Json;
 
-namespace IRO.Storage.DefaultStorages
+namespace IRO.Common.Text
 {
-    public class JsonStorageSerializer : IStorageSerializer
+    public class JsonSimpleSerializer : IStringsSerializer
     {
         readonly JsonSerializerSettings _serializerSettings;
 
-        public JsonStorageSerializer(JsonSerializerSettings serializerSettings)
+        public JsonSimpleSerializer(JsonSerializerSettings serializerSettings)
         {
             _serializerSettings = serializerSettings;
         }
 
-        public JsonStorageSerializer()
+        public JsonSimpleSerializer()
         {
             _serializerSettings = new JsonSerializerSettings()
             {

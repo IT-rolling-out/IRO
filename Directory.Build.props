@@ -16,7 +16,6 @@
   <PropertyGroup Condition="$(IsNuPackage)">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
   
   <!-- Category versions list. Use it in target projects and to set nuget dependencies. -->

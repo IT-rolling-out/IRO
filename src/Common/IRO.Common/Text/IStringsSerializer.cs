@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace IRO.Storage.DefaultStorages
+namespace IRO.Common.Text
 {
-    public interface IStorageSerializer
+    public interface IStringsSerializer
     {
         object Deserialize(Type type, string val);
         string Serialize(object val);

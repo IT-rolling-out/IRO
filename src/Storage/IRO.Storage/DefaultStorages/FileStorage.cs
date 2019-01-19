@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using IRO.Common.Services;
+using IRO.Common.Text;
 using IRO.Storage.Exceptions;
 
 namespace IRO.Storage.DefaultStorages
@@ -19,10 +18,10 @@ namespace IRO.Storage.DefaultStorages
         readonly object _locker = new object();
         readonly string _storageFilePath;
         readonly string _syncFilePath;
-        readonly IStorageSerializer _serializer;
+        readonly IStringsSerializer _serializer;
 
         long _currentSyncIteration;
-        Dictionary<string, object> _storageDict;
+        Dictionary<string, string> _storageDict;
 
 
         /// <summary>
@@ -42,12 +41,12 @@ namespace IRO.Storage.DefaultStorages
         }
 
         public FileStorage(string storageName, string path)
-            : this(storageName, path, new JsonStorageSerializer())
+            : this(storageName, path, new JsonSimpleSerializer())
         {
 
         }
 
-        public FileStorage(string storageName, string path, IStorageSerializer serializer)
+        public FileStorage(string storageName, string path, IStringsSerializer serializer)
         {
             _serializer = serializer;
             _storageFilePath = Path.Combine(path, storageName);
@@ -63,7 +62,7 @@ namespace IRO.Storage.DefaultStorages
         /// </summary>
         /// <param name="lifetime">Ignored.</param>
         /// <returns></returns>
-        public async Task Set(string key, object value, TimeSpan? lifetime = null)
+        public async Task Set(string key, object value)
         {
             await Task.Run(() =>
             {
@@ -79,13 +78,15 @@ namespace IRO.Storage.DefaultStorages
                         }
                         else
                         {
-                            _storageDict[key] = value;
+                            string serializedValue = _serializer.Serialize(
+                                value
+                            );
+                            _storageDict[key] = serializedValue;
                         }
 
                         string serializedDict = _serializer.Serialize(
                             _storageDict
                         );
-
                         SaveStorageState(serializedDict);
                     }
                 }
@@ -163,14 +164,17 @@ namespace IRO.Storage.DefaultStorages
                     throw new KeyNotFoundException();
                 }
 
-                var origValue = _storageDict[key];
-                if (origValue == null)
+                var serializedValue = _storageDict[key];
+                object value = null;
+                if (serializedValue != null)
+                {
+                    value = _serializer.Deserialize(type, serializedValue);
+                }
+                if (value == null)
                 {
                     _storageDict.Remove(key);
                     throw new Exception();
                 }
-                var str = _serializer.Serialize(origValue);
-                var value = _serializer.Deserialize(type, str);
                 return value;
             }
         }
@@ -191,20 +195,27 @@ namespace IRO.Storage.DefaultStorages
             WriteSyncIteration(++_currentSyncIteration);
         }
 
-        Dictionary<string, object> ReadStorage()
+        Dictionary<string, string> ReadStorage()
         {
-            Dictionary<string, object> res = null;
+            Dictionary<string, string> res = null;
             try
             {
                 CommonHelpers.TryReadAllText(_storageFilePath, out string strFromFile, TimeoutSeconds);
-                res = (Dictionary<string, object>)_serializer.Deserialize(
-                    typeof(Dictionary<string, object>),
+                res = (Dictionary<string, string>) _serializer.Deserialize(
+                    typeof(Dictionary<string, string>),
                     strFromFile
-                    );
+                );
             }
-            catch { }
+            catch(Exception ex)
+            {
+                //if (File.Exists(_storageFilePath))
+                //{
+                //    throw new StorageException("Storage file exists, but still getting exception.");
+                //}
+            }
+
             if (res == null)
-                res = new Dictionary<string, object>();
+                res = new Dictionary<string, string>();
             return res;
         }
 
@@ -233,11 +244,6 @@ namespace IRO.Storage.DefaultStorages
         {
             CommonHelpers.TryCreateFileIfNotExists(_syncFilePath);
             CommonHelpers.TryWriteAllText(_syncFilePath, newIteration.ToString(), TimeoutSeconds);
-        }
-
-        void ThrowWrappedError(Exception ex, string key)
-        {
-
         }
     }
 }

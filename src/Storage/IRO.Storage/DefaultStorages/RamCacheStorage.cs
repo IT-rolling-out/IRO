@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using IRO.Common.Text;
 using IRO.Storage.Exceptions;
 
 namespace IRO.Storage.DefaultStorages
@@ -10,19 +11,19 @@ namespace IRO.Storage.DefaultStorages
     /// <summary>
     /// Will serialize all values, like other storages.
     /// </summary>
-    public class RamStorage : IKeyValueStorage
+    public class RamCacheStorage : IKeyValueStorage
     {
         const string ExceptionMsgTemplate = "Error with '{0}' in ram storage.";
-        readonly IStorageSerializer _serializer;
+        readonly IStringsSerializer _serializer;
         readonly object _locker = new object();
         readonly IDictionary<string, object> _storageDict = new ConcurrentDictionary<string, object>();
 
-        public RamStorage(IStorageSerializer serializer)
+        public RamCacheStorage(IStringsSerializer serializer)
         {
             _serializer = serializer;
         }
 
-        public RamStorage() : this(new JsonStorageSerializer())
+        public RamCacheStorage() : this(new JsonSimpleSerializer())
         {
         }
 
@@ -52,7 +53,7 @@ namespace IRO.Storage.DefaultStorages
             }
         }
 
-        public async Task Set(string key, object value, TimeSpan? lifetime = null)
+        public async Task Set(string key, object value)
         {
             try
             {

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace IRO.Common.Services
+namespace IRO.Common.Text
 {
     public static class TextExtensions
     {

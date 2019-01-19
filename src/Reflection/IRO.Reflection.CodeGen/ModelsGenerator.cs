@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using IRO.Common.Services;
+using IRO.Common.Text;
 using IRO.Reflection.Core;
 
 namespace IRO.Reflection.CodeGen

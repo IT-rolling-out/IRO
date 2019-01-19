@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using IRO.SlnUnitTests.MyStorage;
 using IRO.Storage;
+using IRO.Storage.WithLiteDB;
 using NUnit.Framework;
 
 namespace IRO.SlnUnitTests.Storage
@@ -19,10 +20,10 @@ namespace IRO.SlnUnitTests.Storage
             await storage.Set(key, null);
             try
             {
-                await storage.Get<string>(key);
-                Assert.Fail("Storage.Get must throw exception for values, that null or doesn`t exists.");
+                await storage.Get(typeof(string), key);
+                Assert.Fail("Storage. Get must throw exception for values, that null or doesn`t exists.");
             }
-            catch
+            catch(Exception ex)
             {
                 Assert.Pass();
             }
@@ -87,12 +88,22 @@ namespace IRO.SlnUnitTests.Storage
 
         public static async Task SynchronizationTest(IKeyValueStorage storage)
         {
+            await storage.Clear();
+
+            var rd = new Random();
             for (int i = 0; i < 50; i++)
             {
+                for (int j = 0; j < 10; j++)
+                {
+                    await storage.Set("key" + rd.Next(10000, 99999).ToString(), "qwwwwwwww");
+                }
+
+
                 string key = "key" + i.ToString();
                 string prevKey = "key" + (i-1).ToString();
 
-                await storage.Clear();
+                //await storage.Clear();
+                await storage.Set(prevKey, null);
                 var prevVal = await storage.GetOrNull<string>(prevKey);
                 if (prevVal != null)
                 {
@@ -105,6 +116,8 @@ namespace IRO.SlnUnitTests.Storage
                 var isContains=await storage.ContainsKey(key);
                 Assert.IsTrue(isContains);
             }
+
+            await storage.Clear();
         }
 
         

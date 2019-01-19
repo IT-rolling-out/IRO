@@ -12,12 +12,11 @@ namespace IRO.Storage
         Task<object> Get(Type type, string key);
 
         /// <summary>
-        /// If value is 'null', then method will remove that value from the dictionary.
+        /// If value is 'null', then method will remove that value from the storage.
         /// Method is synchronized with Get.
         /// If you're not closing the application, it's not recommended to use await keyword.
         /// </summary>
-        /// <param name="lifetime">If null - will not expire ever.</param>
-        Task Set(string key, object value, TimeSpan? lifetime=null);
+        Task Set(string key, object value);
 
         Task<bool> ContainsKey(string key);
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using IRO.Common.Text;
 
 namespace IRO.Common.Algorithms
 {
