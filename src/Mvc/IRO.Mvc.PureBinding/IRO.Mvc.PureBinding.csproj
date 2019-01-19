@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>$(AsmVersion_Mvc)</Version>
     <Description>Свой биндер моделей для методов в контроллерах. Позволяет получать</Description>
   </PropertyGroup>
 

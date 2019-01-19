@@ -2,8 +2,11 @@
 <Project>
 
   <PropertyGroup Condition="$(IsNuPackage)">
-    <Version>20.1.1</Version>
     <PackageIconUrl>https://gitlab.com/KogerCoder/sharedresources/raw/master/iro_nuget_logo.png</PackageIconUrl>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   
 </Project>

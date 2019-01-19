@@ -5,11 +5,11 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>$(AsmVersion_FileIO)</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IRO.FileIO.FilesReplacerUtil\IRO.FileIO.FilesReplacerUtil.csproj" />
     <ProjectReference Include="..\..\CmdLine\IRO.CmdLine\IRO.CmdLine.csproj" />
-    <ProjectReference Include="..\..\Storage\IRO.Storage.JsonFileStorage\IRO.Storage.JsonFileStorage.csproj" />
   </ItemGroup>
  </Project>

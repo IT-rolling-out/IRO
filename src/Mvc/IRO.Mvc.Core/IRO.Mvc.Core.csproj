@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>$(AsmVersion_Mvc)</Version>
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 

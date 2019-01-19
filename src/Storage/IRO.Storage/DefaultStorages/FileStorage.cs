@@ -1,77 +1,73 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using IRO.Common.Services;
 
-namespace IRO.Storage.JsonFileStorage
+namespace IRO.Storage.DefaultStorages
 {
     /// <summary>
-    /// Storage in json file.
+    /// Storage in file.
     /// </summary>
-    public class JsonLocalStorage : IKeyValueStorage
+    public class FileStorage : IKeyValueStorage
     {
         const int TimeoutSeconds = 30;
-        readonly object Locker = new object();
+        readonly object _locker = new object();
         readonly string _storageFilePath;
         readonly string _syncFilePath;
+        readonly IStorageSerializer _serializer;
+
         long _currentSyncIteration;
         Dictionary<string, object> _storageDict;
-        JsonSerializerSettings _serializeOpt;
-        static object writingLock = 1;
+
 
         /// <summary>
-        /// Storage name will be "localstorage"
+        /// Storage name will be "localstorage".
         /// </summary>
-        public JsonLocalStorage() : this("localstorage")
-        {
-
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="storageName">Storage name</param>
-        public JsonLocalStorage(string storageName) : this(storageName, CommonHelpers.GetExecutableAssemblyDir())
+        public FileStorage() : this("local_storage")
         {
 
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="storageName">Storage name</param>
-        /// <param name="path">Path to storage</param>
-        public JsonLocalStorage(string storageName, string path)
+        public FileStorage(string storageName) 
+            : this(storageName, AppDomain.CurrentDomain.BaseDirectory)
         {
-            _serializeOpt = new JsonSerializerSettings();
-            if (Debugger.IsAttached)
-            {
-                _serializeOpt.Formatting = Formatting.Indented;
-            }
+        }
 
-            _storageFilePath = Path.Combine(path, storageName + ".json");
-            _syncFilePath= Path.Combine(path, storageName + "_sync.txt");
+        public FileStorage(string storageName, string path) 
+            : this(storageName, path, new JsonStorageSerializer())
+        {
+
+        }
+
+        public FileStorage(string storageName, string path, IStorageSerializer serializer)
+        {
+            _serializer = serializer;
+            _storageFilePath = Path.Combine(path, storageName);
+            _syncFilePath = Path.Combine(path, storageName + "_sync.txt");
             CommonHelpers.TryCreateFileIfNotExists(_storageFilePath);
             CommonHelpers.TryCreateFileIfNotExists(_syncFilePath);
 
         }
 
         /// <summary>
-        /// Method is synchronized with Get. If value is 'null', then method will remove that value from the dictionary.
+        /// Method is synchronized with Get.
         /// If you're not closing the application, it's not recommended to use await keyword.
         /// </summary>
-        public async Task Set(string key, object value)
+        /// <param name="lifetime">Ignored.</param>
+        /// <returns></returns>
+        public async Task Set(string key, object value, TimeSpan? lifetime = null)
         {
             await Task.Run(() =>
             {
-                string serializedDict;
-                lock (Locker)
+                lock (_locker)
                 {
-                    _LoadStorageState();     
-                    
+                    LoadStorageState();
+
                     if (value == null)
                     {
                         _storageDict.Remove(key);
@@ -81,12 +77,11 @@ namespace IRO.Storage.JsonFileStorage
                         _storageDict[key] = value;
                     }
 
-                    serializedDict = JsonConvert.SerializeObject(
-                       _storageDict,
-                       _serializeOpt
+                    string serializedDict = _serializer.Serialize(
+                       _storageDict
                        );
 
-                    _SaveStorageState(serializedDict);
+                    SaveStorageState(serializedDict);
                 }
             }).ConfigureAwait(false);
         }
@@ -99,77 +94,87 @@ namespace IRO.Storage.JsonFileStorage
         {
             return await Task.Run(() =>
             {
-                return (T)_Get(key, typeof(T));
+                try
+                {
+                    return (T)LocalGet(key, typeof(T));
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception($"Can`t resolve value by key '{key}' in file storage.", ex);
+                }
             }).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// If the key doesn't exist, throws a null exception.
-        /// If 'key_name' is equals to null, method will return false
-        /// </summary>
         public async Task<bool> ContainsKey(string key)
         {
-            lock (Locker)
+            return await Task.Run(() =>
             {
-                _LoadStorageState();
-                return _storageDict.ContainsKey(key);
-            }
+                lock (_locker)
+                {
+                    LoadStorageState();
+                    return _storageDict.ContainsKey(key);
+                }
+            }).ConfigureAwait(false);
         }
 
-        public Task ClearAll()
+        public Task Clear()
         {
-            lock (Locker)
+            lock (_locker)
             {
-                _SaveStorageState("{}");
+                _storageDict?.Clear();
+                SaveStorageState("{}");
             }
             return Task.FromResult<object>(null);
         }
 
-        object _Get(string key, Type t)
+        object LocalGet(string key, Type t)
         {
-            lock (Locker)
+            lock (_locker)
             {
-                _LoadStorageState();
+                LoadStorageState();
 
                 if (!_storageDict.ContainsKey(key))
                 {
                     //return default value for structs or null for class
-                    if (t.IsValueType)
-                        return Activator.CreateInstance(t);
-                    else
-                        return null;
+                    throw new KeyNotFoundException();
                 }
 
-                string serializedStr = JsonConvert.SerializeObject(_storageDict[key]);
-                object res = JsonConvert.DeserializeObject(serializedStr, t);              
-                return res;
+                var origValue = _storageDict[key];
+                if (origValue == null)
+                {
+                    _storageDict.Remove(key);
+                    throw new Exception();
+                }
+                var str = _serializer.Serialize(origValue);
+                var value = _serializer.Deserialize(t, str);
+                return value;
             }
-
         }
 
-        void _LoadStorageState()
+        void LoadStorageState()
         {
-            long fromFileSyncIteration = _ReadSyncIteration();
+            long fromFileSyncIteration = ReadSyncIteration();
             if (_storageDict == null || _currentSyncIteration < fromFileSyncIteration)
             {
-                _storageDict = _ReadStorage();
+                _storageDict = ReadStorage();
                 _currentSyncIteration = fromFileSyncIteration;
             }
         }
 
-        void _SaveStorageState(string storage)
+        void SaveStorageState(string storage)
         {
-            _WriteStorage(storage);
-            _WriteSyncIteration(++_currentSyncIteration);
+            WriteStorage(storage);
+            WriteSyncIteration(++_currentSyncIteration);
         }
 
-        Dictionary<string, object> _ReadStorage()
+        Dictionary<string, object> ReadStorage()
         {
             Dictionary<string, object> res = null;
             try
             {
                 CommonHelpers.TryReadAllText(_storageFilePath, out string strFromFile, TimeoutSeconds);
-                res = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+                res = (Dictionary<string, object>)_serializer.Deserialize(
+                    typeof(Dictionary<string, object>),
                     strFromFile
                     );
             }
@@ -179,13 +184,13 @@ namespace IRO.Storage.JsonFileStorage
             return res;
         }
 
-        void _WriteStorage(string storage)
+        void WriteStorage(string storage)
         {
             CommonHelpers.TryCreateFileIfNotExists(_storageFilePath);
             CommonHelpers.TryWriteAllText(_storageFilePath, storage, TimeoutSeconds);
         }
 
-        long _ReadSyncIteration()
+        long ReadSyncIteration()
         {
             try
             {
@@ -197,10 +202,10 @@ namespace IRO.Storage.JsonFileStorage
             {
                 return 0;
             }
-            
+
         }
 
-        void _WriteSyncIteration(long newIteration)
+        void WriteSyncIteration(long newIteration)
         {
             CommonHelpers.TryCreateFileIfNotExists(_syncFilePath);
             CommonHelpers.TryWriteAllText(_syncFilePath, newIteration.ToString(), TimeoutSeconds);

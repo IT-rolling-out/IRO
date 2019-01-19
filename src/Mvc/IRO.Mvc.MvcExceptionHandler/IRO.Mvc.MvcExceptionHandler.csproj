@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>$(AsmVersion_Mvc)</Version>
     <Description>Глобальный обработчик исключений для asp.net. Также поддерживает обработку http кодов. Работает совместно с DevExceptionPage.</Description>
   </PropertyGroup>
 

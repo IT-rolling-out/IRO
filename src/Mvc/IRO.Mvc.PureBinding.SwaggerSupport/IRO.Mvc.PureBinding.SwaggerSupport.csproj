@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>$(AsmVersion_Mvc)</Version>
     <Description>Интегрирует PureBinding c Swashbuckle.</Description>
   </PropertyGroup>
 

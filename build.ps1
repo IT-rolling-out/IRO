@@ -90,6 +90,9 @@ $global:Path="$PSScriptRoot\IRO.sln";
 $global:IsRelease="";
 $global:Configuration="";
 
+$IgnoredProjectsInfo = [IO.File]::ReadAllText("$PSScriptRoot\items\IgnoredProjects.txt")
+Write-Host $IgnoredProjectsInfo "`n`n";
+
 # Cleaning
 $WantRemoveNupkgFromSrc = ReadBool "Want to remove all .nupkg files from '.\src' before build? ";
 if($WantRemoveNupkgFromSrc){
@@ -100,6 +103,7 @@ if($WantRemoveNupkgFromSrc){
 
 # Build
 AskConfiguration;
+dotnet restore $global:Path /clp:ErrorsOnly
 dotnet build $global:Path --configuration $global:Configuration /clp:ErrorsOnly
 WriteOperationResultByExitCode "Solution build status: " $lastexitcode
 pause;
@@ -110,7 +114,7 @@ if($WantExUnitTests){
   $testRes=0;
   Get-ChildItem "$PSScriptRoot\tests" -Recurse -Filter "*UnitTest*.csproj" | 
   Foreach-Object {    
-    dotnet test $_.FullName --verbosity  m
+    dotnet test $_.FullName --configuration $global:Configuration --verbosity  m
 	if($lastexitcode){
 	  $testRes=1;
 	}

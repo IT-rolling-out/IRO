@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CmdLine\IRO.CmdLine\IRO.CmdLine.csproj" />
-    <ProjectReference Include="..\..\src\Storage\IRO.Storage.JsonFileStorage\IRO.Storage.JsonFileStorage.csproj" />
   </ItemGroup>
 
   

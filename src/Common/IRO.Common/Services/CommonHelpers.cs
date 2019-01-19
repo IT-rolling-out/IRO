@@ -10,18 +10,6 @@ namespace IRO.Common.Services
 {
     public static class CommonHelpers
     {
-        public static string GetExecutableAssemblyDir()
-        {
-#if NETSTANDARD2_0
-            var appDir = Assembly.GetExecutingAssembly().Location;
-            var assemblyFileName = Path.GetFileName(appDir);
-            appDir = appDir.Remove(appDir.Length - assemblyFileName.Length);
-            return appDir;
-#endif
-
-            throw new NotSupportedException();
-        }
-
         /// <summary>
         /// Глубокое копирование с использованием json серилизации.
         /// Использовать ОЧЕНЬ осторожно, а лучше вообще никогда.

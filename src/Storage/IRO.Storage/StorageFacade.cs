@@ -8,7 +8,7 @@ namespace IRO.Storage
     /// Вы можете подставить отдельную реализацию на каждой платформе.
     /// Статический класс - просто обертка для простоты использования.
     /// </summary>
-    public static class StorageHardDrive
+    public static class StorageFacade
     {
         static IKeyValueStorage _handler;
 
@@ -45,13 +45,15 @@ namespace IRO.Storage
         /// </summary>
         public static Task<bool> ContainsKey(string key) => Handler.ContainsKey(key);
 
-        public static Task ClearAll() => Handler.ClearAll();
+        public static Task Clear() => Handler.Clear();
 
         /// <summary>
         /// Manual set handler. Use for fast initialization.
         /// </summary>
         public static void InitDependencies(IKeyValueStorage handler)
         {
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
             _handler = handler;
         }
     }

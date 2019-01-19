@@ -4,11 +4,9 @@
     <IsTest>false</IsTest>
     <IsNuPackage>false</IsNuPackage>
   </PropertyGroup>
-
   <PropertyGroup Condition = "($(MSBuildProjectName.StartsWith('IRO.SlnTests')) Or $(MSBuildProjectName.StartsWith('IRO.SlnUnitTests')))">
     <IsTest>true</IsTest>
   </PropertyGroup>
-
   <PropertyGroup  Condition = "$(MSBuildProjectName.StartsWith('IRO.')) And !$(IsTest)" >
     <IsNuPackage>true</IsNuPackage>
   </PropertyGroup>
@@ -19,5 +17,22 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+  
+  <!-- Category versions list. Use it in target projects and to set nuget dependencies. -->
+  <PropertyGroup>
+    <!-- Use current same version for all or define special for category-->
+    <DefaultAsmVersion>2.0.0</DefaultAsmVersion>
+
+    <AsmVersion_CmdLine>$(DefaultAsmVersion)</AsmVersion_CmdLine>
+    <AsmVersion_Common>$(DefaultAsmVersion)</AsmVersion_Common>    
+    <AsmVersion_Cross>$(DefaultAsmVersion)</AsmVersion_Cross>
+    <AsmVersion_Cross_ImprovedWebView>$(DefaultAsmVersion)</AsmVersion_Cross_ImprovedWebView>
+    <AsmVersion_CustomIoc>$(DefaultAsmVersion)</AsmVersion_CustomIoc>
+    <AsmVersion_FileIO>$(DefaultAsmVersion)</AsmVersion_FileIO>
+    <AsmVersion_Localization>$(DefaultAsmVersion)</AsmVersion_Localization>
+    <AsmVersion_Mvc>$(DefaultAsmVersion)</AsmVersion_Mvc>
+    <AsmVersion_Reflection>$(DefaultAsmVersion)</AsmVersion_Reflection>
+    <AsmVersion_Storage>$(DefaultAsmVersion)</AsmVersion_Storage>   
   </PropertyGroup>
 </Project>

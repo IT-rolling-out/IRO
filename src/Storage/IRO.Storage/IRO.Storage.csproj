@@ -1,12 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>$(AsmVersion_Storage)</Version>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\IRO.Common\IRO.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files (x86)\Microsoft SDKs\NuGetPackagesFallback\netstandard.library\2.0.1\build\netstandard2.0\ref\netstandard.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Users\Yura\.nuget\packages\newtonsoft.json\12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
 

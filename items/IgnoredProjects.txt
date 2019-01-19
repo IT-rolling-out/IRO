@@ -1,0 +1,15 @@
+-------------- IGNORED PROJECTS --------------
+
+Here you can see list of projects, that removed form .sln, but still left in repository.
+Current projects were under development, but for some reason they were incomplete. 
+They are removed from the repository, so as not to waste the attention of developers on the mistakes of their build.
+WARN: IRO.SlnUnitTests * tests will be launched by build.ps1 even if they are removed from the solution.
+
+List:
+- IRO.Cross.ImprovedWebView
+- IRO.Cross.ImprovedWebView.Droid
+- IRO.Cross
+- IRO.Cross.Droid
+- IRO.SlnTests.WebViewAndroidTest
+
+-------------- IGNORED PROJECTS --------------

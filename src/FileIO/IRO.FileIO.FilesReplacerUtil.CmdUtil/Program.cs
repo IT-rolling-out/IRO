@@ -1,7 +1,8 @@
 using System;
 using IRO.CmdLine;
 using IRO.Storage;
-using IRO.Storage.JsonFileStorage;
+using IRO.Storage.DefaultStorages;
+using IRO.Storage.DefaultStorages.FileStorage;
 
 namespace IRO.FileIO.FilesReplacerUtil.CmdUtil
 {
@@ -10,7 +11,7 @@ namespace IRO.FileIO.FilesReplacerUtil.CmdUtil
         static void Main(string[] args)
         {
             StorageHardDrive.InitDependencies(
-               new JsonLocalStorage()
+               new FileStorage()
                );
 
             //Простейшая консоль с командами из методов классса.

@@ -2,7 +2,8 @@
 using System.Reflection;
 using IRO.CmdLine;
 using IRO.Storage;
-using IRO.Storage.JsonFileStorage;
+using IRO.Storage.DefaultStorages;
+using IRO.Storage.DefaultStorages.FileStorage;
 
 namespace IRO.SlnTests.CmdTest
 {
@@ -14,7 +15,7 @@ namespace IRO.SlnTests.CmdTest
             var assemblyFileName = Path.GetFileName(appDir);
             appDir = appDir.Remove(appDir.Length - assemblyFileName.Length);
             StorageHardDrive.InitDependencies(
-               new JsonLocalStorage(
+               new FileStorage(
                    Path.Combine(appDir, "storage.json")
                    )
                );
