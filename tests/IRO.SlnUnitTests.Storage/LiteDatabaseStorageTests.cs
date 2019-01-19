@@ -48,5 +48,11 @@ namespace IRO.SlnUnitTests.Storage
         {
             await StaticUnifiedTests.SynchronizationTest(new LiteDatabaseStorage("collection7"));
         }
+
+        [Test]
+        public async Task ReadTest()
+        {
+            await StaticUnifiedTests.ReadTest(new LiteDatabaseStorage("collection8"));
+        }
     }
 }

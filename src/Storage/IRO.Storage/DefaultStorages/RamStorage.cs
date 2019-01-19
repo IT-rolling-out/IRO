@@ -9,21 +9,22 @@ using IRO.Storage.Exceptions;
 namespace IRO.Storage.DefaultStorages
 {
     /// <summary>
-    /// Will serialize all values, like other storages.
+    /// Will serialize all values, like other storages and save it in ram.
+    /// Jsut like unlimited cache.
     /// </summary>
-    public class RamCacheStorage : IKeyValueStorage
+    public class RamStorage : IKeyValueStorage
     {
         const string ExceptionMsgTemplate = "Error with '{0}' in ram storage.";
         readonly IStringsSerializer _serializer;
         readonly object _locker = new object();
         readonly IDictionary<string, object> _storageDict = new ConcurrentDictionary<string, object>();
 
-        public RamCacheStorage(IStringsSerializer serializer)
+        public RamStorage(IStringsSerializer serializer)
         {
             _serializer = serializer;
         }
 
-        public RamCacheStorage() : this(new JsonSimpleSerializer())
+        public RamStorage() : this(new JsonSimpleSerializer())
         {
         }
 

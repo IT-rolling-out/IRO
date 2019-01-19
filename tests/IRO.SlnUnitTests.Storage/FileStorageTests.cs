@@ -62,5 +62,11 @@ namespace IRO.SlnUnitTests.Storage
         {
             await StaticUnifiedTests.SynchronizationTest(new FileStorage("storage7.json"));
         }
+
+        [Test]
+        public async Task ReadTest()
+        {
+            await StaticUnifiedTests.ReadTest(new FileStorage("storage8.json"));
+        }
     }
 }

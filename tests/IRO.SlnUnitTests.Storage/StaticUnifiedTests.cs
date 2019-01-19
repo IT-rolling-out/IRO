@@ -100,7 +100,7 @@ namespace IRO.SlnUnitTests.Storage
 
 
                 string key = "key" + i.ToString();
-                string prevKey = "key" + (i-1).ToString();
+                string prevKey = "key" + (i - 1).ToString();
 
                 //await storage.Clear();
                 await storage.Set(prevKey, null);
@@ -110,16 +110,35 @@ namespace IRO.SlnUnitTests.Storage
                     Assert.Fail($"Not null value after cleaning. Iteration {i}.");
                 }
 
-                await storage.Set(key,"val");
+                await storage.Set(key, "val");
                 var val = await storage.Get<string>(key);
                 Assert.AreEqual(val, "val");
-                var isContains=await storage.ContainsKey(key);
+                var isContains = await storage.ContainsKey(key);
                 Assert.IsTrue(isContains);
             }
 
             await storage.Clear();
         }
 
-        
+        public static async Task ReadTest(IKeyValueStorage storage)
+        {
+            await storage.Clear();
+
+            var rd = new Random();
+            for (int i = 0; i < 500; i++)
+            {
+                await storage.Set("somekey" + i, "qwwwwwwww");
+            }
+
+            await storage.Set("mykey", "val");
+            for (int i = 0; i < 10000; i++)
+            {
+                var val=await storage.Get<string>("mykey");
+                Assert.AreEqual("val", val);
+            }
+            await storage.Clear();
+        }
+
+
     }
 }

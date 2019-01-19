@@ -1,47 +1,45 @@
 ﻿using LiteDB;
-using Newtonsoft.Json;
-using IRO;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using IRO.Common.Services;
+using IRO.Cache;
+using IRO.Common.Text;
+using IRO.Storage.Exceptions;
 
 namespace IRO.Storage.WithLiteDB
 {
     /// <summary>
-    /// Storage in json file.
+    /// Storage in litedb file.
+    /// Recommended to use it for storages upper than 1000 records.
+    /// For another use Storage.FileStorage.
     /// </summary>
     public class LiteDatabaseStorage : IKeyValueStorage
     {
+        const string ExceptionMsgTemplate = "Error with '{0}' in litedb storage.";
         const string DefaultDbFileName = "localstorage.db";
         readonly object Locker = new object();
         string _collectionName;
-        string _dbFilePath;
+        readonly string _dbFilePath;
+        readonly RamCache _cache;
+        readonly IStringsSerializer _serializer;
+        bool _useCache;
 
-        public LiteDatabaseStorage() : this("def_storage_collection")
-        {
-        }
-
-        public LiteDatabaseStorage(string collectionName)
-            : this(collectionName, null)
+        public LiteDatabaseStorage(string collectionName="def_storage_collection")
+            : this(collectionName, null, null)
         {
         }
 
         /// <summary>
-        /// 
         /// </summary>
-        /// <param name="collectionName"></param>
-        /// <param name="dbFilePath"></param>
-        /// <param name="cacheStorage">Use cache storages for much performanse. Default is RamCacheStorage.</param>
-        public LiteDatabaseStorage(string collectionName, string dbFilePath)
+        /// <param name="useCache">Use cache for much performanse. Default is RamCacheStorage.
+        /// <para></para>
+        /// Disable it for crossprocess database, because cache threadsafe only in process.
+        /// </param>
+        public LiteDatabaseStorage(string collectionName, string dbFilePath, IStringsSerializer serializer, bool useCache=true)
         {
+            _useCache = useCache;
+            _serializer = serializer ?? new JsonSimpleSerializer();
+            _cache = new RamCache(1000);
             if (dbFilePath == null)
                 dbFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DefaultDbFileName);
 
@@ -61,38 +59,47 @@ namespace IRO.Storage.WithLiteDB
         /// <param name="lifetime">Ignored.</param>
         public async Task Set(string key, object value)
         {
-
             Action asyncAct=() =>
             {
-                lock (Locker)
+                try
                 {
-                    if (value == null)
+                    lock (Locker)
                     {
-                        using (var _db = new LiteDatabase(_dbFilePath))
+                        if(_useCache)
+                            _cache.SetSync(key, value);
+                        if (value == null)
                         {
-                            var _collection = _db.GetCollection<BsonDocument>(_collectionName);
-                            _collection.Delete(key);
+                            using (var _db = new LiteDatabase(_dbFilePath))
+                            {
+                                var _collection = _db.GetCollection<BsonDocument>(_collectionName);
+                                _collection.Delete(key);
+                            }
                         }
-                    }
-                    else
-                    {
-                        //Use json for more simple convertation.
-                        string jsonStr = JsonConvert.SerializeObject(value);
-                        using (var _db = new LiteDatabase(_dbFilePath))
+                        else
                         {
-                            var _collection = _db.GetCollection<BsonDocument>(_collectionName);
-                            _collection.Upsert(
-                                new BsonDocument
-                                {
-                                    ["_id"] = key,
-                                    ["Value"] = jsonStr
-                                }
-                            );
+                            //Use json for more simple convertation.
+                            string serializedStr = _serializer.Serialize(value);
+                            using (var _db = new LiteDatabase(_dbFilePath))
+                            {
+                                var _collection = _db.GetCollection<BsonDocument>(_collectionName);
+                                _collection.Upsert(
+                                    new BsonDocument
+                                    {
+                                        ["_id"] = key,
+                                        ["Value"] = serializedStr
+                                    }
+                                );
+                            }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
+                }
             };
-            await Task.Run(asyncAct);
+            asyncAct();
+            //await Task.Run(asyncAct);
         }
 
         /// <summary>
@@ -101,27 +108,46 @@ namespace IRO.Storage.WithLiteDB
         /// </summary>
         public async Task<object> Get(Type type, string key)
         {
-            lock (Locker)
+            try
             {
-                string jsonStr;
-                using (var _db = new LiteDatabase(_dbFilePath))
+                string serializedStr = null;
+                lock (Locker)
                 {
-                    var _collection = _db.GetCollection<BsonDocument>(_collectionName);
-                    var keyValPair = _collection.FindById(key);
-                    if (keyValPair == null)
+                    if (_useCache)
                     {
-                        //return default value for structs or null for class
-                        if (type.IsValueType)
-                            return Activator.CreateInstance(type);
-                        else
-                            return null;
+                        var cachedValue = _cache.TryGetSync(type, key);
+                        if (cachedValue != null)
+                            return cachedValue;
                     }
-                    jsonStr = keyValPair["Value"];
+
+                    using (var _db = new LiteDatabase(_dbFilePath))
+                    {
+                        var _collection = _db.GetCollection<BsonDocument>(_collectionName);
+
+                        var keyValPair = _collection.FindById(key);
+                        if (keyValPair != null)
+                        {
+                            serializedStr = keyValPair["Value"];
+                        }
+
+                    }
                 }
 
-                //Use json for more simple convertation.
-                var res = JsonConvert.DeserializeObject(jsonStr, type);
-                return res;
+                object value = null;
+                if (serializedStr != null)
+                {
+                    value = _serializer.Deserialize(type, serializedStr);
+                }
+
+                if (value == null)
+                {
+                    throw new Exception("Can`t find value.");
+                }
+                return value;
+            }
+            catch (Exception ex)
+            {
+                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
             }
         }
 
@@ -131,24 +157,38 @@ namespace IRO.Storage.WithLiteDB
         /// </summary>
         public async Task<bool> ContainsKey(string key)
         {
-            lock (Locker)
+            try
             {
-                using (var _db = new LiteDatabase(_dbFilePath))
+                lock (Locker)
                 {
-                    var _collection = _db.GetCollection<BsonDocument>(_collectionName);
-                    return _collection.Exists(r => r["_id"] == key);
+                    using (var _db = new LiteDatabase(_dbFilePath))
+                    {
+                        var _collection = _db.GetCollection<BsonDocument>(_collectionName);
+                        return _collection.Exists(r => r["_id"] == key);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
             }
         }
 
         public async Task Clear()
         {
-            lock (Locker)
+            try
             {
-                using (var _db = new LiteDatabase(_dbFilePath))
+                lock (Locker)
                 {
-                    _db.DropCollection(_collectionName);
+                    using (var _db = new LiteDatabase(_dbFilePath))
+                    {
+                        _db.DropCollection(_collectionName);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new StorageException(string.Format(ExceptionMsgTemplate), ex);
             }
         }
     }
