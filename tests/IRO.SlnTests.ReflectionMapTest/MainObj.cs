@@ -1,10 +1,11 @@
-﻿using IRO.Reflection.Map.Metadata;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using IRO.Reflection.Map.Metadata;
 
-namespace ReflectionMapTest
+namespace IRO.SlnTests.ReflectionMapTest
 {
     class MainObj
     {
+
         [SimplePropReflectionMap]
         public string AccessToken { get; }
 

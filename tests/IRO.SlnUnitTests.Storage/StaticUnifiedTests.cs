@@ -125,13 +125,13 @@ namespace IRO.SlnUnitTests.Storage
             await storage.Clear();
 
             var rd = new Random();
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 50; i++)
             {
                 await storage.Set("somekey" + i, "qwwwwwwww");
             }
 
             await storage.Set("mykey", "val");
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 500; i++)
             {
                 var val=await storage.Get<string>("mykey");
                 Assert.AreEqual("val", val);

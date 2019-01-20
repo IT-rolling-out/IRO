@@ -236,6 +236,12 @@ namespace IRO.Reflection.Core
         {
             try
             {
+                //Ignore constructor loops.
+                if (!difficultConstructorsTypes.Contains(t))
+                {
+                    return null;
+                }
+
                 //Create dict.
                 if (typeof(IDictionary).IsAssignableFrom(t) && t.IsGenericType)
                 {
@@ -284,6 +290,7 @@ namespace IRO.Reflection.Core
                 //Constructor with params.
                 if (obj == null)
                 {
+                    //Add to loops counter only types with parametrized constructor.
                     difficultConstructorsTypes.Add(t);
                     var constructors = t.GetConstructors();
                     foreach (var ctor in constructors)
@@ -296,13 +303,7 @@ namespace IRO.Reflection.Core
                             for (int i = 0; i < parametersTypes.Length; i++)
                             {
                                 var paramType = parametersTypes[i];
-                                object paramValue = null;
-                                //Ignore constructor loops.
-                                if (!difficultConstructorsTypes.Contains(t))
-                                {
-                                    paramValue = CreateTypeExample(paramType.ParameterType, difficultConstructorsTypes);
-                                }
-
+                                object paramValue = CreateTypeExample(paramType.ParameterType, difficultConstructorsTypes);
                                 parameters[i] = paramValue;
                             }
 

@@ -29,7 +29,7 @@
     <AsmVersion_Cross>$(DefaultAsmVersion)</AsmVersion_Cross>
     <AsmVersion_Cross_ImprovedWebView>$(DefaultAsmVersion)</AsmVersion_Cross_ImprovedWebView>
     <AsmVersion_CustomIoc>$(DefaultAsmVersion)</AsmVersion_CustomIoc>
-    <AsmVersion_FileIO>$(DefaultAsmVersion)</AsmVersion_FileIO>
+    <AsmVersion_FileIO>1.0.2</AsmVersion_FileIO>
     <AsmVersion_Localization>$(DefaultAsmVersion)</AsmVersion_Localization>
     <AsmVersion_Mvc>$(DefaultAsmVersion)</AsmVersion_Mvc>
     <AsmVersion_Reflection>$(DefaultAsmVersion)</AsmVersion_Reflection>

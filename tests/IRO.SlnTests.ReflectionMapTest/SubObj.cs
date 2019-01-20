@@ -1,7 +1,7 @@
-﻿using IRO.Reflection.Map.Metadata;
-using System;
+﻿using System;
+using IRO.Reflection.Map.Metadata;
 
-namespace ReflectionMapTest
+namespace IRO.SlnTests.ReflectionMapTest
 {
     class SubObj
     {

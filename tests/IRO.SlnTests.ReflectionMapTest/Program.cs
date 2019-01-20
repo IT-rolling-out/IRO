@@ -1,10 +1,9 @@
-﻿using IRO.Reflection.Map;
-using System;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using IRO.Reflection.Core.ModelBinders;
+using IRO.Reflection.Map;
 
-namespace ReflectionMapTest
+namespace IRO.SlnTests.ReflectionMapTest
 {
     class Program
     {
