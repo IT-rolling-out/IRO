@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using ChinhDo.Transactions;
 using IRO.Common.Diagnostics;
 
 namespace IRO.FileIO.ImprovedFileOperations
@@ -16,13 +15,9 @@ namespace IRO.FileIO.ImprovedFileOperations
     /// </summary>
     public static class ImprovedFile
     {
-        const string TransactionMessage = "It`s not deprecated. I use [Obsolete] only to tell you that you can use TransactionScope here.";
+        //static Random _random = new Random();
 
-        static TxFileManager _txFileManager = new TxFileManager();
-
-        static Random _random = new Random();
-
-        public static string BufPath { get; set; }
+        //public static string BufPath { get; set; }
 
         public static IDebugService DebugService { get; set; } = new DebugService();
 
@@ -31,36 +26,13 @@ namespace IRO.FileIO.ImprovedFileOperations
             try
             {
       
-                BufPath = Path.Combine(Environment.CurrentDirectory, "CopyPasteBuf");
-                if (Directory.Exists(BufPath))
-                {
-                    TryDelete(BufPath);
-                }
+                //BufPath = Path.Combine(Environment.CurrentDirectory, "CopyPasteBuf");
+                //if (Directory.Exists(BufPath))
+                //{
+                //    TryDelete(BufPath);
+                //}
             }
             catch { }
-        }
-
-        /// <summary>
-        /// Меняет файлы (папки) местами.
-        /// </summary>
-        [Obsolete(TransactionMessage)]
-        public static void Switch(string source1Path, string source2Path)
-        {
-            var bufGen = Path.Combine(
-                BufPath,
-                _random.Next(100000, 9999999).ToString()
-                );
-            TryDelete("dasdsadasdasdsadsa");
-            var buf1 = Path.Combine(bufGen, "source1");
-            var buf2 = Path.Combine(bufGen, "source2");
-            Copy(source1Path, buf1);
-            Copy(source2Path, buf2);
-            Delete(source1Path);
-            Delete(source2Path);
-            Copy(buf1, source2Path);
-            Copy(buf2, source1Path);
-            TryDelete(buf1);
-            TryDelete(buf2);
         }
 
         /// <summary>
@@ -109,7 +81,6 @@ namespace IRO.FileIO.ImprovedFileOperations
         /// <summary>
         /// Копирует с заменой все файлы/папки и обновляет время их последнего редактирования.
         /// </summary>
-        [Obsolete(TransactionMessage)]
         public static void Copy(string sourcePath, string destinationPath, bool overwrite = true)
         {
             _Copy(sourcePath, destinationPath, overwrite, true);
@@ -126,7 +97,6 @@ namespace IRO.FileIO.ImprovedFileOperations
         /// <summary>
         /// Удаляет все файлы/папки по пути.
         /// </summary>
-        [Obsolete(TransactionMessage)]
         public static void Delete(string sourcePath)
         {
             _Delete(sourcePath, true);
@@ -207,7 +177,7 @@ namespace IRO.FileIO.ImprovedFileOperations
                     string[] directories = Directory.GetDirectories(sourcePath, "*.*", SearchOption.AllDirectories);
                     foreach (var dirPath in directories)
                     {
-                        _txFileManager.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
+                        Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
                     }
 
                     string[] files = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
@@ -227,8 +197,8 @@ namespace IRO.FileIO.ImprovedFileOperations
                     TryUpdateTime(sourcePath);
                     var dirName = Path.GetDirectoryName(destinationPath);
                     if (!Directory.Exists(dirName))
-                        _txFileManager.CreateDirectory(dirName);
-                    _txFileManager.Copy(
+                        Directory.CreateDirectory(dirName);
+                    File.Copy(
                         sourcePath,
                         destinationPath,
                         overwrite
@@ -270,13 +240,13 @@ namespace IRO.FileIO.ImprovedFileOperations
                     }
 
                     //Если папка
-                    _txFileManager.DeleteDirectory(sourcePath);
+                    Directory.Delete(sourcePath);
                     DebugService.WriteLine($"Dir deleted: '{sourcePath}'");
                 }
                 else
                 {
                     //Если файл
-                    _txFileManager.Delete(sourcePath);
+                    File.Delete(sourcePath);
                     DebugService.WriteLine($"File deleted: '{sourcePath}'");
                 }
 
@@ -284,7 +254,8 @@ namespace IRO.FileIO.ImprovedFileOperations
             catch (Exception ex)
             {
                 DebugService.WriteLine($"Delete error: '{ex.Message}'\nPath: '{sourcePath}'");
-                throw;
+                if (throwErrors)
+                    throw;
             }
         }
     }

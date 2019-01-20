@@ -218,33 +218,101 @@ namespace IRO.Reflection.Core
             }
         }
 
+        /// <summary>
+        /// You can create type examle (not default null for classes),
+        /// creates instanse. If enum or dict - fill it with one record.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static object CreateTypeExample(Type t)
+        {
+            return CreateTypeExample(t, new HashSet<Type>());
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="difficultConstructorsTypes">Types with parameters in constructor. Used to avoid endless loops.</param>
+        static object CreateTypeExample(Type t, HashSet<Type> difficultConstructorsTypes)
         {
             try
             {
+                //Create dict.
                 if (typeof(IDictionary).IsAssignableFrom(t) && t.IsGenericType)
                 {
                     var keyType = t.GetGenericArguments()[0];
                     var valType = t.GetGenericArguments()[1];
                     var resDict = TryCreate(t) as IDictionary
                         ?? CreateDictNonGeneric(keyType, valType);
+
+                    object key=null;
+                    if (keyType.IsAssignableFrom(typeof(string)))
+                    {
+                        key = "key";
+                    }
+                    else
+                    {
+                        key = CreateTypeExample(keyType, difficultConstructorsTypes);
+                    }
                     resDict.Add(
-                        CreateTypeExample(keyType),
-                        CreateTypeExample(valType)
+                        key,
+                        CreateTypeExample(valType,difficultConstructorsTypes)
                         );
                     return resDict;
                 }
+                
+                //Create list.
                 if (typeof(IEnumerable).IsAssignableFrom(t) && t.IsGenericType)
                 {
                     var elType = t.GetGenericArguments()[0];
                     var resList = TryCreate(t) as IList
                         ?? CreateListNonGeneric(elType);
                     resList.Add(
-                        CreateTypeExample(elType)
+                        CreateTypeExample(elType,difficultConstructorsTypes)
                         );
                     return resList;
                 }
-                return Activator.CreateInstance(t);
+
+                //Example of object is string/
+                if (t.IsAssignableFrom(typeof(object)))
+                {
+                    return "";
+                }
+
+                //Constructor without params.
+                var obj=TryCreate(t);
+
+                //Constructor with params.
+                if (obj == null)
+                {
+                    difficultConstructorsTypes.Add(t);
+                    var constructors = t.GetConstructors();
+                    foreach (var ctor in constructors)
+                    {
+                        try
+                        {
+                            //Create parameters.
+                            var parametersTypes = ctor.GetParameters();
+                            var parameters = new object[parametersTypes.Length];
+                            for (int i = 0; i < parametersTypes.Length; i++)
+                            {
+                                var paramType = parametersTypes[i];
+                                object paramValue = null;
+                                //Ignore constructor loops.
+                                if (!difficultConstructorsTypes.Contains(t))
+                                {
+                                    paramValue = CreateTypeExample(paramType.ParameterType, difficultConstructorsTypes);
+                                }
+
+                                parameters[i] = paramValue;
+                            }
+
+                            obj=ctor.Invoke(parameters);
+                            break;
+                        }
+                        catch { }
+                    }
+                }
+                return obj;
             }
             catch
             {
