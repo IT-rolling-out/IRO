@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Map.Metadata\IRO.Reflection.Map.Metadata.csproj" />
     <ProjectReference Include="..\..\src\Storage\IRO.Storage.WithLiteDB\IRO.Storage.WithLiteDB.csproj" />
   </ItemGroup>
 

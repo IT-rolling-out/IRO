@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\IRO.Common.Algorithms\IRO.Common.Algorithms.csproj" />
     <ProjectReference Include="..\..\Common\IRO.Common\IRO.Common.csproj" />
   </ItemGroup>
 

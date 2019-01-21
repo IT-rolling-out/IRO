@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using IRO.Common.Services;
+using Newtonsoft.Json;
 
 namespace IRO.FileIO.FilesReplacerUtil.Settings
 {
@@ -16,8 +16,10 @@ namespace IRO.FileIO.FilesReplacerUtil.Settings
 
         public object Clone()
         {
-            //Лень нормально копировать.
-            return CommonHelpers.DeepCopy<FilesReplacerSettings>(this);
+            // I'm too lazy to copy normal.
+            return JsonConvert.DeserializeObject<FilesReplacerSettings>(
+                JsonConvert.SerializeObject(this)
+            );
         }
 
         public static FilesReplacerSettings Template()

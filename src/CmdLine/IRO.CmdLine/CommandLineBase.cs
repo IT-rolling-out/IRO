@@ -202,19 +202,9 @@ namespace IRO.CmdLine
             catch (Exception ex)
             {
                 Cmd.WriteLine("Executing command throwed exception: " + ex.ToString(), ConsoleColor.DarkRed);
-                //ApiException apiEx = ExceptionsHelper.FindInnerExceptionInAggregateException<ApiException>(ex);
-                //if (apiEx!=null)
-                //{
-                //    var apiErr = apiEx.GetApiError();
-                //    HandleApiError(apiErr);
-                //}
                 Cmd.Write("\nWant to ignore it? Press y/n (y): ", ConsoleColor.DarkRed);
                 var consoleText = Cmd.ReadLine();
-                if (consoleText.Trim() == "")
-                {
-                    //throw;
-                }
-                if (consoleText.Trim().StartsWith("n"))
+                if (consoleText.TrimStart().StartsWith("n"))
                 {
                     throw;
                 }

@@ -4,47 +4,51 @@ using System.Text;
 
 namespace IRO.Common.Services
 {
-    
+
     public static class ExceptionsHelper
     {
         /// <summary>
-        /// Находит вложенное исключение по его типу.
+        /// Find first inner exception (or current) that is assignable from soughtExceptionType.
+        /// Or return null.
+        /// <para></para>
+        /// If AggregateException - will search in all InnerExceptions.
         /// </summary>
-        public static T FindInnerExceptionInAggregateException<T>(AggregateException parentEx) where T : Exception
+        public static Exception FindInnerException(Type soughtExceptionType, Exception ownerEx)
         {
-            if (parentEx == null)
+            if (soughtExceptionType == null)
+                throw new ArgumentNullException(nameof(soughtExceptionType));
+
+            if (ownerEx == null)
                 return null;
 
-            foreach (var innerEx in parentEx.InnerExceptions)
+            if (soughtExceptionType.IsAssignableFrom(ownerEx.GetType()))
             {
-                if (innerEx is AggregateException)
-                    return FindInnerExceptionInAggregateException<T>((AggregateException)innerEx);
-                else
-                    return FindInnerExceptionInAggregateException<T>(innerEx);
+                return ownerEx;
             }
-
+            else if (ownerEx is AggregateException aggregateEx)
+            {
+                foreach (var innerEx in aggregateEx.InnerExceptions)
+                {
+                    var foundEx = FindInnerException(soughtExceptionType, innerEx);
+                    if (foundEx != null)
+                        return foundEx;
+                }
+            }
+            else
+            {
+                var foundEx = FindInnerException(soughtExceptionType, ownerEx.InnerException);
+                if (foundEx != null)
+                    return foundEx;
+            }
             return null;
         }
 
         /// <summary>
         /// Находит вложенное исключение по его типу.
         /// </summary>
-        public static T FindInnerExceptionInAggregateException<T>(Exception parentEx) where T : Exception
+        public static TException FindInnerException<TException>(Exception parentEx) where TException : Exception
         {
-            if (parentEx == null)
-                return null;
-            if (parentEx is T)
-                return (T)parentEx;
-            if (parentEx is AggregateException)
-                return FindInnerExceptionInAggregateException<T>(((AggregateException)parentEx));
-            else
-            {
-                var innerEx = parentEx.InnerException;
-                return FindInnerExceptionInAggregateException<T>(innerEx);
-            }
-
+            return FindInnerException(typeof(TException), parentEx) as TException;
         }
-
-        
     }
 }

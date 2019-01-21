@@ -5,8 +5,8 @@ namespace IRO.Common.Services
     public static class ProcessExtension
     {
         /// <summary>
-        /// Запуск процессов в .net core.
-        /// Обычный Process.Start не сработает.
+        /// StartProcess on .net core.
+        /// Deafult Process.Start will throw exception.
         /// </summary>
         /// <param name="process"></param>
         /// <param name="path"></param>

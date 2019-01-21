@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Cache\IRO.Cache\IRO.Cache.csproj" />
-    <ProjectReference Include="..\..\src\Localization\IRO.Localization\IRO.Localization.csproj" />
   </ItemGroup>
 
 </Project>

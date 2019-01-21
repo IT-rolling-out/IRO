@@ -43,7 +43,7 @@ namespace IRO.FileIO.FilesReplacerUtil
                     {
                         var sourceFile = fileAndDest.Item1;
                         var destination = fileAndDest.Item2;
-                        ImprovedFile.Copy(sourceFile, destination, true);
+                        (new ImprovedFile()).Copy(sourceFile, destination, true);
                     }
                     scope.Complete();
                 }
@@ -54,7 +54,7 @@ namespace IRO.FileIO.FilesReplacerUtil
                 {
                     var sourceFile = fileAndDest.Item1;
                     var destination = fileAndDest.Item2;
-                    ImprovedFile.TryCopy(sourceFile, destination, true);
+                    (new ImprovedFile()).TryCopy(sourceFile, destination, true);
                 }
             }
 
@@ -70,7 +70,7 @@ namespace IRO.FileIO.FilesReplacerUtil
 
                     foreach (var file in foundFiles)
                     {
-                        ImprovedFile.Delete(file);
+                        (new ImprovedFile()).Delete(file);
                     }
                     scope.Complete();
                 }
@@ -79,7 +79,7 @@ namespace IRO.FileIO.FilesReplacerUtil
             {
                 foreach (var file in foundFiles)
                 {
-                    ImprovedFile.TryDelete(file);
+                    (new ImprovedFile()).TryDelete(file);
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace IRO.FileIO.FilesReplacerUtil
             if (_settings.GlobalSearchSettings?.IgnoredRegexCompiled != null)
                 ignoreRegex.AddRange(_settings.GlobalSearchSettings?.IgnoredRegexCompiled);
 
-            var files = ImprovedFile.Search(
+            var files = (new ImprovedFile()).Search(
                 dir.DirPath,
                 searchRegex,
                 ignoreRegex

@@ -1,8 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
 using IRO.CmdLine;
-using IRO.Storage;
-using IRO.Storage.DefaultStorages;
 
 namespace IRO.SlnTests.CmdTest
 {

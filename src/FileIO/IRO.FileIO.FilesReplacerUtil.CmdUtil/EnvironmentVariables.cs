@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace IRO.Common.Services
+namespace IRO.FileIO.FilesReplacerUtil.CmdUtil
 {
     public static class EnvironmentVariables
     {

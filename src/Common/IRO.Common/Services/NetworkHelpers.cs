@@ -12,9 +12,9 @@ namespace IRO.Common.Services
     public static class NetworkHelpers
     {
         /// <summary>
-        /// Return null on exception.
+        /// Return null on exceptions.
         /// </summary>
-        public async static Task<string> TrySendGetHttpRequest(string url, int timeoutSeconds = 20)
+        public static async Task<string> TrySendGetHttpRequest(string url, int timeoutSeconds = 20)
         {
             string res = null;
             try
@@ -34,56 +34,33 @@ namespace IRO.Common.Services
             }
             catch
             {
-
             }
             return res;
         }
 
         /// <summary>
-        /// Return null on exception.
+        /// Return null on exceptions.
         /// </summary>
-        public async static Task<string> TrySendPostHttpRequest(string url, Dictionary<string,string> data, int timeoutSeconds = 20)
+        public static async Task<string> TrySendPostHttpRequest(string url, Dictionary<string,string> data, int timeoutSeconds = 20)
         {
             string res = null;
             try
             {
-
                 var content = new FormUrlEncodedContent(data);
                 HttpClient client = new HttpClient();
                 var response = await client.PostAsync(url, content).ConfigureAwait(false);
                 res = await response.Content.ReadAsStringAsync();
-
             }
             catch
             {
-
             }
             return res;
         }
-
-        public static List<string> GetAllPossibleIPsInLocalNetwork()
-        {
-            List<string> res = new List<string>();
-            string startPart = "192.168.";
-
-            for (int i = 0; i < 255; i++)
-            {
-                for (int j = 0; j < 255; j++)
-                {
-                    res.Add(startPart + i + "." + j);
-
-                }
-                //break;
-            }
-
-            return res;
-        }
-
 
         /// <summary>
-        /// Will ping all IPs from list and return new list with respounded IPs.
+        /// Really fast parallel ping for IPs list .Return new list with respounded IPs.
         /// </summary>
-        public static async Task<List<string>> PingAll(List<string> inputIPs, int timeoutMS = 50)
+        public static async Task<List<string>> Ping(ICollection<string> inputIPs, int timeoutMS = 50)
         {
             List<string> res = new List<string>();
 

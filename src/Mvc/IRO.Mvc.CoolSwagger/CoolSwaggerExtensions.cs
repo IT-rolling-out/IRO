@@ -39,7 +39,7 @@ namespace IRO.Mvc.CoolSwagger
 
         public static void IncludeAllAvailableXmlComments(this SwaggerGenOptions opt)
         {
-            var xmlFiles=ImprovedFile.Search(
+            var xmlFiles=(new ImprovedFile()).Search(
                 AppContext.BaseDirectory,
                 new List<Regex> { new Regex("\\.[Xx][Mm][Ll]$") }
                 );

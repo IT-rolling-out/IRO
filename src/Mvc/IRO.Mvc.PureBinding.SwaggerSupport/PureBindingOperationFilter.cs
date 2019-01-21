@@ -1,6 +1,5 @@
 ﻿using IRO.Mvc.PureBinding.Metadata;
 using IRO.Reflection.CodeGen;
-using IRO.Common.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -8,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text;
 
 namespace IRO.Mvc.PureBinding.SwaggerSupport

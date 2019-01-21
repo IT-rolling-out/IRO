@@ -42,20 +42,20 @@ namespace IRO.SlnUnitTests.FileIO
         [Test]
         public void DeleteTest()
         {
-            ImprovedFile.Delete(File1);
+            (new ImprovedFile()).Delete(File1);
             if (File.Exists(File1))
             {
                 Assert.Fail("File wasn`t deleted.");
             }
 
 
-            ImprovedFile.Delete(Dir1_File2);
+            (new ImprovedFile()).Delete(Dir1_File2);
             if (File.Exists(Dir1_File2))
             {
                 Assert.Fail("File wasn`t deleted.");
             }
 
-            ImprovedFile.Delete(Dir1);
+            (new ImprovedFile()).Delete(Dir1);
             if (Directory.Exists(Dir1))
             {
                 Assert.Fail("Dir wasn`t deleted.");
@@ -68,7 +68,7 @@ namespace IRO.SlnUnitTests.FileIO
             var blockingStream = File.Open(Dir1_File1, FileMode.Open);
             try
             {
-                ImprovedFile.Delete(Dir1);
+                (new ImprovedFile()).Delete(Dir1);
                 Assert.Fail("Delete method doesn`t throw error.");
             }
             catch
@@ -94,7 +94,7 @@ namespace IRO.SlnUnitTests.FileIO
             var blockingStream = File.Open(Dir1_File1, FileMode.Open);
             try
             {
-                ImprovedFile.TryDelete(Dir1);
+                (new ImprovedFile()).TryDelete(Dir1);
                 if (File.Exists(Dir1_File1) && !File.Exists(Dir1_File2) && !File.Exists(Dir1_Dir2_File1))
                 {
                     Assert.Pass();
@@ -136,7 +136,7 @@ namespace IRO.SlnUnitTests.FileIO
             var blockingStream = File.Open(Dir1_File1, FileMode.Open);
             try
             {
-                ImprovedFile.TryCopy(Dir1, CopyDir1);
+                (new ImprovedFile()).TryCopy(Dir1, CopyDir1);
                 if (!File.Exists(CopyDir1_File1) && File.Exists(CopyDir1_File2) && File.Exists(CopyDir1_Dir2_File1))
                 {
                     Assert.Pass();
@@ -158,7 +158,7 @@ namespace IRO.SlnUnitTests.FileIO
             var blockingStream = File.Open(Dir1_File1, FileMode.Open);
             try
             {
-                ImprovedFile.Copy(Dir1, CopyDir1);
+                (new ImprovedFile()).Copy(Dir1, CopyDir1);
                 Assert.Fail("Doesn`t throw exception.");
             }
             catch

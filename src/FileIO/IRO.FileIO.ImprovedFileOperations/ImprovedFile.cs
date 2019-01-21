@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using IRO.Common.Diagnostics;
 
 namespace IRO.FileIO.ImprovedFileOperations
 {
@@ -13,32 +12,19 @@ namespace IRO.FileIO.ImprovedFileOperations
     /// <para></para>
     /// Многие методы позволяют обернуть работу с файлами и папками в TransactionScope.
     /// </summary>
-    public static class ImprovedFile
+    public class ImprovedFile
     {
-        //static Random _random = new Random();
+        readonly Action<string> _logger;
 
-        //public static string BufPath { get; set; }
-
-        public static IDebugService DebugService { get; set; } = new DebugService();
-
-        static ImprovedFile()
+        public ImprovedFile(Action<string> logger=null)
         {
-            try
-            {
-      
-                //BufPath = Path.Combine(Environment.CurrentDirectory, "CopyPasteBuf");
-                //if (Directory.Exists(BufPath))
-                //{
-                //    TryDelete(BufPath);
-                //}
-            }
-            catch { }
+            _logger = logger;
         }
 
         /// <summary>
         /// Обновляет время последнего редактирования у файла / всех файлов в папке.
         /// </summary>
-        public static void TryUpdateTime(string sourcePath)
+        public void TryUpdateTime(string sourcePath)
         {
             try
             {
@@ -61,19 +47,19 @@ namespace IRO.FileIO.ImprovedFileOperations
                 {
                     File.SetCreationTime(sourcePath, DateTime.Now);
                     File.SetLastWriteTime(sourcePath, DateTime.Now);
-                    //DebugService.WriteLine($"Updated file time '{sourcePath}'");
+                    //Log($"Updated file time '{sourcePath}'");
                 }
             }
             catch (Exception ex)
             {
-                DebugService.WriteLine($"Update time error: '{ex.Message}'\nPath: '{sourcePath}'");
+                Log($"Update time error: '{ex.Message}'\nPath: '{sourcePath}'");
             }
         }
 
         /// <summary>
         /// Копирует с заменой все файлы/папки и обновляет время их последнего редактирования.
         /// </summary>
-        public static void TryCopy(string sourcePath, string destinationPath, bool overwrite = true)
+        public void TryCopy(string sourcePath, string destinationPath, bool overwrite = true)
         {
             _Copy(sourcePath, destinationPath, overwrite, false);
         }
@@ -81,7 +67,7 @@ namespace IRO.FileIO.ImprovedFileOperations
         /// <summary>
         /// Копирует с заменой все файлы/папки и обновляет время их последнего редактирования.
         /// </summary>
-        public static void Copy(string sourcePath, string destinationPath, bool overwrite = true)
+        public void Copy(string sourcePath, string destinationPath, bool overwrite = true)
         {
             _Copy(sourcePath, destinationPath, overwrite, true);
         }
@@ -89,7 +75,7 @@ namespace IRO.FileIO.ImprovedFileOperations
         /// <summary>
         /// Удаляет все файлы/папки по пути.
         /// </summary>
-        public static void TryDelete(string sourcePath)
+        public void TryDelete(string sourcePath)
         {
             _Delete(sourcePath, false);
         }
@@ -97,7 +83,7 @@ namespace IRO.FileIO.ImprovedFileOperations
         /// <summary>
         /// Удаляет все файлы/папки по пути.
         /// </summary>
-        public static void Delete(string sourcePath)
+        public void Delete(string sourcePath)
         {
             _Delete(sourcePath, true);
         }
@@ -106,7 +92,7 @@ namespace IRO.FileIO.ImprovedFileOperations
         /// Находит все файлы, которые соответствуют одному из переданным регулярным выражений.
         /// </summary>
         /// <param name="sourcePath"></param>
-        public static List<string> Search(string sourcePath, IEnumerable<Regex> regexList, IEnumerable<Regex> regexIgnoreList=null)
+        public List<string> Search(string sourcePath, IEnumerable<Regex> regexList, IEnumerable<Regex> regexIgnoreList=null)
         {
             var res = new List<string>();
             _SearchFiles(sourcePath, res, regexList, regexIgnoreList);
@@ -114,7 +100,7 @@ namespace IRO.FileIO.ImprovedFileOperations
         }
 
 
-        static void _SearchFiles(string sourcePath, List<string> resultList, IEnumerable<Regex> regexList, IEnumerable<Regex> regexIgnoreList)
+        void _SearchFiles(string sourcePath, List<string> resultList, IEnumerable<Regex> regexList, IEnumerable<Regex> regexIgnoreList)
         {
 
             //Если папка
@@ -167,7 +153,7 @@ namespace IRO.FileIO.ImprovedFileOperations
             }
         }
 
-        static void _Copy(string sourcePath, string destinationPath, bool overwrite, bool throwErrors)
+        void _Copy(string sourcePath, string destinationPath, bool overwrite, bool throwErrors)
         {
             try
             {
@@ -190,7 +176,7 @@ namespace IRO.FileIO.ImprovedFileOperations
                             throwErrors
                             );
                     }
-                    DebugService.WriteLine($"Dir copied: '{sourcePath}' -> '{destinationPath}'");
+                    Log($"Dir copied: '{sourcePath}' -> '{destinationPath}'");
                 }
                 else
                 {
@@ -203,21 +189,21 @@ namespace IRO.FileIO.ImprovedFileOperations
                         destinationPath,
                         overwrite
                         );
-                    DebugService.WriteLine($"File copied: '{sourcePath}' -> '{destinationPath}'");
+                    Log($"File copied: '{sourcePath}' -> '{destinationPath}'");
                 }
 
             }
             catch (Exception ex)
             {
-                DebugService.WriteLine($"Copy error: '{ex.Message}'\nPath: '{sourcePath}' -> '{destinationPath}'");
+                Log($"Copy error: '{ex.Message}'\nPath: '{sourcePath}' -> '{destinationPath}'");
                 if (throwErrors)
                     throw;
             }
         }
 
-        static void _Delete(string sourcePath, bool throwErrors)
+        void _Delete(string sourcePath, bool throwErrors)
         {
-            DebugService.WriteLine($"Will TryDelete '{sourcePath}'");
+            Log($"Will TryDelete '{sourcePath}'");
             try
             {
                 //Если папка
@@ -241,22 +227,27 @@ namespace IRO.FileIO.ImprovedFileOperations
 
                     //Если папка
                     Directory.Delete(sourcePath);
-                    DebugService.WriteLine($"Dir deleted: '{sourcePath}'");
+                    Log($"Dir deleted: '{sourcePath}'");
                 }
                 else
                 {
                     //Если файл
                     File.Delete(sourcePath);
-                    DebugService.WriteLine($"File deleted: '{sourcePath}'");
+                    Log($"File deleted: '{sourcePath}'");
                 }
 
             }
             catch (Exception ex)
             {
-                DebugService.WriteLine($"Delete error: '{ex.Message}'\nPath: '{sourcePath}'");
+                Log($"Delete error: '{ex.Message}'\nPath: '{sourcePath}'");
                 if (throwErrors)
                     throw;
             }
+        }
+
+        void Log(string msg)
+        {
+            _logger?.Invoke(msg);
         }
     }
 }

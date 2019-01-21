@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace IRO.CustomIoc
 {
+    //!Warning! Russian text, use google transalte.
     /// <summary>
     /// Смысл IocSystem в том чтоб накладывать дополнительные проверки на ServiceProvider и ServiceCollection,
     /// когда они используются в одном месте. 

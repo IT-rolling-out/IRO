@@ -21,7 +21,7 @@ namespace IRO.CmdLine
                 var process = TryStartProcess(jsonEditorFilePath);
                 TryWaitForExit(process);
                 string res;
-                CommonHelpers.TryReadAllText(jsonEditorFilePath, out res, 120);
+                FileHelpers.TryReadAllText(jsonEditorFilePath, out res, 120);
                 return res;
             }
             catch (Exception ex)

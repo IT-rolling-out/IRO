@@ -7,6 +7,9 @@ namespace IRO.Reflection.Core
 {
     public class TypeInheritanceTreeBuilder
     {
+        /// <summary>
+        /// Return trees, with type inheritance hierarchy. 
+        /// </summary>
         public static List<TreeNode<Type>> BuildTrees(IEnumerable<Type> types)
         {
             Func<Type, Type> getParent = (t) =>

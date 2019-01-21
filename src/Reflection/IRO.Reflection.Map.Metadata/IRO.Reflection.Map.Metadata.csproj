@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <Version>$(AsmVersion_Reflection)</Version>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-
- </Project>

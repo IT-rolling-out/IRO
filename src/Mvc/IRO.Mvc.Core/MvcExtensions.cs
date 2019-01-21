@@ -17,7 +17,7 @@ namespace IRO.Mvc.Core
             {
                 return (string)cachedText;
             }
-            string text=CommonHelpers.ReadAllTextFromStream(httpContext.Request.Body);
+            string text=StreamHelpers.ReadAllTextFromStream(httpContext.Request.Body);
             httpContext.Items[RequestBodyTextItemName] = text;
             return text;
         }

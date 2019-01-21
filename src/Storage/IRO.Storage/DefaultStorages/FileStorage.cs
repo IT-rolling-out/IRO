@@ -53,9 +53,14 @@ namespace IRO.Storage.DefaultStorages
             _serializer = serializer;
             _storageFilePath = Path.Combine(path, storageName);
             _syncFilePath = Path.Combine(path, storageName + "_sync.txt");
-            CommonHelpers.TryCreateFileIfNotExists(_storageFilePath);
-            CommonHelpers.TryCreateFileIfNotExists(_syncFilePath);
-
+            if (!File.Exists(_storageFilePath))
+            {
+                File.CreateText(_storageFilePath).Close();
+            }
+            if (!File.Exists(_syncFilePath))
+            {
+                File.CreateText(_syncFilePath).Close();
+            }
         }
 
         /// <summary>
@@ -221,7 +226,7 @@ namespace IRO.Storage.DefaultStorages
             Dictionary<string, string> res = null;
             try
             {
-                CommonHelpers.TryReadAllText(_storageFilePath, out string strFromFile, TimeoutSeconds);
+                FileHelpers.TryReadAllText(_storageFilePath, out string strFromFile, TimeoutSeconds);
                 res = (Dictionary<string, string>)_serializer.Deserialize(
                     typeof(Dictionary<string, string>),
                     strFromFile
@@ -242,15 +247,18 @@ namespace IRO.Storage.DefaultStorages
 
         void WriteStorage(string storage)
         {
-            CommonHelpers.TryCreateFileIfNotExists(_storageFilePath);
-            CommonHelpers.TryWriteAllText(_storageFilePath, storage, TimeoutSeconds);
+            if (!File.Exists(_storageFilePath))
+            {
+                File.CreateText(_storageFilePath).Close();
+            }
+            FileHelpers.TryWriteAllText(_storageFilePath, storage, TimeoutSeconds);
         }
 
         long ReadSyncIteration()
         {
             try
             {
-                bool success = CommonHelpers.TryReadAllText(_syncFilePath, out string str, TimeoutSeconds);
+                bool success = FileHelpers.TryReadAllText(_syncFilePath, out string str, TimeoutSeconds);
                 long res = success ? Convert.ToInt64(str) : 0;
                 return res;
             }
@@ -263,8 +271,7 @@ namespace IRO.Storage.DefaultStorages
 
         void WriteSyncIteration(long newIteration)
         {
-            CommonHelpers.TryCreateFileIfNotExists(_syncFilePath);
-            CommonHelpers.TryWriteAllText(_syncFilePath, newIteration.ToString(), TimeoutSeconds);
+            FileHelpers.TryWriteAllText(_syncFilePath, newIteration.ToString(), TimeoutSeconds);
         }
     }
 }
