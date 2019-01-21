@@ -10,7 +10,11 @@ namespace IRO.Mvc.Core
         /// </summary>
         public const string RequestBodyTextItemName = "RequestBodyText";
 
-
+        /// <summary>
+        /// Read request contetn to string and then return cached value.
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
         public static string GetRequestBodyText(this HttpContext httpContext)
         {
             if(httpContext.Items.TryGetValue(RequestBodyTextItemName, out var cachedText))

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CmdLine", "src\CmdLine\IRO.CmdLine\IRO.CmdLine.csproj", "{842F7620-085C-4DEF-B206-2F50259C5DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.CmdTest", "tests\IRO.SlnTests.CmdTest\IRO.SlnTests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Tests.CmdTest", "tests\IRO.Tests.CmdTest\IRO.Tests.CmdTest.csproj", "{F248E809-752A-4192-BD16-BCB22BA0A77F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CmdLine", "CmdLine", "{CCC15F0E-D147-40E5-BA81-C1841A6C0BB2}"
 EndProject
@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc.MvcExceptionHandler
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc.PureBinding", "src\Mvc\IRO.Mvc.PureBinding\IRO.Mvc.PureBinding.csproj", "{E314F491-E694-4E01-AC89-278ABE6B5A1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.PureBindingsTest", "tests\IRO.SlnTests.PureBindingsTest\IRO.SlnTests.PureBindingsTest.csproj", "{914C1631-89F0-43C8-8C7E-6149D6DACD0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Tests.PureBindingsTest", "tests\IRO.Tests.PureBindingsTest\IRO.Tests.PureBindingsTest.csproj", "{914C1631-89F0-43C8-8C7E-6149D6DACD0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.SwashbuckleTest", "tests\IRO.SlnTests.SwashbuckleTest\IRO.SlnTests.SwashbuckleTest.csproj", "{A68A6623-C845-4ADC-A074-A99F51A7145B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Tests.SwashbuckleTest", "tests\IRO.Tests.SwashbuckleTest\IRO.Tests.SwashbuckleTest.csproj", "{A68A6623-C845-4ADC-A074-A99F51A7145B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Mvc", "src\Mvc\IRO.Mvc\IRO.Mvc.csproj", "{8683C09F-1DD0-4E45-A14C-6A74C026EBB0}"
 EndProject
@@ -51,15 +51,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc", "Mvc", "{EC7ADBF5-A8E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B5E0A75B-0688-4423-BC9C-C233E31D9492}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomIoc", "CustomIoc", "{5EC32341-E0EA-489C-816E-B2C230349495}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileIO", "FileIO", "{B68063A5-A6ED-4B92-A671-D5EA038228DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{680BCBA2-35DF-4EC0-A392-1E3590681936}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Common", "src\Common\IRO.Common\IRO.Common.csproj", "{51FC5540-879D-4E2F-B5C3-BA80E5752AE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnTests.AlgorithmsTest", "tests\IRO.SlnTests.AlgorithmsTest\IRO.SlnTests.AlgorithmsTest.csproj", "{E48358E2-D941-491D-88B4-6FF115090899}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Tests.AlgorithmsTest", "tests\IRO.Tests.AlgorithmsTest\IRO.Tests.AlgorithmsTest.csproj", "{E48358E2-D941-491D-88B4-6FF115090899}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Storage", "src\Storage\IRO.Storage\IRO.Storage.csproj", "{8F1FA595-9B70-4306-9E25-3786B7D4183A}"
 EndProject
@@ -71,8 +69,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.FileIO.FilesReplacerUti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.FileIO.ImprovedFileOperations", "src\FileIO\IRO.FileIO.ImprovedFileOperations\IRO.FileIO.ImprovedFileOperations.csproj", "{FC988344-EFCD-40E7-891E-1A8E990E3FAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.CustomIoc", "src\CustomIoc\IRO.CustomIoc\IRO.CustomIoc.csproj", "{805BFC86-2AAD-4372-8A42-F59CE2B39D74}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BF3E8F4E-C26A-45F1-A53B-36C7AC98D0E2}"
 	ProjectSection(SolutionItems) = preProject
 		scripts\copy_nupkgs.cmd = scripts\copy_nupkgs.cmd
@@ -83,15 +79,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BF3E
 		scripts\rename_files.cmd = scripts\rename_files.cmd
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnUnitTests", "tests\IRO.SlnUnitTests\IRO.SlnUnitTests.csproj", "{37859EE7-7887-4159-BAF4-E13A730A4863}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.UnitTests", "tests\IRO.UnitTests\IRO.UnitTests.csproj", "{37859EE7-7887-4159-BAF4-E13A730A4863}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnUnitTests.Storage", "tests\IRO.SlnUnitTests.Storage\IRO.SlnUnitTests.Storage.csproj", "{922E6E7C-ECEE-40D9-87AD-55B5E52F53A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.UnitTests.Storage", "tests\IRO.UnitTests.Storage\IRO.UnitTests.Storage.csproj", "{922E6E7C-ECEE-40D9-87AD-55B5E52F53A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache", "Cache", "{FA0EBD25-8CA8-40C9-8C60-D53774075D86}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Cache", "src\Cache\IRO.Cache\IRO.Cache.csproj", "{B6989030-9CD6-4DCA-85D5-82127978D1EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.SlnUnitTests.FileIO", "tests\IRO.SlnUnitTests.FileIO\IRO.SlnUnitTests.FileIO.csproj", "{B4B449AA-A182-458C-9685-D94D3D87B995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.UnitTests.FileIO", "tests\IRO.UnitTests.FileIO\IRO.UnitTests.FileIO.csproj", "{B4B449AA-A182-458C-9685-D94D3D87B995}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Common.Algorithms", "src\Common\IRO.Common.Algorithms\IRO.Common.Algorithms.csproj", "{666CF718-49BC-4C4F-A6E2-0BA3FB05FDED}"
 EndProject
@@ -185,10 +181,6 @@ Global
 		{FC988344-EFCD-40E7-891E-1A8E990E3FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC988344-EFCD-40E7-891E-1A8E990E3FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC988344-EFCD-40E7-891E-1A8E990E3FAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{805BFC86-2AAD-4372-8A42-F59CE2B39D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{805BFC86-2AAD-4372-8A42-F59CE2B39D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{805BFC86-2AAD-4372-8A42-F59CE2B39D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{805BFC86-2AAD-4372-8A42-F59CE2B39D74}.Release|Any CPU.Build.0 = Release|Any CPU
 		{37859EE7-7887-4159-BAF4-E13A730A4863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37859EE7-7887-4159-BAF4-E13A730A4863}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37859EE7-7887-4159-BAF4-E13A730A4863}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -235,7 +227,6 @@ Global
 		{7470E549-2339-4479-B592-528AD2E9D827} = {B68063A5-A6ED-4B92-A671-D5EA038228DE}
 		{0867EB9B-5B6E-4B67-A482-A905656684BA} = {B68063A5-A6ED-4B92-A671-D5EA038228DE}
 		{FC988344-EFCD-40E7-891E-1A8E990E3FAD} = {B68063A5-A6ED-4B92-A671-D5EA038228DE}
-		{805BFC86-2AAD-4372-8A42-F59CE2B39D74} = {5EC32341-E0EA-489C-816E-B2C230349495}
 		{BF3E8F4E-C26A-45F1-A53B-36C7AC98D0E2} = {645B685D-30B9-41AE-A709-35A4F5231558}
 		{37859EE7-7887-4159-BAF4-E13A730A4863} = {78FAC66F-3AC1-489E-9D43-A25CD0C27FC1}
 		{922E6E7C-ECEE-40D9-87AD-55B5E52F53A1} = {78FAC66F-3AC1-489E-9D43-A25CD0C27FC1}

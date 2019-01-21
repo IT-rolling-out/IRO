@@ -1,3 +1,20 @@
+[CmdletBinding()]
+Param(
+    #[switch]$CustomParam,
+    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
+    [string[]]$NotSilent
+)
+
+if($NotSilent -eq 1){
+  $Silent=0;
+  $NotSilent=1;
+}
+else{  
+  $Silent=1;
+  $NotSilent=0;
+}
+Write-Host "Is silent: " $Silent;
+
 ###########################################################################
 # BASE FUNCTIONS
 ###########################################################################
@@ -23,6 +40,12 @@ function Write-Color([String[]]$Text, [ConsoleColor[]]$Color = "White", [int]$St
     }
 }
 
+function SPause{
+ if($NotSilent -eq 1){
+   pause
+ }
+}
+
 function CustomWrite([String[]]$Text, [ConsoleColor[]]$Color = "White"){
   $Text=">>>>> "+$Text;
   Write-Color -Text $Text -Color $Color;
@@ -45,7 +68,12 @@ function WriteOperationResultByExitCode($text, $exitCode)
 
 function ReadBool($hint)
 {
-  $hint=$hint+" (y/n, y - default) ";
+  $hint=$hint+" y/n (y) ";
+  if($Silent -eq 1)
+  {
+    Write-Host $hint;
+    return 1;
+  }
   $answer = Read-Host $hint
   if($answer -eq 'n'){
     return 0;
@@ -86,33 +114,38 @@ function DotnetBuildInfo()
 # EXECUTION
 ###########################################################################
 
-$global:Path="$PSScriptRoot\IRO.sln";
+# $global:Path="$PSScriptRoot\IRO.sln";
+
 $global:IsRelease="";
 $global:Configuration="";
+$global:BuildExitCode="";
 
-$IgnoredProjectsInfo = [IO.File]::ReadAllText("$PSScriptRoot\items\IgnoredProjects.txt")
-Write-Host $IgnoredProjectsInfo "`n`n";
-
-# Cleaning
+# Remove old nupkg.
 $WantRemoveNupkgFromSrc = ReadBool "Want to remove all .nupkg files from '.\src' before build? ";
 if($WantRemoveNupkgFromSrc){
-  scripts\delete_nupkgs__src.cmd
+  & "$PSScriptRoot\scripts\delete_nupkgs.cmd" "$PSScriptRoot\..\src" $Silent
   CustomWrite "Removed .nupkg files." Green;
-  pause;  
+  SPause;  
 }
 
 # Build
 AskConfiguration;
-dotnet restore $global:Path /clp:ErrorsOnly
-dotnet build $global:Path --configuration $global:Configuration /clp:ErrorsOnly
-WriteOperationResultByExitCode "Solution build status: " $lastexitcode
-pause;
+
+Get-ChildItem "$PSScriptRoot" -Recurse -Filter "*.sln" | Foreach-Object {    
+  $SlnPath=$_.FullName;
+  Write-Host "Building solution: " $SlnPath;
+  dotnet restore $SlnPath /clp:ErrorsOnly
+  dotnet build $SlnPath --configuration $global:Configuration /clp:ErrorsOnly
+  $global:BuildExitCode=$lastexitcode;
+  WriteOperationResultByExitCode "Solution build status: " $lastexitcode
+  SPause;
+}
 
 # Tests
 $WantExUnitTests = ReadBool "Want execute unit tests? "
 if($WantExUnitTests){
   $testRes=0;
-  Get-ChildItem "$PSScriptRoot\tests" -Recurse -Filter "*UnitTest*.csproj" | 
+  Get-ChildItem "$PSScriptRoot" -Recurse -Filter "*UnitTest*.csproj" | 
   Foreach-Object {    
     dotnet test $_.FullName --configuration $global:Configuration --verbosity  m
 	if($lastexitcode){
@@ -120,7 +153,7 @@ if($WantExUnitTests){
 	}
   }
   WriteOperationResultByExitCode "Tests execution status: " $testRes;
-  pause;
+  SPause;
 }
 
 # Copy nugets to output/nuget
@@ -130,7 +163,8 @@ if($WantClearOutputNuget){
     rd "$PSScriptRoot\output\nuget" -recurse;  
 	CustomWrite "Removed old." Green	
   }    
-  scripts\copy_nupkgs.cmd "$PSScriptRoot\src\" "$PSScriptRoot\output\nuget\" $global:IsRelease 1
+  & "$PSScriptRoot\scripts\copy_nupkgs.cmd" "$PSScriptRoot\src\" "$PSScriptRoot\output\nuget\" $global:IsRelease $Silent
   CustomWrite "Copied." Green
 }
-pause
+SPause
+exit $global:BuildExitCode;
