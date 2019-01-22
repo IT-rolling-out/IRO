@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using IRO.Common.Services;
 using IRO.Common.Text;
+using IRO.Reflection.CodeGen.Exceptions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;

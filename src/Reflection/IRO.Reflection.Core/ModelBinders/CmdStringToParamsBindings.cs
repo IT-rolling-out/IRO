@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace IRO.Reflection.Core.ModelBinders
 {
@@ -26,17 +27,17 @@ namespace IRO.Reflection.Core.ModelBinders
             var paramsDict = SplitParams(paramsStr, ignoreErrors, splitter);
             foreach (var parameter in parameters)
             {
-                var paramType = parameter.Info.ParameterType;
+                var paramType = parameter.ParamType;
                 var paramName = parameter.ParamName;
                 object currentValue = null;
                 try
                 {
-                    string currentValueStr =PrepareStringForJsonSerializer(
+                    string currentValueStr = PrepareStringForJsonSerializer(
                         paramsDict[paramName],
                         paramType
                         );
                     //Console.WriteLine("--> " + currentValueStr);
-                    currentValue =Deserialize(paramType, currentValueStr);
+                    currentValue = Deserialize(paramType, currentValueStr);
                 }
                 catch (Exception ex)
                 {
@@ -59,8 +60,8 @@ namespace IRO.Reflection.Core.ModelBinders
             {
                 return trimmed;
             }
-            var firstChar=valueStr.Trim().First();
-            var lastChar=valueStr.Trim().Last();
+            var firstChar = valueStr.Trim().First();
+            var lastChar = valueStr.Trim().Last();
             if ((firstChar == '{' && lastChar == '}') || (firstChar == '[' && lastChar == ']'))
             {
                 //If json object. Yeah, it`s crunch to allow user work without "" for strings (cmd limitations).
@@ -73,7 +74,7 @@ namespace IRO.Reflection.Core.ModelBinders
             }
 
             //If string without "".
-            return "\""+valueStr+"\"";
+            return "\"" + valueStr + "\"";
         }
 
         Dictionary<string, string> SplitParams(string parameters, bool ignoreErrors, char splitter)
@@ -94,7 +95,7 @@ namespace IRO.Reflection.Core.ModelBinders
                 {
                     int splitIndex = paramAndName.IndexOf(":");
                     paramName = paramAndName.Remove(splitIndex).Trim();
-                    value = paramAndName.Substring(splitIndex+1);
+                    value = paramAndName.Substring(splitIndex + 1);
                     if (string.IsNullOrWhiteSpace(paramName) || string.IsNullOrWhiteSpace(value))
                         throw new Exception("Wrong params str.");
                     res.Add(paramName, value);

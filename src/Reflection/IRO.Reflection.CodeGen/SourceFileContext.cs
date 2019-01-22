@@ -5,7 +5,11 @@ using System.Reflection;
 
 namespace IRO.Reflection.CodeGen
 {
-    public class CsFileContext
+    /// <summary>
+    /// Represent cs file dependencies (not source code).
+    /// Context, that allow you to easy merge .cs files and their dependencies.
+    /// </summary>
+    public class SourceFileContext
     {
         readonly HashSet<Type> _types = new HashSet<Type>();
 
@@ -16,9 +20,9 @@ namespace IRO.Reflection.CodeGen
         /// <summary>
         /// Сливает контекст cs файлов в один.
         /// </summary>
-        public static CsFileContext Merge(params CsFileContext[] contextEnumerable)
+        public static SourceFileContext Merge(params SourceFileContext[] contextEnumerable)
         {
-            var resContext = new CsFileContext();
+            var resContext = new SourceFileContext();
             foreach (var ctx in contextEnumerable)
             {
                 foreach (var item in ctx._types)
@@ -57,7 +61,7 @@ namespace IRO.Reflection.CodeGen
                 var genericArgs =type.GetGenericArguments();              
                 for (var i = 0; i < genericArgs.Length; i++)
                 {
-                    UsedType(genericArgs[0]);
+                    UsedType(genericArgs[i]);
                 }
             }
 

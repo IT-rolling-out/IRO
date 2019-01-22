@@ -48,7 +48,7 @@ namespace IRO.Reflection.Core.ModelBinders
             var paramTypes = new List<Type>();
             foreach(var parameter in parameters)
             {
-                paramTypes.Add(parameter.Info.ParameterType);
+                paramTypes.Add(parameter.ParamType);
             }
             return ResolveFromArray(jsonArrayStr,paramTypes, ignoreErrors, jsonSerializer);
         }
@@ -67,7 +67,7 @@ namespace IRO.Reflection.Core.ModelBinders
             int i = 0;
             foreach (var parameter in parameters)
             {
-                var paramType = parameter.Info.ParameterType;
+                var paramType = parameter.ParamType;
                 object currentValue = null;
                 try
                 {

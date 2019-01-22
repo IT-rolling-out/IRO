@@ -123,7 +123,7 @@ $global:BuildExitCode="";
 # Remove old nupkg.
 $WantRemoveNupkgFromSrc = ReadBool "Want to remove all .nupkg files from '.\src' before build? ";
 if($WantRemoveNupkgFromSrc){
-  & "$PSScriptRoot\scripts\delete_nupkgs.cmd" "$PSScriptRoot\..\src" $Silent
+  & "$PSScriptRoot\scripts\delete_nupkgs.cmd" "$PSScriptRoot\src" $Silent
   CustomWrite "Removed .nupkg files." Green;
   SPause;  
 }

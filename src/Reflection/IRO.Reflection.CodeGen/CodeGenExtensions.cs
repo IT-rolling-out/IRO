@@ -4,7 +4,7 @@ using IRO.Common.Text;
 
 namespace IRO.Reflection.CodeGen
 {
-    public static class SimpleGenerators
+    public static class CodeGenExtensions
     {
         public static string WrapClass(string innerCode, string codeNamespace, IEnumerable<string> usings=null)
         {

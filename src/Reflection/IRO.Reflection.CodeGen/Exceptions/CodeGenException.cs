@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace IRO.Reflection.CodeGen
+namespace IRO.Reflection.CodeGen.Exceptions
 {
     public class CodeGenException : Exception
     {

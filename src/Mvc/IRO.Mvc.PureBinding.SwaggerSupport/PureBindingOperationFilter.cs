@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using IRO.Reflection.CodeGen.ModelsGenerators;
+using IRO.Reflection.Core.ModelBinders;
 
 namespace IRO.Mvc.PureBinding.SwaggerSupport
 {
@@ -43,17 +45,17 @@ namespace IRO.Mvc.PureBinding.SwaggerSupport
 
             var modelGenInp = new ModelsGeneratorInput()
             {
-                Params = new List<IRO.Reflection.Core.Parameter>(),
-                ModelName=modelName
+                Params = new List<Parameter>(),
+                ClassName=modelName
             };
             foreach (var param in methodInfo.GetParameters())
             {
                 var attr=param.GetCustomAttribute<FromPureBindingAttribute>();
                 if (attr == null)
                     continue;
-                var customParam = new IRO.Reflection.Core.Parameter();
+                var customParam = new Parameter();
                 customParam.ParamName=attr.ParameterName ?? param.Name;
-                customParam.Info = param;
+                customParam.ParamInfo = param;
                 modelGenInp.Params.Add(customParam);
             }
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using IRO.Reflection.SummarySearch.Exceptions;
 
 namespace IRO.Reflection.SummarySearch
 {

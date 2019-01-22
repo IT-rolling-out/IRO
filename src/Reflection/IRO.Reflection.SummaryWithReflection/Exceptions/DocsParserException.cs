@@ -1,6 +1,6 @@
 using System;
 
-namespace IRO.Reflection.SummarySearch
+namespace IRO.Reflection.SummarySearch.Exceptions
 {
     /// <summary>
     /// An exception thrown by the DocsByReflection library

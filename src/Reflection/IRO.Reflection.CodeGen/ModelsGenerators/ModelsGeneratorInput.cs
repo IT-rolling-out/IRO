@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
-using IRO.Reflection.Core;
+using IRO.Reflection.Core.ModelBinders;
 
-namespace IRO.Reflection.CodeGen
+namespace IRO.Reflection.CodeGen.ModelsGenerators
 {
     public struct ModelsGeneratorInput
     {
-        public string ModelName { get; set; }
+        public string ClassName { get; set; }
 
         public List<Parameter> Params { get; set; }
     }

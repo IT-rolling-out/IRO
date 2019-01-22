@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using IRO.Common.Services;
 using IRO.Common.Text;
+using IRO.Reflection.CodeGen.Exceptions;
 using IRO.Reflection.Core;
 
-namespace IRO.Reflection.CodeGen
+namespace IRO.Reflection.CodeGen.ModelsGenerators
 {
     public class ModelsGenerator
     {
@@ -15,7 +14,7 @@ namespace IRO.Reflection.CodeGen
         readonly string _baseClassName;
         readonly bool _typeNamesWithAssembly;
 
-        protected CsFileContext CurrentContext { get; private set; }
+        protected SourceFileContext CurrentContext { get; private set; }
 
         public ModelsGenerator(
             IEnumerable<ModelsGeneratorInput> modelsGeneratorInputs,
@@ -34,11 +33,11 @@ namespace IRO.Reflection.CodeGen
         {
             try
             {
-                ClearContext();
+                NewContext();
                 var modelsScript = "";
                 foreach (var param in _modelsGeneratorInputs)
                 {
-                    modelsScript += GenerateModel(param) + "\n";
+                    modelsScript += GenerateModelSourceCode(param) + "\n";
                 }
 
                 var usings = CurrentContext.GetNamespaces();
@@ -46,7 +45,7 @@ namespace IRO.Reflection.CodeGen
                 {
                     usings.Remove(_namespaceStr);
                 }
-                modelsScript = SimpleGenerators.WrapClass(modelsScript, _namespaceStr, usings);
+                modelsScript = CodeGenExtensions.WrapClass(modelsScript, _namespaceStr, usings);
 
                 var res = new CodeGenResult
                 {
@@ -61,9 +60,9 @@ namespace IRO.Reflection.CodeGen
             }
         }
 
-        public virtual string GenerateModel(ModelsGeneratorInput modelsGeneratorInput)
+        protected virtual string GenerateModelSourceCode(ModelsGeneratorInput modelsGeneratorInput)
         {
-            var modelName = modelsGeneratorInput.ModelName;
+            var modelName = modelsGeneratorInput.ClassName;
             string newClassStr = "public class " +
                 modelName +
                 GenerateBaseClass(modelsGeneratorInput) +
@@ -72,10 +71,10 @@ namespace IRO.Reflection.CodeGen
             {
                 var paramName = param.ParamName;
                 paramName = paramName[0].ToString().ToUpper() + paramName.Substring(1);
-                var attrs = GenerateAttributes(param.Info);
+                var attrs = GenerateAttributes(param.ParamInfo);
                 var newClassProp = attrs
                     + "public "
-                    + GetTypeName(param.Info.ParameterType)
+                    + GetTypeName(param.ParamInfo.ParameterType)
                     + " "
                     + paramName
                     + " { get; set; }";
@@ -85,9 +84,9 @@ namespace IRO.Reflection.CodeGen
             return newClassStr;
         }
 
-        public void ClearContext()
+        public void NewContext()
         {
-            CurrentContext = new CsFileContext();
+            CurrentContext = new SourceFileContext();
         }
 
         protected virtual string GenerateAttributes(ParameterInfo param)

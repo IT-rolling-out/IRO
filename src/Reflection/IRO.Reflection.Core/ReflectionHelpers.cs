@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using IRO.Reflection.Core.ModelBinders;
 
 namespace IRO.Reflection.Core
 {
@@ -171,17 +172,13 @@ namespace IRO.Reflection.Core
         }
         #endregion
 
-        public static IEnumerable<ParameterInfo> ToParamInfo(this IEnumerable<Parameter> parameters)
-        {
-            return parameters.Select(x => x.Info);
-        }
-
         public static IEnumerable<Parameter> ToParam(this IEnumerable<ParameterInfo> parameters)
         {
             return parameters.Select(x => new Parameter
             {
                 ParamName = x.Name,
-                Info = x
+                ParamType = x.ParameterType,
+                ParamInfo=x
             });
         }
 
