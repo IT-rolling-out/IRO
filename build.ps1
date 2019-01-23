@@ -2,18 +2,10 @@
 Param(
     #[switch]$CustomParam,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
-    [string[]]$NotSilent
+    [int]$NotSilent,
+	[int]$IsRelease,
+	[string]$NugetsOutputDir
 )
-
-if($NotSilent -eq 1){
-  $Silent=0;
-  $NotSilent=1;
-}
-else{  
-  $Silent=1;
-  $NotSilent=0;
-}
-Write-Host "Is silent: " $Silent;
 
 ###########################################################################
 # BASE FUNCTIONS
@@ -87,67 +79,102 @@ function ReadBool($hint)
 
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 
-function AskConfiguration()
-{
-  $global:IsRelease = ReadBool "Please enter 'y' if you wan't to build in release mode"; 
-  $global:IsRelease=$global:IsRelease;  
-  if($global:IsRelease)
-  {
-    $global:Configuration="Release";
-  }
-  else
-  {
-    $global:Configuration="Debug";
-  }
-}
-
 function DotnetBuildInfo()
 {     
-  # dotnet build $path --configuration $global:Configuration
+  # dotnet build $path --configuration $Configuration
   $exitCode=$lastexitcode;
-  Write-Host "Builded in " + $global:Configuration + " mode.";
+  Write-Host "Builded in " + $Configuration + " mode.";
   WriteOperationResultByExitCode "Dotnet build status: " $exitCode;
   return $exitCode;
+}
+
+###########################################################################
+# HANDLE STARTUP ARGUMENTS
+###########################################################################
+
+Write-Color -Text "Script path: $PSScriptRoot\build.ps1" -Color Green;
+
+# Set configuration
+if($IsRelease -eq 1)
+{
+  $IsRelease=1;
+  $Configuration="Release";
+}
+else
+{
+  $IsRelease=0;
+  $Configuration="Debug";
+}
+Write-Color -Text "Configuration: $Configuration" -Color Green;
+  
+# Set mode.
+if($NotSilent -eq 1){
+  $Silent=0;
+  $NotSilent=1;
+}
+else{  
+  $Silent=1;
+  $NotSilent=0;
+}
+Write-Color -Text "Is silent: $Silent"  -Color Green;
+
+if(-not $NugetsOutputDir)
+{
+  $NugetsOutputDir="$PSScriptRoot\output\nuget";
+}
+Write-Color -Text "Nugets output directory: $NugetsOutputDir" -Color Green;
+SPause;
+
+###########################################################################
+# BUILD SUBMODULES
+###########################################################################
+
+# Executing same ps1 files with current parameters.
+$FirstIter=$TRUE;
+
+Get-ChildItem "$PSScriptRoot\submodules" -Recurse -Filter "build.ps1" | Foreach-Object { 
+  if($FirstIter){
+    Write-Color -Text "Building submodules: " -Green;
+    $FirstIter=$FALSE;
+  }
+  $SubmoduleBuild=$_.FullName;
+  & $SubmoduleBuild -NotSilent $NotSilent -IsRelease $IsRelease -NugetsOutputDir $NugetsOutputDir
+}
+if(-not $FirstIter){
+  Write-Color -Text "Finished.";
+  SPause;
 }
 
 ###########################################################################
 # EXECUTION
 ###########################################################################
 
-# $global:Path="$PSScriptRoot\IRO.sln";
-
-$global:IsRelease="";
-$global:Configuration="";
-$global:BuildExitCode="";
-
-# Remove old nupkg.
-$WantRemoveNupkgFromSrc = ReadBool "Want to remove all .nupkg files from '.\src' before build? ";
-if($WantRemoveNupkgFromSrc){
-  & "$PSScriptRoot\scripts\delete_nupkgs.cmd" "$PSScriptRoot\src" $Silent
-  CustomWrite "Removed .nupkg files." Green;
-  SPause;  
-}
+# Remove old nupkg from src folder.
+Write-Host "Will remove old nupkg from src folder.";
+SPause;
+& "$PSScriptRoot\scripts\delete_nupkgs.cmd" "$PSScriptRoot\src" 1
+CustomWrite "Removed .nupkg files.`n" Green;
+SPause;  
 
 # Build
-AskConfiguration;
-
-Get-ChildItem "$PSScriptRoot" -Recurse -Filter "*.sln" | Foreach-Object {    
+$BuildExitCode="";
+Get-ChildItem "$PSScriptRoot" -Filter "*.sln" | Foreach-Object {    
   $SlnPath=$_.FullName;
   Write-Host "Building solution: " $SlnPath;
   dotnet restore $SlnPath /clp:ErrorsOnly
-  dotnet build $SlnPath --configuration $global:Configuration /clp:ErrorsOnly
-  $global:BuildExitCode=$lastexitcode;
+  dotnet build $SlnPath --configuration $Configuration /clp:ErrorsOnly
+  $BuildExitCode=$lastexitcode;
   WriteOperationResultByExitCode "Solution build status: " $lastexitcode
   SPause;
 }
 
 # Tests
-$WantExUnitTests = ReadBool "Want execute unit tests? "
-if($WantExUnitTests){
+$WantSkipUnitTests = ReadBool "Want skip unit tests? "
+if(-not $WantSkipUnitTests){
   $testRes=0;
   Get-ChildItem "$PSScriptRoot" -Recurse -Filter "*UnitTest*.csproj" | 
   Foreach-Object {    
-    dotnet test $_.FullName --configuration $global:Configuration --verbosity  m
+    dotnet test $_.FullName --configuration $Configuration --verbosity  m
 	if($lastexitcode){
 	  $testRes=1;
 	}
@@ -157,14 +184,7 @@ if($WantExUnitTests){
 }
 
 # Copy nugets to output/nuget
-$WantClearOutputNuget = ReadBool "Want clear '.\output\nupkg' and fill with new builded packages? "
-if($WantClearOutputNuget){
-  if(Test-Path -Path "$PSScriptRoot\output\nuget"){
-    rd "$PSScriptRoot\output\nuget" -recurse;  
-	CustomWrite "Removed old." Green	
-  }    
-  & "$PSScriptRoot\scripts\copy_nupkgs.cmd" "$PSScriptRoot\src\" "$PSScriptRoot\output\nuget\" $global:IsRelease $Silent
-  CustomWrite "Copied." Green
-}
+& "$PSScriptRoot\scripts\copy_nupkgs.cmd" "$PSScriptRoot\src\" $NugetsOutputDir $IsRelease 1
+CustomWrite "Copied." Green
 SPause
-exit $global:BuildExitCode;
+exit $BuildExitCode;
