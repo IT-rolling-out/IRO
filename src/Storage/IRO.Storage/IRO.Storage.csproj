@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Version>$(AsmVersion_Storage)</Version>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Simple key-value storage for client applications.</Description>
   </PropertyGroup>
 
   <ItemGroup>

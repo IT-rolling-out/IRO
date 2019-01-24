@@ -29,15 +29,6 @@ function AskConfiguration()
   }
 }
 
-$NugetsOutputDir="$PSScriptRoot\output\nuget";
-$WantClearOutputNuget = ReadBool "Want clear '$NugetsOutputDir' before build? "
-if($WantClearOutputNuget){
-  if(Test-Path -Path $NugetsOutputDir){
-    rd $NugetsOutputDir -recurse;  	
-  }  
-  Write-Host "Removed."	  
-}
-
 $Configuration=""
 $IsRelease="";
 

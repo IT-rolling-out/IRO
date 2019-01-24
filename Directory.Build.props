@@ -16,20 +16,22 @@
   <PropertyGroup Condition="$(IsNuPackage)">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<PackageProjectUrl>https://github.com/IT-rolling-out/IRO</PackageProjectUrl>
   </PropertyGroup>
-  
+
   <!-- Category versions list. Use it in target projects and to set nuget dependencies. -->
   <PropertyGroup>
-    <!-- Use current same version for all or define special for category-->	
-	<VersionPostfix>-alpha</VersionPostfix>
-    <DefaultAsmVersion>1.0.3$(VersionPostfix)</DefaultAsmVersion>
-
-    <AsmVersion_Cache>1.0.2$(VersionPostfix)</AsmVersion_Cache>
-    <AsmVersion_CmdLine>2.0.2$(VersionPostfix)</AsmVersion_CmdLine>
-    <AsmVersion_Common>$(DefaultAsmVersion)</AsmVersion_Common>    
-    <AsmVersion_FileIO>1.0.3$(VersionPostfix)</AsmVersion_FileIO>
+    <!-- Use current same version for all or define special for category-->
+    <VersionPostfix></VersionPostfix>
+	
+    <DefaultAsmVersion>1.0.7$(VersionPostfix)</DefaultAsmVersion>
+	
+    <AsmVersion_Cache>1.0.6$(VersionPostfix)</AsmVersion_Cache>
+    <AsmVersion_CmdLine>2.0.6$(VersionPostfix)</AsmVersion_CmdLine>
+    <AsmVersion_Common>1.0.8$(VersionPostfix)</AsmVersion_Common>
+    <AsmVersion_FileIO>1.0.7$(VersionPostfix)</AsmVersion_FileIO>
     <AsmVersion_Mvc>$(DefaultAsmVersion)</AsmVersion_Mvc>
     <AsmVersion_Reflection>$(DefaultAsmVersion)</AsmVersion_Reflection>
-    <AsmVersion_Storage>2.2.1$(VersionPostfix)</AsmVersion_Storage>   
+    <AsmVersion_Storage>2.2.5$(VersionPostfix)</AsmVersion_Storage>
   </PropertyGroup>
 </Project>

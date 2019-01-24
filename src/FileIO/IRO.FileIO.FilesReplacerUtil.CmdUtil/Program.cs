@@ -7,7 +7,6 @@ namespace IRO.FileIO.FilesReplacerUtil.CmdUtil
     {
         static void Main(string[] args)
         {
-            //Простейшая консоль с командами из методов классса.
             var cmds = new CmdSwitcher();
             cmds.PushCmdInStack(new CmdLineFacade());
             cmds.ExecuteStartup(args);

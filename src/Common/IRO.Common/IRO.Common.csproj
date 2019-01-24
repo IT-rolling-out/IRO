@@ -3,10 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>$(AsmVersion_Common)</Version>
-    <Description>
-      Обшие инструменты в сборке Common. Есть сервисы с часто используемыми методами работы с текстом, для упрощения работы с встроенными ресурсами, файловой системой, сетью, сервис для запуска процессов в .net core приложении, сервис для поиска исключений внутри других исключений (включая AggregateException).
-      Есть generic Tree.
-    </Description>
+    <Description>Common instruments here Common. 
+There are services with frequently used methods of working with text, to simplify working with embedded resources, the file system, the network, a service for running processes in a .net core application, a service for finding exceptions within other exceptions (including AggregateException).</Description>
   </PropertyGroup>
 
   <ItemGroup>

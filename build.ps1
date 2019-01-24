@@ -149,6 +149,17 @@ if(-not $FirstIter){
 # EXECUTION
 ###########################################################################
 
+# Remove default nuget output dir.
+$DefaultNugetsOutputDir="$PSScriptRoot\output\nuget";
+$WantClearOutputNuget = ReadBool "Want clear '$DefaultNugetsOutputDir' before build? "
+if($WantClearOutputNuget){
+  if(Test-Path -Path $DefaultNugetsOutputDir){
+    rd $DefaultNugetsOutputDir -recurse;  	
+  }  
+  Write-Host "Removed."	  
+}
+
+
 # Remove old nupkg from src folder.
 Write-Host "Will remove old nupkg from src folder.";
 SPause;

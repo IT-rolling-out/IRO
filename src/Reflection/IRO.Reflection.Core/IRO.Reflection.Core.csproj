@@ -3,7 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>$(AsmVersion_Reflection)</Version>
-    <Description>Базовые утилиты для упрощения работы с рефлексией.</Description>
+    <Description>Add some base reflection operations. What you can do:
+- get type name just same as c# code (default generic names is not same);
+- build Type inheritance tree (and convert it to sorted list;
+- invoke any method with json array or complex object. Useful to build cross-process interfaces;
+- find assignable types;
+- find types with attribute4
+- create generic list or dictionary with reflection;
+- create types recursive.</Description>
   </PropertyGroup>
 
   <ItemGroup>
