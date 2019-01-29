@@ -16,14 +16,15 @@ namespace IRO.Storage
 
         public static async Task<T> Get<T>(this IKeyValueStorage @this, string key)
         {
-            object value= await @this.Get(typeof(T), key);
-            if (value is T)
+            object value=null;
+            try
             {
+                value = await @this.Get(typeof(T), key);
                 return (T)value;
             }
-            else
+            catch (Exception ex)
             {
-                throw new StorageException($"Can`t cast returned value '{value}' to type {typeof(T).Name}.");
+                throw new StorageException($"Can`t cast returned value '{value}' to type {typeof(T).Name}.", ex);
             }
         }
 

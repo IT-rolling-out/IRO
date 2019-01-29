@@ -4,10 +4,10 @@
     <IsTest>false</IsTest>
     <IsNuPackage>false</IsNuPackage>
   </PropertyGroup>
-  <PropertyGroup Condition = "($(MSBuildProjectName.StartsWith('IRO.SlnTests')) Or $(MSBuildProjectName.StartsWith('IRO.SlnUnitTests')))">
+  <PropertyGroup Condition = "($(MSBuildProjectName.StartsWith('IRO.Tests')) Or $(MSBuildProjectName.StartsWith('IRO.UnitTests')))">
     <IsTest>true</IsTest>
   </PropertyGroup>
-  <PropertyGroup  Condition = "$(MSBuildProjectName.StartsWith('IRO.')) And !$(IsTest)" >
+  <PropertyGroup  Condition = "!$(IsTest)" >
     <IsNuPackage>true</IsNuPackage>
   </PropertyGroup>
 
