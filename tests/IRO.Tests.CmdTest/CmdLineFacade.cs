@@ -30,5 +30,11 @@ namespace IRO.Tests.CmdTest
                 {nameof(intParam),intParam }
             });
         }
+
+        [CmdInfo]
+        public void Test3()
+        {
+            var res = ReadResource<bool>("test simple res");
+        }
     }   
 }

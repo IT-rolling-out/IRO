@@ -7,7 +7,7 @@ namespace IRO.Common.Collections
 {
     public static class EnumerableExtensions
     {
-        public static HashSet<T> ToHashSet<T>(IEnumerable<T> enumerable)
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable)
         {
             if (enumerable == null)
                 throw new ArgumentNullException(nameof(enumerable), "You can`t create hash set from null.");

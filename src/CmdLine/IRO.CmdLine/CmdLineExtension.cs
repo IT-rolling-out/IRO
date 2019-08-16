@@ -192,9 +192,9 @@ namespace IRO.CmdLine
                 $"Input ({cachedValueInHint}): ",
                 ConsoleColor.Yellow
                 );
-
-            //Если автоматическое считывание, то возвращаем закешированное значение.
-            string val = "";
+            
+            //Автоматическое считывание если пустая строка.
+            string val = ReadLine().Trim();
             if (val=="" && cachedValue != null)
             {
                 val = cachedValue;

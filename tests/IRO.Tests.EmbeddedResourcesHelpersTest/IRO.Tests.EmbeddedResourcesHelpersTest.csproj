@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MyEmbeddedResources\Dir\dir_file.txt" />
+    <None Remove="MyEmbeddedResources\Dir\dir_file2.txt" />
+    <None Remove="MyEmbeddedResources\Dir\SubDir\sub_dir_file.txt" />
+    <None Remove="MyEmbeddedResources\file1.xml" />
+    <None Remove="MyEmbeddedResources\file2.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="MyEmbeddedResources\Dir\dir_file.txt" />
+    <EmbeddedResource Include="MyEmbeddedResources\Dir\dir_file2.txt" />
+    <EmbeddedResource Include="MyEmbeddedResources\Dir\SubDir\sub_dir_file.txt" />
+    <EmbeddedResource Include="MyEmbeddedResources\file1.xml" />
+    <EmbeddedResource Include="MyEmbeddedResources\file2.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Common\IRO.Common\IRO.Common.csproj" />
+    <ProjectReference Include="..\..\src\Common\IRO.EmbeddedResources\IRO.EmbeddedResources.csproj" />
+  </ItemGroup>
+
+</Project>

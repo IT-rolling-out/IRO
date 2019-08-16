@@ -81,68 +81,33 @@ namespace IRO.Reflection.Core
         #endregion
 
         #region Copied from IocGlob.
-        public static Type FindAssignable(Type baseType, IEnumerable<string> assembliesNames)
-        {
-            List<Exception> innerExceptions = null;
-            List<Assembly> asms;
-            if (assembliesNames == null)
-            {
-                asms = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            }
-            else
-            {
-                asms = new List<Assembly>();
-                foreach (var assemblyName in assembliesNames)
-                {
-                    try
-                    {
-                        var asm = Assembly.Load(assemblyName);
-
-                        asms.Add(asm);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (innerExceptions == null)
-                            innerExceptions = new List<Exception>();
-                        innerExceptions.Add(ex);
-                    }
-                }
-            }
-            return FindAssignable(baseType, asms);
-            //if (innerExceptions == null)
-            //{
-            //    throw new Exception(msg);
-            //}
-            //throw new AggregateException(msg, innerExceptions);
-        }
 
         /// <summary>
-        /// Search assingnable types in app domain  and return first finded type or throw exception.
+        /// Search assingnable types in app domain  and return found types.
         /// </summary>
-        /// <param name="assemblyesNames">If null, it will search in current app domain assemblies.</param>
+        /// <param name="assemblies">If null, it will search in current app domain assemblies.</param>
         /// <returns></returns>
-        public static Type FindAssignable(Type baseType, IEnumerable<Assembly> assemblies)
+        public static IEnumerable<Type> FindAssignable(Type baseType, IEnumerable<Assembly> assemblies = null)
         {
+            if (assemblies == null)
+            {
+                assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            }
+
             var types = assemblies.SelectMany(s => s.GetTypes())
-                .Where(p => baseType.IsAssignableFrom(p) && !p.IsAbstract && p.IsClass)
+                .Where(t => baseType.IsAssignableFrom(t))
                 .ToList();
 
-            types.Remove(baseType);
-            if (types.Any())
-            {
-                return types.First();
-            }
+            return types;
 
-            var msg = $"Can`t find type that implement '{baseType.Name}'. It seems you have forgot to include implementing dll to main project.";
-            throw new AggregateException(msg);
         }
 
         /// <summary>
-        /// Search assignable types in app domain  and return first finded type or throw exception.
+        /// Search assingnable types in app domain  and return found types.
         /// </summary>
-        /// <param name="assemblyesNames">If null, it will search in current app domain assemblies.</param>
+        /// <param name="assemblies">If null, it will search in current app domain assemblies.</param>
         /// <returns></returns>
-        public static Type FindAssignable<TBase>(IEnumerable<Assembly> assemblies)
+        public static IEnumerable<Type> FindAssignable<TBase>(IEnumerable<Assembly> assemblies = null)
         {
             return FindAssignable(typeof(TBase), assemblies);
         }
@@ -178,7 +143,7 @@ namespace IRO.Reflection.Core
             {
                 ParamName = x.Name,
                 ParamType = x.ParameterType,
-                ParamInfo=x
+                ParamInfo = x
             });
         }
 
@@ -234,7 +199,7 @@ namespace IRO.Reflection.Core
             try
             {
                 //Ignore constructor loops.
-                if (!difficultConstructorsTypes.Contains(t))
+                if (difficultConstructorsTypes.Contains(t))
                 {
                     return null;
                 }
@@ -247,7 +212,7 @@ namespace IRO.Reflection.Core
                     var resDict = TryCreate(t) as IDictionary
                         ?? CreateDictNonGeneric(keyType, valType);
 
-                    object key=null;
+                    object key = null;
                     if (keyType.IsAssignableFrom(typeof(string)))
                     {
                         key = "key";
@@ -258,11 +223,11 @@ namespace IRO.Reflection.Core
                     }
                     resDict.Add(
                         key,
-                        CreateTypeExample(valType,difficultConstructorsTypes)
+                        CreateTypeExample(valType, difficultConstructorsTypes)
                         );
                     return resDict;
                 }
-                
+
                 //Create list.
                 if (typeof(IEnumerable).IsAssignableFrom(t) && t.IsGenericType)
                 {
@@ -270,7 +235,7 @@ namespace IRO.Reflection.Core
                     var resList = TryCreate(t) as IList
                         ?? CreateListNonGeneric(elType);
                     resList.Add(
-                        CreateTypeExample(elType,difficultConstructorsTypes)
+                        CreateTypeExample(elType, difficultConstructorsTypes)
                         );
                     return resList;
                 }
@@ -282,7 +247,7 @@ namespace IRO.Reflection.Core
                 }
 
                 //Constructor without params.
-                var obj=TryCreate(t);
+                var obj = TryCreate(t);
 
                 //Constructor with params.
                 if (obj == null)
@@ -304,7 +269,7 @@ namespace IRO.Reflection.Core
                                 parameters[i] = paramValue;
                             }
 
-                            obj=ctor.Invoke(parameters);
+                            obj = ctor.Invoke(parameters);
                             break;
                         }
                         catch { }
@@ -358,6 +323,6 @@ namespace IRO.Reflection.Core
             {
                 return null;
             }
-        }                
+        }
     }
 }
