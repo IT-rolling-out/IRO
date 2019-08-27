@@ -90,6 +90,40 @@ Implemented storages:
 
 Has default caching and cross-process synchronization.
 
+### IRO.Threading
+
+Now contains only ThreadSyncContext which can help you working with specific threads.
+Wpf example. How you can get value of wpf ui contol (with passing exceptions to calling thread):
+
+```csharp
+    Visibility value = default(Visibility);
+    Exception internalException = null;
+    control.Dispatcher.Invoke(()=>
+    {
+        try
+        {
+            value = control.Visibility;
+        }
+        catch(Exception ex)
+        {
+            internalException = ex;
+        }
+    });
+    if(internalException!=null)
+        throw internalException;
+    return value;
+```
+
+How you can do it with ThreadSyncContext:
+
+```csharp
+    return ThreadSyncContext.Invoke(()=> control.Visibility);
+```
+
+### IRO.EmbeddedResources
+
+Helps to read or extract embedded resource files and directories.
+
 ### IRO.Cache
 
 Has cache service interface and simplest implemention (based on records count). Good solution for client apps.

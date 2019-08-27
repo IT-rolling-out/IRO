@@ -11,6 +11,7 @@
     <None Remove="MyEmbeddedResources\Dir\SubDir\sub_dir_file.txt" />
     <None Remove="MyEmbeddedResources\file1.xml" />
     <None Remove="MyEmbeddedResources\file2.txt" />
+    <None Remove="MyEmbeddedResources\myfile.min.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,7 @@
     <EmbeddedResource Include="MyEmbeddedResources\Dir\SubDir\sub_dir_file.txt" />
     <EmbeddedResource Include="MyEmbeddedResources\file1.xml" />
     <EmbeddedResource Include="MyEmbeddedResources\file2.txt" />
+    <EmbeddedResource Include="MyEmbeddedResources\myfile.min.js" />
   </ItemGroup>
 
   <ItemGroup>

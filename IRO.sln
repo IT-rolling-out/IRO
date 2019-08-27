@@ -73,9 +73,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Common.Algorithms", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.UnitTests.Reflection", "tests\IRO.UnitTests.Reflection\IRO.UnitTests.Reflection.csproj", "{755522C9-4F8B-4B0A-862B-109AB43E1412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Tests.EmbeddedResourcesHelpersTest", "tests\IRO.Tests.EmbeddedResourcesHelpersTest\IRO.Tests.EmbeddedResourcesHelpersTest.csproj", "{B2FC43B1-D6B9-4B83-A08E-FE92714BBEBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.Tests.EmbeddedResourcesHelpersTest", "tests\IRO.Tests.EmbeddedResourcesHelpersTest\IRO.Tests.EmbeddedResourcesHelpersTest.csproj", "{B2FC43B1-D6B9-4B83-A08E-FE92714BBEBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.EmbeddedResources", "src\Common\IRO.EmbeddedResources\IRO.EmbeddedResources.csproj", "{2DEB5E20-D162-4645-8D2C-C7BA925517AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRO.EmbeddedResources", "src\Common\IRO.EmbeddedResources\IRO.EmbeddedResources.csproj", "{2DEB5E20-D162-4645-8D2C-C7BA925517AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Threading", "src\Common\IRO.Threading\IRO.Threading.csproj", "{3594B3AF-64CC-4584-94EC-001727F28495}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +169,10 @@ Global
 		{2DEB5E20-D162-4645-8D2C-C7BA925517AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DEB5E20-D162-4645-8D2C-C7BA925517AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DEB5E20-D162-4645-8D2C-C7BA925517AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3594B3AF-64CC-4584-94EC-001727F28495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3594B3AF-64CC-4584-94EC-001727F28495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3594B3AF-64CC-4584-94EC-001727F28495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3594B3AF-64CC-4584-94EC-001727F28495}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{755522C9-4F8B-4B0A-862B-109AB43E1412} = {78FAC66F-3AC1-489E-9D43-A25CD0C27FC1}
 		{B2FC43B1-D6B9-4B83-A08E-FE92714BBEBB} = {78FAC66F-3AC1-489E-9D43-A25CD0C27FC1}
 		{2DEB5E20-D162-4645-8D2C-C7BA925517AD} = {B5E0A75B-0688-4423-BC9C-C233E31D9492}
+		{3594B3AF-64CC-4584-94EC-001727F28495} = {B5E0A75B-0688-4423-BC9C-C233E31D9492}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA15EAC1-7737-46A9-9AE6-6D25A5CD34E0}
