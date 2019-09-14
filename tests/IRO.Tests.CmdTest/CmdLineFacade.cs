@@ -6,7 +6,7 @@ namespace IRO.Tests.CmdTest
 {
     public class CmdLineFacade : CommandLineBase
     {
-        public CmdLineFacade() : base(null)
+        public CmdLineFacade(CmdLineExtension cmdLineExtension = null) : base(cmdLineExtension)
         {
         }
 
@@ -36,5 +36,5 @@ namespace IRO.Tests.CmdTest
         {
             var res = ReadResource<bool>("test simple res");
         }
-    }   
+    }
 }

@@ -11,17 +11,6 @@ using IRO.Reflection.Core;
 
 namespace IRO.CmdLine
 {
-    public class ResolvedCmdInfo
-    {
-        public MethodInfo MethodInfo { get; set; }
-
-        public string CmdName { get; set; }
-
-        public string OriginalMethodName { get; set; }
-
-        public string Description { get; set; }
-    }
-
     /// <summary>
     /// Базовый класс для генерации cli.
     /// Можно писать методы с входными параметрами (массив строк).
@@ -69,11 +58,7 @@ namespace IRO.CmdLine
             }
         }
 
-        public CommandLineBase():this(null)
-        {
-        }
-
-        public CommandLineBase(CmdLineExtension cmdLineExtension)
+        public CommandLineBase(CmdLineExtension cmdLineExtension=null)
         {
             Cmd = cmdLineExtension ?? new CmdLineExtension(new DefaultConsoleHandler());
             CmdNameAndInfo = CreateReflectionDict();

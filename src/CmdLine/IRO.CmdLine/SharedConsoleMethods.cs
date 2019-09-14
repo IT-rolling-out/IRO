@@ -5,7 +5,7 @@ using System.IO;
 
 namespace IRO.CmdLine
 {
-    static class SharedConsoleMethods
+    public static class SharedConsoleMethods
     {
         const string jsonEditorFilePath = "json_editor_buf.json";
 
@@ -18,10 +18,9 @@ namespace IRO.CmdLine
                     jsonPrototypeString
                     );
 
-                var process = TryStartProcess(jsonEditorFilePath);
-                TryWaitForExit(process);
-                string res;
-                FileHelpers.TryReadAllText(jsonEditorFilePath, out res, 120);
+                var process = StartProcess(jsonEditorFilePath);
+                process.WaitForExit();
+                FileHelpers.TryReadAllText(jsonEditorFilePath, out var res, 120);
                 return res;
             }
             catch (Exception ex)
@@ -46,7 +45,7 @@ namespace IRO.CmdLine
             }
         }
 
-        static Process TryStartProcess(string jsonEditorFilePath)
+        static Process StartProcess(string jsonEditorFilePath)
         {
             Process editorProcess = null;
             try
@@ -59,16 +58,6 @@ namespace IRO.CmdLine
                 editorProcess.StartNetCore(jsonEditorFilePath);
             }
             return editorProcess;
-
-        }
-
-        static void TryWaitForExit(Process editorProcess)
-        {
-            try
-            {
-                editorProcess.WaitForExit();
-            }
-            catch { }
 
         }
     }
