@@ -99,7 +99,6 @@ namespace IRO.FileIO.ImprovedFileOperations
             return res;
         }
 
-
         void _SearchFiles(string sourcePath, List<string> resultList, IEnumerable<Regex> regexList, IEnumerable<Regex> regexIgnoreList)
         {
 

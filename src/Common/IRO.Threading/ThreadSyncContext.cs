@@ -12,11 +12,13 @@ namespace IRO.Threading
     /// </summary>
     public class ThreadSyncContext
     {
-        readonly IThreadSyncInvoker invoker;
+        public IThreadSyncInvoker Invoker => _invoker;
+
+        readonly IThreadSyncInvoker _invoker;
 
         public ThreadSyncContext(IThreadSyncInvoker threadSyncInvoker)
         {
-            invoker = threadSyncInvoker ?? throw new ArgumentNullException(nameof(threadSyncInvoker));
+            _invoker = threadSyncInvoker ?? throw new ArgumentNullException(nameof(threadSyncInvoker));
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace IRO.Threading
         {
             var res = default(TResult);
             Exception origException = null;
-            invoker.Invoke(() =>
+            _invoker.Invoke(() =>
             {
                 try
                 {
@@ -59,7 +61,7 @@ namespace IRO.Threading
         public async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> func)
         {
             var tcs = new TaskCompletionSource<TResult>(TaskCreationOptions.RunContinuationsAsynchronously);
-            invoker.InvokeAsync(async () =>
+            _invoker.InvokeAsync(async () =>
             {
                 try
                 {
