@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>$(AsmVersion_Cache)</Version>
+    <Description>Has cache service interface and simplest implemention (based on records count). Good solution for client apps.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\IRO.Common\IRO.Common.csproj" />
+  </ItemGroup>
+
+</Project>
