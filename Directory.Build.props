@@ -32,7 +32,7 @@
     <AsmVersion_FileIO>1.0.7$(VersionPostfix)</AsmVersion_FileIO>
     <AsmVersion_Mvc>$(DefaultAsmVersion)</AsmVersion_Mvc>
     <AsmVersion_Reflection>$(DefaultAsmVersion)</AsmVersion_Reflection>
-    <AsmVersion_Storage>2.2.5$(VersionPostfix)</AsmVersion_Storage>
+    <AsmVersion_Storage>2.2.7$(VersionPostfix)</AsmVersion_Storage>
 	<AsmVersion_EmbeddedResources>1.1.0$(VersionPostfix)</AsmVersion_EmbeddedResources>
 	<AsmVersion_Threading>1.0.1$(VersionPostfix)</AsmVersion_Threading>
   </PropertyGroup>

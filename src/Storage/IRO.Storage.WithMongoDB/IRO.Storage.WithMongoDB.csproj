@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>$(AsmVersion_Storage)</Version>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Simple key-value storage for client applications. Litedb implemention.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.11.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Cache\IRO.Cache\IRO.Cache.csproj" />
+    <ProjectReference Include="..\IRO.Storage\IRO.Storage.csproj" />
+  </ItemGroup>
+
+</Project>
