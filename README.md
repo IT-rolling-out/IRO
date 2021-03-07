@@ -79,8 +79,27 @@ Simple key-value storage for client applications.
     int? nullableNum = await storage.GetOrDefault<int?>("key");
     
 	//Remove
-    await storage.Set("key", null);
 	await storage.Remove("key");
+    bool isContains = await storage.Contains("key"); //False
+
+    //Null values
+    await storage.Set("key", null);
+    isContains = await storage.Contains("key"); //True
+
+    //Scope usage (use dot symbol for this)
+    await storage.Set("Scope.Value1", 10);
+    await storage.Set("Scope.Value2", "Str");
+    var scope = await storage.Get<MyScopeClass>("Scope");
+    //Or this
+    //JToken scope = await storage.Get("Scope");
+    Console.WriteLine(scope.Value1); //Write 10
+    Console.WriteLine(scope.Value2); //Write Str
+
+    //Scope remove
+    await storage.Remove("Scope");     
+    //Note that if set value to this key - scope will be removed automatically.
+    isContains = await storage.Contains("Scope"); //False
+    isContains = await storage.Contains("Scope.Value1"); //False too
 ```
 
 Implemented storages:

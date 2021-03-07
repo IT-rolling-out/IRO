@@ -49,6 +49,10 @@ namespace IRO.Storage.DefaultStorages
         public async Task<JToken> Get(string key)
         {
             ThrowIfBadKey(key);
+            if (!await ContainsKey(key))
+            {
+                throw new Exception($"Storage not contains key '{key}'");
+            }
             return await UsingLock(async () =>
             {
                 var jToken = await GetAndParseToJToken(key);
@@ -148,6 +152,9 @@ namespace IRO.Storage.DefaultStorages
 
         protected abstract Task InnerSet(string key, string strValue);
 
+        /// <summary>
+        /// Removed keys return null, just like undefined keys do.
+        /// </summary>
         protected abstract Task InnerRemove(string key);
 
         public abstract Task InnerClear();

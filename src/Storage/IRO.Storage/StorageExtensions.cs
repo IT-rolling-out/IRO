@@ -6,6 +6,13 @@ namespace IRO.Storage
 {
     public static class StorageExtensions
     {
+        /// <summary>
+        /// Return object casted to type.
+        /// <para></para>
+        /// If key was not defined or was removed - throw exception.
+        /// <para></para>
+        /// If object was set to null - return null.
+        /// </summary>
         public static async Task<T> Get<T>(this IKeyValueStorage @this, string key)
         {
             object value=null;
