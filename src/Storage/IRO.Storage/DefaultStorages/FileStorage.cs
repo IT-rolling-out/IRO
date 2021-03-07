@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using IRO.Common.Services;
 using IRO.Common.Text;
 using IRO.Storage.Exceptions;
+using Newtonsoft.Json;
 
 namespace IRO.Storage.DefaultStorages
 {
@@ -13,212 +15,63 @@ namespace IRO.Storage.DefaultStorages
     /// <para></para>
     /// Use its own unlimited cache to store object, that will be serialized (store all data in memory and sync with hard drive).
     /// </summary>
-    public class FileStorage : IKeyValueStorage
+    public class FileStorage : BaseStorage
     {
-        const string ExceptionMsgTemplate = "Error with '{0}' in file storage.";
         const int TimeoutSeconds = 30;
-        readonly object _locker = new object();
         readonly string _storageFilePath;
-        readonly string _syncFilePath;
-        readonly IStringsSerializer _serializer;
+        IDictionary<string, string> _storageDict;
 
-        long _currentSyncIteration;
-        Dictionary<string, string> _storageDict;
-
-
-        /// <summary>
-        /// Storage name will be "localstorage".
-        /// </summary>
-        public FileStorage() : this("local_storage")
+        public FileStorage(FileStorageInitOptions opt = null)
         {
-
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="storageName">Storage name</param>
-        public FileStorage(string storageName)
-            : this(storageName, AppDomain.CurrentDomain.BaseDirectory)
-        {
-        }
-
-        public FileStorage(string storageName, string path)
-            : this(storageName, path, new JsonSimpleSerializer())
-        {
-
-        }
-
-        public FileStorage(string storageName, string path, IStringsSerializer serializer)
-        {
-            _serializer = serializer;
-            _storageFilePath = Path.Combine(path, storageName);
-            _syncFilePath = Path.Combine(path, storageName + "_sync.txt");
+            opt ??= new FileStorageInitOptions();
+            _storageFilePath = opt.StorageFilePath;
             if (!File.Exists(_storageFilePath))
             {
                 File.CreateText(_storageFilePath).Close();
             }
-            if (!File.Exists(_syncFilePath))
-            {
-                File.CreateText(_syncFilePath).Close();
-            }
+
         }
 
-        /// <summary>
-        /// Method is synchronized with Get.
-        /// If you're not closing the application, it's not recommended to use await keyword.
-        /// </summary>
-        /// <param name="lifetime">Ignored.</param>
-        /// <returns></returns>
-        public async Task Set(string key, object value)
+        protected override async Task InnerSet(string key, string value)
         {
-            Exception exception = null;
-            await Task.Run(() =>
-            {
-                try
-                {
-                    lock (_locker)
-                    {
-                        LoadStorageState();
-
-                        if (value == null)
-                        {
-                            _storageDict.Remove(key);
-                        }
-                        else
-                        {
-                            string serializedValue = _serializer.Serialize(
-                                value
-                            );
-                            _storageDict[key] = serializedValue;
-                        }
-
-                        string serializedDict = _serializer.Serialize(
-                            _storageDict
-                        );
-                        SaveStorageState(serializedDict);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    exception = ex;
-                }
-            }).ConfigureAwait(false);
-            if (exception != null)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), exception);
-            }
+            LoadStorageState();
+            _storageDict[key] = value;
+            SaveStorageState();
         }
 
-        /// <summary>
-        /// Method is synchronized with Set. 
-        /// If key doesn't exist, then method will return null for reference type or default value for value types.
-        /// </summary>
-        public async Task<object> Get(Type type, string key)
+        protected override async Task InnerRemove(string key)
         {
-            Exception exception = null;
-            var res = await Task.Run(() =>
-            {
-                try
-                {
-                    return PrivateGet(type, key);
-                }
-                catch (Exception ex)
-                {
-                    exception = ex;
-                    return null;
-                }
-            }).ConfigureAwait(false);
-            if (exception != null)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), exception);
-            }
-            return res;
+            LoadStorageState();
+            _storageDict.Remove(key);
+            SaveStorageState();
         }
 
-        public async Task<bool> ContainsKey(string key)
+        protected override async Task<string> InnerGet(string key)
         {
-            Exception exception = null;
-            var res = await Task.Run(() =>
+            LoadStorageState();
+            if (_storageDict.TryGetValue(key, out var value))
             {
-                try
-                {
-                    lock (_locker)
-                    {
-                        LoadStorageState();
-                        return _storageDict.ContainsKey(key);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    exception = ex;
-                    return false;
-                }
-            }).ConfigureAwait(false);
-            if (exception != null)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), exception);
-            }
-            return res;
-        }
-
-        public Task Clear()
-        {
-            lock (_locker)
-            {
-                try
-                {
-                    _storageDict?.Clear();
-                    SaveStorageState("{}");
-                }
-                catch (Exception ex)
-                {
-                    throw new StorageException("Cleaning exception.", ex);
-                }
-            }
-            return Task.FromResult<object>(null);
-        }
-
-        object PrivateGet(Type type, string key)
-        {
-            lock (_locker)
-            {
-                LoadStorageState();
-
-                if (!_storageDict.ContainsKey(key))
-                {
-                    //return default value for structs or null for class
-                    throw new KeyNotFoundException();
-                }
-
-                var serializedValue = _storageDict[key];
-                object value = null;
-                if (serializedValue != null)
-                {
-                    value = _serializer.Deserialize(type, serializedValue);
-                }
-                if (value == null)
-                {
-                    _storageDict.Remove(key);
-                    throw new Exception();
-                }
                 return value;
             }
+            return null;
         }
+
+        public override async Task InnerClear()
+        {
+            _storageDict?.Clear();
+            SaveStorageState();
+        }
+
 
         void LoadStorageState()
         {
-            long fromFileSyncIteration = ReadSyncIteration();
-            if (_storageDict == null || _currentSyncIteration < fromFileSyncIteration)
-            {
-                _storageDict = ReadStorage();
-                _currentSyncIteration = fromFileSyncIteration;
-            }
+            _storageDict = ReadStorage();
         }
 
-        void SaveStorageState(string storage)
+        void SaveStorageState()
         {
-            WriteStorage(storage);
-            WriteSyncIteration(++_currentSyncIteration);
+            string serializedDict = JsonConvert.SerializeObject(_storageDict);
+            WriteStorage(serializedDict);
         }
 
         Dictionary<string, string> ReadStorage()
@@ -226,23 +79,20 @@ namespace IRO.Storage.DefaultStorages
             Dictionary<string, string> res = null;
             try
             {
-                FileHelpers.TryReadAllText(_storageFilePath, out string strFromFile, TimeoutSeconds);
-                res = (Dictionary<string, string>)_serializer.Deserialize(
-                    typeof(Dictionary<string, string>),
+                FileHelpers.TryReadAllText(
+                    _storageFilePath,
+                    out string strFromFile,
+                    TimeoutSeconds
+                    );
+                res = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                     strFromFile
-                );
+                    );
             }
             catch (Exception ex)
             {
-                //if (File.Exists(_storageFilePath))
-                //{
-                //    throw new StorageException("Storage file exists, but still getting exception.");
-                //}
+                Debug.WriteLine(ex);
             }
-
-            if (res == null)
-                res = new Dictionary<string, string>();
-            return res;
+            return res ?? new Dictionary<string, string>();
         }
 
         void WriteStorage(string storage)
@@ -252,26 +102,6 @@ namespace IRO.Storage.DefaultStorages
                 File.CreateText(_storageFilePath).Close();
             }
             FileHelpers.TryWriteAllText(_storageFilePath, storage, TimeoutSeconds);
-        }
-
-        long ReadSyncIteration()
-        {
-            try
-            {
-                bool success = FileHelpers.TryReadAllText(_syncFilePath, out string str, TimeoutSeconds);
-                long res = success ? Convert.ToInt64(str) : 0;
-                return res;
-            }
-            catch
-            {
-                return 0;
-            }
-
-        }
-
-        void WriteSyncIteration(long newIteration)
-        {
-            FileHelpers.TryWriteAllText(_syncFilePath, newIteration.ToString(), TimeoutSeconds);
         }
     }
 }

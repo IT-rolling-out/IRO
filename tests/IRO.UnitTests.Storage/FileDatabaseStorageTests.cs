@@ -1,22 +1,18 @@
 ﻿using System.Threading.Tasks;
-using IRO.Storage.WithLiteDB;
-using IRO.Storage.WithMongoDB;
-using MongoDB.Driver;
+using IRO.Storage;
+using IRO.Storage.DefaultStorages;
 using NUnit.Framework;
 
 namespace IRO.UnitTests.Storage
 {
-    public class MongoDatabaseStorageTests
+    public class FileDatabaseStorageTests
     {
-        readonly MongoDatabaseStorage _storage;
+        readonly IKeyValueStorage _storage;
 
-        public MongoDatabaseStorageTests()
+        public FileDatabaseStorageTests()
         {
-            var client =
-                new MongoClient(
-                    "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false");
-            var db = client.GetDatabase("storage_test_db");
-            _storage = new MongoDatabaseStorage(db);
+            _storage = new FileStorage();
+            _storage.Clear();
         }
 
         [Test]

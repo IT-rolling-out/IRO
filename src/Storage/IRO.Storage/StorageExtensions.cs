@@ -6,14 +6,6 @@ namespace IRO.Storage
 {
     public static class StorageExtensions
     {
-        /// <summary>
-        /// Just call of Set(key, null).
-        /// </summary>
-        public static async Task Remove(this IKeyValueStorage @this, string key)
-        {
-            await @this.Set(key, null);
-        }
-
         public static async Task<T> Get<T>(this IKeyValueStorage @this, string key)
         {
             object value=null;

@@ -18,4 +18,12 @@
     <ProjectReference Include="..\..\src\Storage\IRO.Storage.WithMongoDB\IRO.Storage.WithMongoDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="C:\Users\Yura\.nuget\packages\mongodb.driver.core\2.11.5\build\../runtimes/win/native/snappy64.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Yura\.nuget\packages\mongodb.driver.core\2.11.5\build\../runtimes/win/native/snappy32.dll" />
+  </ItemGroup>
+
 </Project>

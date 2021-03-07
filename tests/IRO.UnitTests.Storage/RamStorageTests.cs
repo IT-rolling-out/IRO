@@ -9,7 +9,7 @@ namespace IRO.UnitTests.Storage
         [Test]
         public async Task TestGetNullThrows()
         {
-            await StaticUnifiedTests.TestGetNullThrows(new RamStorage());
+            await StaticUnifiedTests.TestGetNull(new RamStorage());
         }
 
         [Test]

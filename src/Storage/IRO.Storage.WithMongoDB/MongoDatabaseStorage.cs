@@ -4,6 +4,7 @@ using IRO.Common.Text;
 using IRO.Storage.Exceptions;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Newtonsoft.Json.Linq;
 
 namespace IRO.Storage.WithMongoDB
 {
@@ -29,6 +30,11 @@ namespace IRO.Storage.WithMongoDB
 
             _collection = _db.GetCollection<BsonDocument>(_collectionName);
             _collection.EnsureIndex("key").Wait();
+        }
+
+        public Task<JToken> Get(string key)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -67,6 +73,11 @@ namespace IRO.Storage.WithMongoDB
                 throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
             }
 
+        }
+
+        public Task Remove(string key)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

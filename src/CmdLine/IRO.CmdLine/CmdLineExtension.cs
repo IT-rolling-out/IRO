@@ -4,6 +4,7 @@ using IRO.Storage;
 using System;
 using System.Reflection;
 using IRO.Storage.DefaultStorages;
+using System.IO;
 
 namespace IRO.CmdLine
 {
@@ -20,11 +21,15 @@ namespace IRO.CmdLine
         /// Для сложных методов, типа считывания сложных типов через json editor вы можете отключить исключения. Тогда, к примеру, если пользователь допустит 
         /// ошибку при редактировании json файла - ему выведут сообщение, но исключение не завершит работу программы.
         /// </summary>
-        public bool ThrowConsoleParseExeptions { get; } = false;       
+        public bool ThrowConsoleParseExeptions { get; } = false;
 
-        public CmdLineExtension(IConsoleHandler consoleHandler, IKeyValueStorage storage=null)
+        public CmdLineExtension(IConsoleHandler consoleHandler, IKeyValueStorage storage = null)
         {
-            Storage = storage ?? new FileStorage("CmdLineStorage.json");
+            var opt = new FileStorageInitOptions()
+            {
+                StorageFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CmdLineStorage.json")
+            };
+            Storage = storage ?? new FileStorage(opt);
             if (consoleHandler == null)
                 throw new NullReferenceException();
             ConsoleHandler = consoleHandler;

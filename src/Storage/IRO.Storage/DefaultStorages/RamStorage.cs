@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRO.Common.Text;
 using IRO.Storage.Exceptions;
+using Newtonsoft.Json.Linq;
 
 namespace IRO.Storage.DefaultStorages
 {
@@ -54,6 +55,11 @@ namespace IRO.Storage.DefaultStorages
             }
         }
 
+        public Task<JToken> Get(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Set(string key, object value)
         {
             try
@@ -71,6 +77,11 @@ namespace IRO.Storage.DefaultStorages
             {
                 throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
             }
+        }
+
+        public Task Remove(string key)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> ContainsKey(string key)

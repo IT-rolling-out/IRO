@@ -8,31 +8,76 @@ namespace IRO.UnitTests.Storage
 {
     public static class StaticUnifiedTests
     {
+        public static async Task TestScopes(IKeyValueStorage storage)
+        {
+            await storage.Set("ComplexType.Val1", 100);
+            await storage.Set("ComplexType.Val2", "First scope string");
+            await storage.Set("ComplexType.Val3.Val1", 200);
+            await storage.Set("ComplexType.Val3.Val2", "Second scope string");
+            await storage.Set("ComplexType.Val3.Val3.Val1", 300);
+            await storage.Set("ComplexType.Val3.Val3.Val2", "Third scope string");
+
+            var num = await storage.Get<int>("ComplexType.Val1");
+            Assert.AreEqual(num, 100);
+            num = await storage.Get<int>("ComplexType.Val3.Val1");
+            Assert.AreEqual(num, 200);
+
+            var str = await storage.Get<string>("ComplexType.Val3.Val2");
+            Assert.AreEqual(str, "Second scope string");
+
+            var complexType = await storage.Get<ComplexType>("ComplexType");
+            Assert.AreEqual(complexType.Val3.Val3.Val1, 300);
+            complexType = await storage.Get<ComplexType>("ComplexType.Val3");
+            Assert.AreEqual(complexType.Val3.Val1, 300);
+
+            await storage.Remove("ComplexType.Val3.Val3.Val1");
+            var isContains = await storage.ContainsKey("ComplexType.Val3.Val3.Val1");
+            Assert.IsFalse(isContains);
+            isContains = await storage.ContainsKey("ComplexType.Val3.Val3");
+            Assert.IsTrue(isContains);
+
+            await storage.Remove("ComplexType.Val3.Val3.Val2");
+            isContains = await storage.ContainsKey("ComplexType.Val3.Val3");
+            Assert.IsFalse(isContains);
+            isContains = await storage.ContainsKey("ComplexType");
+            Assert.IsTrue(isContains);
+
+            await storage.Set("ComplexType", 999);
+            num = await storage.Get<int>("ComplexType");
+            Assert.AreEqual(num, 999);
+            isContains = await storage.ContainsKey("ComplexType.Val3.Val3");
+            Assert.IsFalse(isContains);
+            isContains = (await storage.ContainsKey("ComplexType.Val1"));
+            Assert.IsFalse(isContains);
+            isContains = (await storage.ContainsKey("ComplexType.Val2"));
+            Assert.IsFalse(isContains);
+            isContains = (await storage.ContainsKey("ComplexType.Val3"));
+            Assert.IsFalse(isContains);
+            isContains = (await storage.ContainsKey("ComplexType.Val3.Val1"));
+            Assert.IsFalse(isContains);
+            isContains = (await storage.ContainsKey("ComplexType.Val3.Val3"));
+            Assert.IsFalse(isContains);
+            isContains = (await storage.ContainsKey("ComplexType.Val3.Val3.Val1"));
+            Assert.IsFalse(isContains);
+        }
+
         /// <summary>
         /// Must throw exception.
         /// </summary>
         /// <param name="storage"></param>
-        public static async Task TestGetNullThrows(IKeyValueStorage storage)
+        public static async Task TestGetNull(IKeyValueStorage storage)
         {
-            var key = "testValue_32453v4ar";
-            await storage.Set(key, "val");
+            var key = "value_TestGetNull";
             await storage.Set(key, null);
-            try
-            {
-                await storage.Get(typeof(string), key);
-                Assert.Fail("Storage. Get must throw exception for values, that null or doesn`t exists.");
-            }
-            catch(Exception ex)
-            {
-                Assert.Pass();
-            }
+            var value = await storage.Get<string>(key);
+            Assert.IsNull(value);
         }
 
         public static async Task TestGetOrDefaultForValueType(IKeyValueStorage storage)
         {
             var key = "testValue1_c34a33";
             await storage.Set(key, null);
-            var num=await storage.GetOrDefault<int>(key);
+            var num = await storage.GetOrDefault<int>(key);
             Assert.AreEqual(num, default(int));
         }
 
@@ -69,20 +114,22 @@ namespace IRO.UnitTests.Storage
         {
             var key = "D99h323";
             await storage.Set(key, 100);
-            var val=await storage.Get<int>(key);
+            var val = await storage.Get<int>(key);
             Assert.AreEqual(val, 100);
         }
 
         public static async Task ContainsTest(IKeyValueStorage storage)
         {
-            var key = "wad323";
+            var key = "value_ContainsTest";
             await storage.Set(key, "asda");
             var isContains = await storage.ContainsKey(key);
             Assert.IsTrue(isContains);
             await storage.Set(key, null);
             isContains = await storage.ContainsKey(key);
+            Assert.IsTrue(isContains);
+            await storage.Remove(key);
+            isContains = await storage.ContainsKey(key);
             Assert.IsFalse(isContains);
-
         }
 
         public static async Task SynchronizationTest(IKeyValueStorage storage)
@@ -132,7 +179,7 @@ namespace IRO.UnitTests.Storage
             await storage.Set("mykey", "val");
             for (int i = 0; i < 500; i++)
             {
-                var val=await storage.Get<string>("mykey");
+                var val = await storage.Get<string>("mykey");
                 Assert.AreEqual("val", val);
             }
             await storage.Clear();
