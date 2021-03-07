@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace IRO.Storage.DefaultStorages
+namespace IRO.Storage.Data
 {
     public class FileStorageInitOptions
     {

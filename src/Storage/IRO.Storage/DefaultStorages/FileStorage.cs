@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using IRO.Common.Services;
 using IRO.Common.Text;
+using IRO.Storage.Data;
 using IRO.Storage.Exceptions;
 using Newtonsoft.Json;
 
@@ -56,7 +57,7 @@ namespace IRO.Storage.DefaultStorages
             return null;
         }
 
-        public override async Task InnerClear()
+        protected override async Task InnerClear()
         {
             _storageDict?.Clear();
             SaveStorageState();

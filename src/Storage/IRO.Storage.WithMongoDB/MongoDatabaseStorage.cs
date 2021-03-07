@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using IRO.Cache;
 using IRO.Common.Text;
+using IRO.Storage.DefaultStorages;
 using IRO.Storage.Exceptions;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -8,132 +10,74 @@ using Newtonsoft.Json.Linq;
 
 namespace IRO.Storage.WithMongoDB
 {
-    public class MongoDatabaseStorage : IKeyValueStorage
+    public class MongoDatabaseStorage : BaseStorage
     {
-        const string ExceptionMsgTemplate = "Error with '{0}' in MongoDB storage.";
-        readonly object Locker = new object();
+        readonly string _collectionName;
+        readonly RamCache _cache;
+        readonly bool _useCache;
         readonly IMongoDatabase _db;
-        string _collectionName;
-        readonly IStringsSerializer _serializer;
         IMongoCollection<BsonDocument> _collection;
 
-        public MongoDatabaseStorage(IMongoDatabase db, string collectionName = "key_value_storage")
-            : this(db, collectionName, null)
-        {
-        }
 
-        public MongoDatabaseStorage(IMongoDatabase db, string collectionName, IStringsSerializer serializer)
+        public MongoDatabaseStorage(IMongoDatabase db, MongoDatabaseStorageInitOptions opt = null)
         {
-            _serializer = serializer ?? new JsonSimpleSerializer();
+            opt ??= new MongoDatabaseStorageInitOptions();
+            _useCache = opt.UseCache;
+            _cache = new RamCache(1000);
             _db = db;
-            _collectionName = collectionName;
-
+            _collectionName = opt.CollectionName;
             _collection = _db.GetCollection<BsonDocument>(_collectionName);
             _collection.EnsureIndex("key").Wait();
         }
 
-        public Task<JToken> Get(string key)
+        protected override async Task InnerSet(string key, string value)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Automatically synchronized with Get. If 'null' - will remove value.
-        /// </summary>
-        public async Task Set(string key, object value)
-        {
-            try
+            if (_useCache)
+                await _cache.Set(key, value);
+            if (value == null)
             {
-                Task taskToAwait;
-                lock (Locker)
-                {
-                    if (value == null)
+                await _collection.DeleteOneAsync(d => d["key"] == key);
+            }
+            else
+            {
+                await _collection.UpsertAsync(
+                    d => d["key"] == key,
+                    new BsonDocument
                     {
-                        taskToAwait = _collection.DeleteOneAsync(d => d["key"] == key);
+                        ["key"] = key,
+                        ["Value"] = value
                     }
-                    else
-                    {
-                        //Use json for more simple convertation.
-                        string serializedStr = _serializer.Serialize(value);
-                        taskToAwait = _collection.UpsertAsync(
-                            d => d["key"] == key,
-                            new BsonDocument
-                            {
-                                ["key"] = key,
-                                ["Value"] = serializedStr
-                            }
-                        );
-
-                    }
-                }
-                await taskToAwait;
-            }
-            catch (Exception ex)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
-            }
-
-        }
-
-        public Task Remove(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Automatically synchronized with Set. 
-        /// </summary>
-        public async Task<object> Get(Type type, string key)
-        {
-            try
-            {
-                string serializedStr = null;
-                var keyValPair = await _collection.FindOneOrDefaultAsync(d => d["key"] == key);
-                if (keyValPair != null)
-                {
-                    serializedStr = keyValPair["Value"].AsString;
-                }
-
-                object value = null;
-                if (serializedStr != null)
-                {
-                    value = _serializer.Deserialize(type, serializedStr);
-                }
-                if (value == null)
-                {
-                    throw new Exception("Can`t find value.");
-                }
-                return value;
-            }
-            catch (Exception ex)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
+                );
             }
         }
 
-        public async Task<bool> ContainsKey(string key)
+        protected override async Task InnerRemove(string key)
         {
-            try
-            {
-                var value = await _collection.FindOneOrDefaultAsync(r => r["key"] == key);
-                return value != null;
-            }
-            catch (Exception ex)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
-            }
+            await InnerSet(key, null);
         }
 
-        public async Task Clear()
+        protected override async Task<string> InnerGet(string key)
         {
-            try
+            if (_useCache)
             {
-                await _db.DropCollectionAsync(_collectionName);
+                var cachedValue = await _cache.GetOrNull(typeof(string), key);
+                if (cachedValue != null)
+                    return (string)cachedValue;
             }
-            catch (Exception ex)
+
+            var keyValPair = await _collection.FindOneOrDefaultAsync(d => d["key"] == key);
+            if (keyValPair != null)
             {
-                throw new StorageException("Can't drop collection.", ex);
+                return keyValPair["Value"]?.AsString;
             }
+            return null;
+
+        }
+
+        protected override async Task InnerClear()
+        {
+            await _db.DropCollectionAsync(_collectionName);
+            _cache.Clear();
         }
     }
 }

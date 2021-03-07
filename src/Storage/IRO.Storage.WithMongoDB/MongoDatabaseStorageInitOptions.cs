@@ -1,20 +1,11 @@
-﻿using System;
-using System.IO;
-
-namespace IRO.Storage.WithLiteDB
+﻿namespace IRO.Storage.WithMongoDB
 {
-    public class LiteDatabaseStorageInitOptions
+    public class MongoDatabaseStorageInitOptions
     {
         /// <summary>
         /// Default is 'key_value_collection'.
         /// </summary>
         public string CollectionName { get; set; } = "key_value_collection";
-
-        /// <summary>
-        /// Default is '{BaseDirectory}/localstorage.litedb'.
-        /// </summary>
-        public string DbFilePath { get; set; }
-            = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "localstorage.litedb");
 
         /// <summary>
         /// Default is true.

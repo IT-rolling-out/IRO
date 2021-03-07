@@ -46,7 +46,7 @@ namespace IRO.Cache
 
         public async Task<object> GetOrNull(Type type, string key)
         {
-            return TryGetSync(type, key);
+            return GetOrNullSync(type, key);
         }
 
         public void SetSync(string key, object value, DateTime? expiresIn = null)
@@ -78,7 +78,7 @@ namespace IRO.Cache
             }
         }
 
-        public object TryGetSync(Type type, string key)
+        public object GetOrNullSync(Type type, string key)
         {
             try
             {
@@ -93,6 +93,11 @@ namespace IRO.Cache
             {
                 throw new CacheException("", ex);
             }
+        }
+
+        public void Clear()
+        {
+            _cacheDict.Clear();
         }
 
         public void Fit()

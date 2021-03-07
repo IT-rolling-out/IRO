@@ -1,72 +1,65 @@
 ﻿using System.Threading.Tasks;
 using IRO.Storage;
-using IRO.Storage.DefaultStorages;
 using NUnit.Framework;
 
 namespace IRO.UnitTests.Storage
 {
-    public class FileDatabaseStorageTests
+    public abstract class BaseStorageTests
     {
-        readonly IKeyValueStorage _storage;
-
-        public FileDatabaseStorageTests()
-        {
-            _storage = new FileStorage();
-            _storage.Clear();
-        }
+        protected IKeyValueStorage Storage { get; set; }
 
         [Test]
         public async Task TestScopes()
         {
-            await StaticUnifiedTests.TestScopes(_storage);
+            await StaticUnifiedTests.TestScopes(Storage);
         }
 
         [Test]
         public async Task TestGetNullThrows()
         {
-            await StaticUnifiedTests.TestGetNull(_storage);
+            await StaticUnifiedTests.TestGetNull(Storage);
         }
 
         [Test]
         public async Task TestGetOrDefaultForValueType()
         {
-            await StaticUnifiedTests.TestGetOrDefaultForValueType(_storage);
+            await StaticUnifiedTests.TestGetOrDefaultForValueType(Storage);
         }
 
         [Test]
         public async Task ComplexObjectTest()
         {
-            await StaticUnifiedTests.ComplexObjectTest(_storage);
+            await StaticUnifiedTests.ComplexObjectTest(Storage);
         }
 
         [Test]
         public void TaskWaitDefaultCall()
         {
-            StaticUnifiedTests.TaskWaitDefaultCall(_storage);
+            StaticUnifiedTests.TaskWaitDefaultCall(Storage);
         }
 
         [Test]
         public async Task DefaultCall()
         {
-            await StaticUnifiedTests.DefaultCall(_storage);
+            await StaticUnifiedTests.DefaultCall(Storage);
         }
 
         [Test]
         public async Task ContainsTest()
         {
-            await StaticUnifiedTests.ContainsTest(_storage);
+            await StaticUnifiedTests.ContainsTest(Storage);
         }
 
         [Test]
         public async Task SynchronizationTest()
         {
-            await StaticUnifiedTests.SynchronizationTest(_storage);
+            await StaticUnifiedTests.SynchronizationTest(Storage);
         }
 
         [Test]
         public async Task ReadTest()
         {
-            await StaticUnifiedTests.ReadTest(_storage);
+            await StaticUnifiedTests.ReadTest(Storage);
         }
     }
 }

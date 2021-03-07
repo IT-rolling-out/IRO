@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using IRO.Storage.Data;
 using IRO.Storage.Exceptions;
 using NeoSmart.AsyncLock;
 using Newtonsoft.Json;
@@ -157,7 +158,7 @@ namespace IRO.Storage.DefaultStorages
         /// </summary>
         protected abstract Task InnerRemove(string key);
 
-        public abstract Task InnerClear();
+        protected abstract Task InnerClear();
         #endregion
 
         #region Private.

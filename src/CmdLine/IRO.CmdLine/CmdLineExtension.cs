@@ -5,6 +5,7 @@ using System;
 using System.Reflection;
 using IRO.Storage.DefaultStorages;
 using System.IO;
+using IRO.Storage.Data;
 
 namespace IRO.CmdLine
 {

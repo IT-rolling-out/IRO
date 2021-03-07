@@ -13,99 +13,32 @@ namespace IRO.Storage.DefaultStorages
     /// Will serialize all values, like other storages and save it in ram.
     /// Jsut like unlimited cache.
     /// </summary>
-    public class RamStorage : IKeyValueStorage
+    public class RamStorage : BaseStorage
     {
-        const string ExceptionMsgTemplate = "Error with '{0}' in ram storage.";
-        readonly IStringsSerializer _serializer;
-        readonly object _locker = new object();
-        readonly IDictionary<string, object> _storageDict = new ConcurrentDictionary<string, object>();
+        readonly IDictionary<string, string> _storageDict = new Dictionary<string, string>();
 
-        public RamStorage(IStringsSerializer serializer)
+        protected override async Task InnerSet(string key, string value)
         {
-            _serializer = serializer;
+            _storageDict[key] = value;
         }
 
-        public RamStorage() : this(new JsonSimpleSerializer())
+        protected override async Task InnerRemove(string key)
         {
+            _storageDict.Remove(key);
         }
 
-        public async Task<object> Get(Type type, string key)
+        protected override async Task<string> InnerGet(string key)
         {
-            try
+            if (_storageDict.TryGetValue(key, out var value))
             {
-                if (!_storageDict.ContainsKey(key))
-                {
-                    //return default value for structs or null for class
-                    throw new KeyNotFoundException();
-                }
-
-                var origValue = _storageDict[key];
-                if (origValue == null)
-                {
-                    _storageDict.Remove(key);
-                    throw new Exception();
-                }
-                var str = _serializer.Serialize(origValue);
-                var value = _serializer.Deserialize(type, str);
                 return value;
             }
-            catch (Exception ex)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
-            }
+            return null;
         }
 
-        public Task<JToken> Get(string key)
+        protected override async Task InnerClear()
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task Set(string key, object value)
-        {
-            try
-            {
-                if (value == null)
-                {
-                    _storageDict.Remove(key);
-                }
-                else
-                {
-                    _storageDict[key] = value;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
-            }
-        }
-
-        public Task Remove(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> ContainsKey(string key)
-        {
-            try
-            {
-                return _storageDict.ContainsKey(key);
-            }
-            catch (Exception ex)
-            {
-                throw new StorageException(string.Format(ExceptionMsgTemplate, key), ex);
-            }
-        }
-
-        public async Task Clear()
-        {
-            try
-            {
-                _storageDict.Clear();
-            }
-            catch (Exception ex)
-            {
-                throw new StorageException("Exception while cleaning.", ex);
-            }
+            _storageDict.Clear();
         }
     }
 }

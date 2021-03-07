@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IRO.Storage.DefaultStorages
+namespace IRO.Storage.Data
 {
     internal class StorageScopeModel
     {
