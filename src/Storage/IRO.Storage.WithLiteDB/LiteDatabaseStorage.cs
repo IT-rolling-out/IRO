@@ -19,14 +19,14 @@ namespace IRO.Storage.WithLiteDB
     {
         readonly string _collectionName;
         readonly string _dbFilePath;
-        readonly RamCache _cache;
+        readonly IKeyValueCache _cache;
         readonly bool _useCache;
 
-        public LiteDatabaseStorage(LiteDatabaseStorageInitOptions opt = null)
+        public LiteDatabaseStorage(LiteDatabaseStorageInitOptions opt = null, IKeyValueCache cache = null)
         {
             opt ??= new LiteDatabaseStorageInitOptions();
             _useCache = opt.UseCache;
-            _cache = new RamCache(1000);
+            _cache = cache ?? new RamCache(1000);
 
             _collectionName = opt.CollectionName;
             _dbFilePath = opt.DbFilePath;
@@ -40,7 +40,7 @@ namespace IRO.Storage.WithLiteDB
         protected override async Task InnerSet(string key, string value)
         {
             if (_useCache)
-                await _cache.Set(key, value);
+                await _cache.SetString(key, value);
             if (value == null)
             {
                 using (var db = new LiteDatabase(_dbFilePath))
@@ -74,9 +74,9 @@ namespace IRO.Storage.WithLiteDB
         {
             if (_useCache)
             {
-                var cachedValue = await _cache.GetOrNull(typeof(string), key);
+                var cachedValue = await _cache.TryGetString(key);
                 if (cachedValue != null)
-                    return (string) cachedValue;
+                    return cachedValue;
             }
 
             using (var db = new LiteDatabase(_dbFilePath))

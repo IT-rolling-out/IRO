@@ -8,40 +8,51 @@ namespace IRO.Cache
 {
     public static class CacheExtensions
     {
-        /// <summary>
-        /// Just call of Set(key, null).
-        /// </summary>
-        public static async Task Remove(this IKeyValueCache @this, string key)
+        public static async Task<string> GetString(this IKeyValueCache cache, string key)
         {
-            await @this.Set(key, null);
+            var bytes = await cache.GetBytes(key);
+            var str = Encoding.UTF8.GetString(bytes);
+            return str;
         }
 
-        /// <summary>
-        /// Return value or null.
-        /// </summary>
-        public static async Task<T> GetOrNull<T>(this IKeyValueCache @this, string key)
-            where T : class
+        public static async Task<byte[]> TryGetBytes(this IKeyValueCache cache, string key)
         {
-            object value = await @this.GetOrNull(typeof(T), key);
-            if (value is T valueConverted)
+            try
             {
-                return valueConverted;
+                var bytes = await cache.GetBytes(key);
+                return bytes;
             }
-            return null;
+            catch
+            {
+                return null;
+            }
         }
 
-        /// <summary>
-        /// Return value or default.
-        /// Use nullable for value types.
-        /// </summary>
-        public static async Task<T> GetOrDefault<T>(this IKeyValueCache @this, string key)
+        public static async Task<string> TryGetString(this IKeyValueCache cache, string key)
         {
-            object value = await @this.GetOrNull(typeof(T), key);
-            if (value is T valueConverted)
+            try
             {
-                return valueConverted;
+                var str = await cache.GetString(key);
+                return str;
             }
-            return default(T);
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static async Task SetString(this IKeyValueCache cache, string key, string str, DateTime? expiresIn = null)
+        {
+            if (str == null)
+            {
+                await cache.Remove(key);
+            }
+            else
+            {
+                var bytes = Encoding.UTF8.GetBytes(str);
+                await cache.SetBytes(key, bytes, expiresIn);
+            }
+
         }
 
     }

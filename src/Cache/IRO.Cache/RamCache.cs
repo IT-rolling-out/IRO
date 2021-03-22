@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,15 +13,13 @@ using IRO.Common.Text;
 namespace IRO.Cache
 {
     /// <summary>
-    /// Saves data in ram as strings.
+    /// Saves data in ram as bytes.
     /// </summary>
     public class RamCache : IKeyValueCache
     {
-        readonly IStringsSerializer _serializer;
-        readonly ConcurrentDictionary<string, CacheContainer> _cacheDict =
-            new ConcurrentDictionary<string, CacheContainer>();
+        readonly ConcurrentDictionary<string, RamCacheContainer> _cacheDict =
+            new ConcurrentDictionary<string, RamCacheContainer>();
 
-        readonly object _keysPoolLock = new object();
         readonly List<string> _keysPool = new List<string>();
 
         readonly int _recordsLimit;
@@ -27,44 +27,62 @@ namespace IRO.Cache
         /// <summary>
         /// </summary>
         /// <param name="recordsLimit">Defailt is int.Max.</param>
-        public RamCache(int recordsLimit = int.MaxValue, IStringsSerializer serializer=null)
+        public RamCache(int recordsLimit = int.MaxValue)
         {
-            _serializer = serializer ?? new JsonSimpleSerializer();
             _recordsLimit = recordsLimit;
             if (recordsLimit < 1)
                 throw new ArgumentException("Records limit can`t be smaller than 1.", nameof(recordsLimit));
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="expiresIn">Ignored.</param>
-        /// <returns></returns>
-        public async Task Set(string key, object value, DateTime? expiresIn = null)
+
+        public async Task<Stream> GetStream(string key)
         {
-            SetSync(key, value, expiresIn);
+            var bytes = await GetBytes(key);
+            var stream = new MemoryStream(bytes);
+            return stream;
         }
 
-        public async Task<object> GetOrNull(Type type, string key)
+        public async Task SetStream(string key, Stream stream, DateTime? expiresIn = null)
         {
-            return GetOrNullSync(type, key);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.CopyTo(ms);
+                var bytes = ms.ToArray();
+                await SetBytes(key, bytes, expiresIn);
+            }
         }
-
-        public void SetSync(string key, object value, DateTime? expiresIn = null)
+        
+        public async Task<byte[]> GetBytes(string key)
         {
             try
             {
-                Fit();
-
-                if (value == null)
+                if (_cacheDict.TryGetValue(key, out var container))
                 {
-                    _cacheDict.TryRemove(key, out var val);
+                    return container.SerializedValue;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new CacheException("", ex);
+            }
+        }
+
+        public async Task SetBytes(string key, byte[] bytes, DateTime? expiresIn = null)
+        {
+            try
+            {
+                await Fit();
+
+                if (bytes == null)
+                {
+                    await Remove(key);
                     return;
                 }
-
-                var serializedValue = _serializer.Serialize(value);
-                var container = new CacheContainer()
+                var container = new RamCacheContainer()
                 {
-                    SerializedValue = serializedValue,
+                    SerializedValue = bytes,
                     ExpiresIn = expiresIn
                 };
                 _cacheDict[key] = container;
@@ -78,48 +96,36 @@ namespace IRO.Cache
             }
         }
 
-        public object GetOrNullSync(Type type, string key)
+        public async Task Remove(string key)
         {
-            try
-            {
-                if (_cacheDict.TryGetValue(key, out var container))
-                {
-                    var value = _serializer.Deserialize(type, container.SerializedValue);
-                    return value;
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw new CacheException("", ex);
-            }
+            _cacheDict.TryRemove(key, out var val);
         }
 
-        public void Clear()
+        public async Task Clear()
         {
             _cacheDict.Clear();
+            _keysPool.Clear();
         }
 
-        public void Fit()
+        public async Task Fit()
         {
             if (_cacheDict.Count < _recordsLimit)
             {
                 return;
             }
 
-            //Use half limit to disable Fit lock on each iteration.
-            //var halfOfLimit = _recordsLimit / 2;
-            //if (halfOfLimit < 1)
-            //    halfOfLimit = 1;
-            //else if (halfOfLimit > 100)
-            //    halfOfLimit = 100;
-
-            //!Not thread safe, but it is jsut simplest cache, come on.
             while (_keysPool.Count > _recordsLimit)
             {
                 var dictKey = _keysPool.First();
-                _keysPool.Remove(dictKey);
-                _cacheDict.TryRemove(dictKey, out var value);
+                _keysPool.RemoveAt(0);
+                try
+                {
+                    await Remove(dictKey);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
         }
 

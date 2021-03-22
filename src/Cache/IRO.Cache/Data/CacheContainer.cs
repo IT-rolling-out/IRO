@@ -4,10 +4,10 @@ using System.Text;
 
 namespace IRO.Cache
 {
-    internal struct CacheContainer
+    internal struct RamCacheContainer
     {
         public DateTime? ExpiresIn { get; set; }
 
-        public string SerializedValue { get; set; }
+        public byte[] SerializedValue { get; set; }
     }
 }

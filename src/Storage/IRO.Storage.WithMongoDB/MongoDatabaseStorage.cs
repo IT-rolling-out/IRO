@@ -13,17 +13,17 @@ namespace IRO.Storage.WithMongoDB
     public class MongoDatabaseStorage : BaseStorage
     {
         readonly string _collectionName;
-        readonly RamCache _cache;
+        readonly IKeyValueCache _cache;
         readonly bool _useCache;
         readonly IMongoDatabase _db;
         IMongoCollection<BsonDocument> _collection;
 
 
-        public MongoDatabaseStorage(IMongoDatabase db, MongoDatabaseStorageInitOptions opt = null)
+        public MongoDatabaseStorage(IMongoDatabase db, MongoDatabaseStorageInitOptions opt = null, IKeyValueCache cache = null)
         {
             opt ??= new MongoDatabaseStorageInitOptions();
             _useCache = opt.UseCache;
-            _cache = new RamCache(1000);
+            _cache = cache ?? new RamCache(1000);
             _db = db;
             _collectionName = opt.CollectionName;
             _collection = _db.GetCollection<BsonDocument>(_collectionName);
@@ -33,7 +33,7 @@ namespace IRO.Storage.WithMongoDB
         protected override async Task InnerSet(string key, string value)
         {
             if (_useCache)
-                await _cache.Set(key, value);
+                await _cache.SetString(key, value);
             if (value == null)
             {
                 await _collection.DeleteOneAsync(d => d["key"] == key);
@@ -60,9 +60,9 @@ namespace IRO.Storage.WithMongoDB
         {
             if (_useCache)
             {
-                var cachedValue = await _cache.GetOrNull(typeof(string), key);
+                var cachedValue = await _cache.TryGetString(key);
                 if (cachedValue != null)
-                    return (string)cachedValue;
+                    return cachedValue;
             }
 
             var keyValPair = await _collection.FindOneOrDefaultAsync(d => d["key"] == key);
