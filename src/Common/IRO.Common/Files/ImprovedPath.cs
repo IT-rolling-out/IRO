@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace IRO.FileIO.ImprovedFileOperations
+namespace IRO.Common.Files
 {
     public static class ImprovedPath
     {

@@ -64,12 +64,12 @@ namespace IRO.Storage.DefaultStorages
         }
 
 
-        void LoadStorageState()
+        protected void LoadStorageState()
         {
             _storageDict = ReadStorage();
         }
 
-        void SaveStorageState()
+        protected void SaveStorageState()
         {
             string serializedDict = JsonConvert.SerializeObject(_storageDict);
             WriteStorage(serializedDict);

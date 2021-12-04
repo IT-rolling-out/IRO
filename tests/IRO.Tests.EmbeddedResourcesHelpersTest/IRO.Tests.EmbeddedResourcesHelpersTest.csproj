@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Common\IRO.Common\IRO.Common.csproj" />
-    <ProjectReference Include="..\..\src\Common\IRO.EmbeddedResources\IRO.EmbeddedResources.csproj" />
   </ItemGroup>
 
 </Project>

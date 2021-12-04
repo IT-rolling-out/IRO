@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IRO.Cache
+namespace IRO.Cache.Data
 {
     internal struct FileSystemCacheContainer
     {

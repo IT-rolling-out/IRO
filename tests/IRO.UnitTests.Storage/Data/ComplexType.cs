@@ -1,4 +1,4 @@
-﻿namespace IRO.UnitTests.Storage
+﻿namespace IRO.UnitTests.Storage.Data
 {
     class ComplexType
     {

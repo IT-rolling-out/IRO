@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace IRO.Cache
+namespace IRO.Cache.Data
 {
     internal struct RamCacheContainer
     {

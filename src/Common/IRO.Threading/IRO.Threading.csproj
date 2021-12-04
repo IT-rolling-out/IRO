@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>$(AsmVersion_Threading)</Version>
+    <Version>$(DefaultAsmVersion)</Version>
     <Description>Thread synchroniztion context that help you invoke delegates in specific thread and get results or exceptions from that delegates.</Description>
   </PropertyGroup>
 

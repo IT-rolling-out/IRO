@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using IRO.Common.EmbeddedResources;
 using IRO.Common.Services;
-using IRO.EmbeddedResources;
 
 namespace IRO.Tests.EmbeddedResourcesHelpersTest
 {

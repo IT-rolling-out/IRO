@@ -24,16 +24,6 @@
     <!-- Use current same version for all or define special for category-->
     <VersionPostfix></VersionPostfix>
 	
-    <DefaultAsmVersion>1.1.0$(VersionPostfix)</DefaultAsmVersion>
-	
-    <AsmVersion_Cache>2.0.1$(VersionPostfix)</AsmVersion_Cache>
-    <AsmVersion_CmdLine>2.0.12$(VersionPostfix)</AsmVersion_CmdLine>
-    <AsmVersion_Common>1.3.0$(VersionPostfix)</AsmVersion_Common>
-    <AsmVersion_FileIO>1.0.7$(VersionPostfix)</AsmVersion_FileIO>
-    <AsmVersion_Mvc>$(DefaultAsmVersion)</AsmVersion_Mvc>
-    <AsmVersion_Reflection>$(DefaultAsmVersion)</AsmVersion_Reflection>
-    <AsmVersion_Storage>2.3.2$(VersionPostfix)</AsmVersion_Storage>
-	<AsmVersion_EmbeddedResources>1.1.0$(VersionPostfix)</AsmVersion_EmbeddedResources>
-	<AsmVersion_Threading>1.0.1$(VersionPostfix)</AsmVersion_Threading>
+    <DefaultAsmVersion>5.0.1$(VersionPostfix)</DefaultAsmVersion>
   </PropertyGroup>
 </Project>
