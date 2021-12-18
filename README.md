@@ -17,56 +17,83 @@ Else projects based on it:
 
 # Below is a description and examples of projects in this repository.
 
-### IRO.CmdLine
+### IRO.LoggingExt
 
-Powerfull lib for creating command line interfaces.
+This can help you log information about method calls and exceptions. And it works without recompilation like in PostSharp.
 
-Initialization:
+Example:
 
+having this method
 ```csharp
-        static void Main(string[] args)
+        int Sum(int a, int b)
         {
-            var cmds = new CmdSwitcher();
-            cmds.PushCmdInStack(new CmdLineFacade());
-            cmds.ExecuteStartup(args);
-            if (args.Length == 0) 
-                cmds.RunDefault();
-            Console.ReadLine();
+            var sum = a + b;
+			var someInnerVariable="aaaa";
+            return sum;
         }
 ```
 
-Write cmd facade class:
-
+if not use extensions to log all information about method we can use this code
 ```csharp
-        [CmdInfo]
-        public void Test1()
+        int Sum(int a, int b)
         {
-            //Easy read complex objects with newtonsoft json.
-            //Will be opened default text editor with example value.
-            var res = ReadResource<Dictionary<object, object>>("test res");
-        }
-
-        [CmdInfo(Description = "In current method you can pass parameters.")]
-        public void Test2(DateTime dtParam, string strParam, bool boolParam, int intParam)
-        {
-            //Easy print complex objects with newtonsoft json.
-            Cmd.WriteLine(new Dictionary<string, object>()
+            try
             {
-                {nameof(dtParam), dtParam},
-                {nameof(boolParam), boolParam},
-                {nameof(strParam),strParam },
-                {nameof(intParam),intParam }
-            });
+                var sum = a + b;				
+			    var someInnerVariable="aaaa";
+
+                var msg = "Method {CallerNamespase}.{CallerClass}.{CalledMethod} called." +
+                          "\n\nWith arguments: {Argument_a}, {Argument_b}." +
+                          "\n\nWith additional values: {someInnerVariable}." +
+                          "\n\nReturned: {Result}";
+                _logger.LogInformation(
+                    msg,
+                    GetType().Namespace,
+                    GetType().Name,
+                    nameof(Sum),
+                    a,
+                    b,
+                    someInnerVariable,
+                    sum
+                );
+                return sum;
+            }
+            catch (Exception ex)
+            {
+                var msg = "Method {CallerNamespase}.{CallerClass}.{CalledMethod} called." +
+                          "\n\nWith arguments: {Argument_a}, {Argument_b}." +
+                          "\n\nFinished with exception: {Exception}";
+                _logger.LogInformation(
+                    msg,
+                    GetType().Namespace,
+                    GetType().Name,
+                    nameof(TestNormal_Analog),
+                    a,
+                    b,
+                    ex
+                );
+                throw;
+            }
         }
 ```
 
-Usage:
+with IRO.LoggingExt you can write logging like this and it will write same message
+```csharp
+        async Task<int> AsyncTestNormal(int a, int b)
+        {
+            using var methodLogScope = _loggingExt
+                .MethodLogScope(this)
+                .WithArguments(a, b, 100)
+               
 
-![](docs/Resources/CmdLineExample.JPG)
+            var sum = a + b;
+            var someInnerVariable="aaaa";
+			methodLogScope.WithAdditionalValue("someInnerVariable", someInnerVariable);
+			
+            return methodLogScope.WithReturn(sum);
+        }
+```
 
-And you can call it through cmd.exe . Just add you app to PATH environment variable and call command in it like default.
-
-The best example of such CLI util - is IRO.FileIO.FilesReplacerUtil.CmdUtil .
 
 ### IRO.Storage
 

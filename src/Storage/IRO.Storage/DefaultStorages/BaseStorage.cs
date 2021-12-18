@@ -40,40 +40,13 @@ namespace IRO.Storage.DefaultStorages
 
         public async Task<object> Get(Type type, string key)
         {
-            return await UsingLock(async () =>
-            {
-                var jToken = await Get(key);
-                return jToken?.ToObject(type);
-            });
+            var jToken = await Get(key); 
+            return jToken?.ToObject(type);
         }
 
         public async Task<JToken> Get(string key)
         {
-            ThrowIfBadKey(key);
-            if (!await ContainsKey(key))
-            {
-                throw new Exception($"Storage not contains key '{key}'");
-            }
-            return await UsingLock(async () =>
-            {
-                var jToken = await GetAndParseToJToken(key);
-                if (IsScopeModel(jToken))
-                {
-                    var scopeCasted = jToken.ToObject<StorageScopeModel>();
-                    var scopeWithValues = new JObject();
-                    foreach (var innerKey in scopeCasted.ScopeKeys)
-                    {
-                        var fullInnerKey = $"{key}{ScopeSplitter}{innerKey}";
-                        var val = await Get(fullInnerKey);
-                        scopeWithValues[innerKey] = val;
-                    }
-                    return scopeWithValues;
-                }
-                else
-                {
-                    return jToken;
-                }
-            });
+            return await GetWithoutLock(key);
         }
 
         public async Task Set(string key, object value)
@@ -211,7 +184,33 @@ namespace IRO.Storage.DefaultStorages
             }
         }
 
+        public async Task<JToken> GetWithoutLock(string key)
+        {
+            ThrowIfBadKey(key);
+            if (!await ContainsKey(key))
+            {
+                throw new Exception($"Storage not contains key '{key}'");
+            }
 
+            var jToken = await GetAndParseToJToken(key);
+            if (IsScopeModel(jToken))
+            {
+                var scopeCasted = jToken.ToObject<StorageScopeModel>();
+                var scopeWithValues = new JObject();
+                foreach (var innerKey in scopeCasted.ScopeKeys)
+                {
+                    var fullInnerKey = $"{key}{ScopeSplitter}{innerKey}";
+                    var val = await GetWithoutLock(fullInnerKey);
+                    scopeWithValues[innerKey] = val;
+                }
+
+                return scopeWithValues;
+            }
+            else
+            {
+                return jToken;
+            }
+        }
 
         (string ScopeFullName, string InnerKeyName) RemoveLastScope(string key)
         {

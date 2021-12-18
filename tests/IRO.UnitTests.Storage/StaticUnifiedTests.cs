@@ -98,7 +98,6 @@ namespace IRO.UnitTests.Storage
                     }
                 };
             await storage.Set("complex", dictLikeComplexObj);
-            await Task.Delay(2000);
             var obj = await storage.Get<ComplexType>("complex");
             Assert.AreEqual(obj.Val1, 10);
             Assert.AreEqual(obj.Val3.Val1, 11);

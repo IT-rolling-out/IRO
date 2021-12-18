@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
+    <PackageReference Include="nunit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Common\IRO.LoggingExt\IRO.LoggingExt.csproj" />
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj" />
+    <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Core\IRO.Reflection.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -15,7 +15,7 @@ namespace IRO.Storage
         /// </summary>
         public static async Task<T> Get<T>(this IKeyValueStorage @this, string key)
         {
-            object value=null;
+            object value = null;
             try
             {
                 value = await @this.Get(typeof(T), key);
@@ -32,11 +32,14 @@ namespace IRO.Storage
         /// </summary>
         public static async Task<T> GetOrDefault<T>(this IKeyValueStorage @this, string key)
         {
-            try
+            if (await @this.ContainsKey(key))
             {
-                return await @this.Get<T>(key);
+                var value = await @this.Get(typeof(T), key);
+                if (value == null)
+                    return default(T);
+                return (T)value;
             }
-            catch
+            else
             {
                 return default(T);
             }
