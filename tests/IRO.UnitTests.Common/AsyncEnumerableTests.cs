@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using IRO.Threading;
@@ -19,17 +20,23 @@ namespace IRO.UnitTests.Common
             set
             {
                 _threadsCount = value;
-                Console.WriteLine($"Threads count: {_threadsCount}.");
+                if (MaxThreadsCount < _threadsCount)
+                    MaxThreadsCount = _threadsCount;
+                //Console.WriteLine($"Threads count: {_threadsCount}.");
 
             }
         }
 
+        static int MaxThreadsCount { get; set; }
+
         [Test]
         public async Task AsyncForeachTest()
         {
+            //Expected time is 500ms
+
             var list = new List<int>()
             {
-                0,1,2,3,4,5,6,7,8,9
+                0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
             };
             object locker = new object();
             int counter = 0;
@@ -38,7 +45,7 @@ namespace IRO.UnitTests.Common
             {
                 lock (locker)
                     ThreadsCount++;
-                //await Task.Delay(2000);
+                await Task.Delay(100);
                 Assert.AreEqual(item, position);
                 lock (locker)
                     counter++;
@@ -48,7 +55,8 @@ namespace IRO.UnitTests.Common
             }, AsyncLinqContext.Create(maxThreadsCount: 5));
 
             Console.WriteLine("Async foreach finished.");
-            Assert.AreEqual(10, counter);
+            Console.WriteLine($"Max threads count: {MaxThreadsCount}.");
+            Assert.AreEqual(20, counter);
         }
 
 
@@ -113,40 +121,47 @@ namespace IRO.UnitTests.Common
         [Test]
         public async Task NestingTest()
         {
-            var twoDimensionalArray = new int[10][];
-            for (int i = 0; i < twoDimensionalArray.Length; i++)
+            //Expected time is 2500ms
+
+            //Make three-dimensional array 10x10x10, filled with 5
+            var threeD = new int[10][][];
+            for (int i = 0; i < threeD.Length; i++)
             {
-                var innerArray = new int[10];
-                twoDimensionalArray[i] = innerArray;
-                for (int j = 0; j < innerArray.Length; j++)
+                var twoD = new int[10][];
+                threeD[i] = twoD;
+                for (int j = 0; j < twoD.Length; j++)
                 {
-                    innerArray[j] = 5;
+                    var oneD = new int[10];
+                    twoD[j] = oneD;
+                    for (int h = 0; h < oneD.Length; h++)
+                    {
+                        oneD[h] = 5;
+                    }
                 }
             }
 
             var locker = new object();
-            //var elementsSum1 = 0;
-            //await twoDimensionalArray.ForEachAsync(async (innerArray, position) =>
-            //{
-            //    await innerArray.ForEachAsync(async (item, position) =>
-            //    {
-            //        lock (locker)
-            //            elementsSum1 += item;
-            //    });
-            //});
-            //Assert.AreEqual(500, elementsSum1);
-
-            var context = AsyncLinqContext.Create(2);
+            var context = AsyncLinqContext.Create(20);
             var elementsSum2 = 0;
-            await twoDimensionalArray.ForEachAsync(async (innerArray, position) =>
+
+            await threeD.ForEachAsync(async (twoD, position) =>
             {
-                await innerArray.ForEachAsync(async (item, position) =>
+                await twoD.ForEachAsync(async (oneD, position) =>
                 {
-                    lock (locker)
-                        elementsSum2 += item;
+                    await oneD.ForEachAsync(async (item, position) =>
+                    {
+                        lock (locker)
+                            ThreadsCount++;
+                        await Task.Delay(50);
+                        lock (locker)
+                            elementsSum2 += item;
+                        lock (locker)
+                            ThreadsCount--;
+                    }, context);
                 }, context);
             }, context);
-            Assert.AreEqual(500, elementsSum2);
+            Console.WriteLine($"Max threads count: {MaxThreadsCount}.");
+            Assert.AreEqual(5000, elementsSum2);
         }
     }
 }

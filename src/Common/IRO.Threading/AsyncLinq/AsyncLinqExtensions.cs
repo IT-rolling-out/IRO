@@ -65,35 +65,35 @@ namespace IRO.Threading
             AsyncLinqContext asyncLinqContext = null
             )
         {
+            asyncLinqContext ??= AsyncLinqContext.Create();
+            var maxThreadsCount = asyncLinqContext.MaxThreadsCount;
+            //Because last thread run synchronously.
+            maxThreadsCount--;
+            var cancelToken = asyncLinqContext.CancellationToken;
+            var tasksHashSet = asyncLinqContext.RunningTasksHashSet;
+
+            var isCurrentLevelNested = asyncLinqContext.IsNesting;
+            asyncLinqContext.IsNesting = true;
+
             if (act == null)
             {
                 throw new ArgumentNullException(nameof(act));
             }
-
-            asyncLinqContext ??= AsyncLinqContext.Create();
-            var maxThreadsCount = asyncLinqContext.MaxThreadsCount;
-            var cancelToken = asyncLinqContext.CancellationToken;
-            var tasksHashSet = new HashSet<Task>();
-            var bigQueue = asyncLinqContext.RunningTasksHashSetsQueue;
-            Lock_Enqueue(bigQueue, tasksHashSet);
-            try
+            var position = 0;
+            foreach (var item in @this)
             {
-                var position = 0;
-                foreach (var item in @this)
+                var positionLocal = position;
+                position++;
+                cancelToken.ThrowIfCancellationRequested();
+
+                if (Lock_HashSetGetCount(tasksHashSet) >= maxThreadsCount)
                 {
-                    cancelToken.ThrowIfCancellationRequested();
-                    while (Lock_Peek(bigQueue) != tasksHashSet || Lock_HashSetGetCount(tasksHashSet) >= maxThreadsCount)
-                    {
-                        cancelToken.ThrowIfCancellationRequested();
-                        var firstTask = Lock_HashSetFirstOrDefault(Lock_Peek(bigQueue));
-                        if (firstTask != null)
-                        {
-                            await firstTask;
-                        }
-                    }
+                    await act(item, positionLocal);
+                }
+                else
+                {
 
                     Task newTask = null;
-                    var positionLocal = position;
                     newTask = new Task(async () =>
                     {
                         try
@@ -110,41 +110,23 @@ namespace IRO.Threading
                         tasksHashSet.Add(newTask);
                         newTask.Start();
                     }
-                    position++;
                 }
+            }
 
-                while (Lock_Peek(bigQueue) != tasksHashSet || Lock_HashSetGetCount(tasksHashSet) > 0)
+            if (!isCurrentLevelNested)
+            {
+                while (Lock_HashSetGetCount(tasksHashSet) > 0)
                 {
                     cancelToken.ThrowIfCancellationRequested();
-                    var firstTask = Lock_HashSetFirstOrDefault(Lock_Peek(bigQueue));
+                    var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
                     if (firstTask != null)
                     {
                         await firstTask;
                     }
                 }
+                asyncLinqContext.IsNesting = false;
             }
-            finally
-            {
-                Lock_Dequeue(bigQueue);
-            }
-        }
 
-        static void Lock_Enqueue<T>(Queue<T> queue, T item)
-        {
-            lock (queue)
-                queue.Enqueue(item);
-        }
-
-        static T Lock_Dequeue<T>(Queue<T> queue)
-        {
-            lock (queue)
-                return queue.Dequeue();
-        }
-
-        static T Lock_Peek<T>(Queue<T> queue)
-        {
-            lock (queue)
-                return queue.Peek();
         }
 
         static int Lock_HashSetGetCount<T>(HashSet<T> hashSet)

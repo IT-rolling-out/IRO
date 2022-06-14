@@ -9,13 +9,15 @@ namespace IRO.Threading
     {
         public int MaxThreadsCount { get; private set; }
 
+        internal bool IsNesting { get; set; } 
+
         internal CancellationToken CancellationToken { get; private set; }
 
-        internal Queue<HashSet<Task>> RunningTasksHashSetsQueue { get; } = new Queue<HashSet<Task>>();
+        internal HashSet<Task> RunningTasksHashSet { get; } = new HashSet<Task>();
 
         private AsyncLinqContext() { }
 
-        public static AsyncLinqContext Create(int? maxThreadsCount=null, CancellationToken cancellationToken = default)
+        public static AsyncLinqContext Create(int? maxThreadsCount = null, CancellationToken cancellationToken = default)
         {
             var alc = new AsyncLinqContext();
             if (maxThreadsCount.HasValue)
