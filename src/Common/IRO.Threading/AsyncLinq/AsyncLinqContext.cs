@@ -11,7 +11,7 @@ namespace IRO.Threading
 
         internal CancellationToken CancellationToken { get; private set; }
 
-        internal Queue<HashSet<Task>> RunningTasksHashSetsList { get; } = new Queue<HashSet<Task>>HashSet<Task>>();
+        internal Queue<HashSet<Task>> RunningTasksHashSetsQueue { get; } = new Queue<HashSet<Task>>();
 
         private AsyncLinqContext() { }
 
