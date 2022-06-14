@@ -82,12 +82,23 @@ namespace IRO.Threading
             }
 
             var position = 0;
-            var tasksHashSet = new ConcurrentHashSet<Task>();
+            var tasksHashSet = new HashSet<Task>();
+            int tasksHashSetCount = 0;
             foreach (var item in @this)
             {
-                if (tasksHashSet.Count >= threadsCount)
+                lock (tasksHashSet)
                 {
-                    await tasksHashSet.First();
+                    tasksHashSetCount = tasksHashSet.Count;
+                }
+                if (tasksHashSetCount >= threadsCount)
+                {
+                    Task firstTask;
+                    lock (tasksHashSet)
+                    {
+                        firstTask = tasksHashSet.FirstOrDefault();
+                    }
+                    if (firstTask != null)
+                        await firstTask;
                 }
 
 
@@ -101,19 +112,30 @@ namespace IRO.Threading
                       }
                       finally
                       {
-                          while (!tasksHashSet.TryRemove(newTask))
+                          lock (tasksHashSet)
                           {
+                              tasksHashSet.Remove(newTask);
                           }
                       }
                   });
-                tasksHashSet.Add(newTask);
+                lock (tasksHashSet)
+                {
+                    tasksHashSet.Add(newTask);
+                }
                 newTask.Start();
                 position++;
             }
 
-            while (tasksHashSet.Count > 0)
+            while (true)
             {
-                await tasksHashSet.FirstOrDefault();
+                Task taskToWait = null;
+                lock (tasksHashSet)
+                {
+                    taskToWait = tasksHashSet.FirstOrDefault();
+                }
+                if (taskToWait != null)
+                    await taskToWait;
+
             }
         }
     }
