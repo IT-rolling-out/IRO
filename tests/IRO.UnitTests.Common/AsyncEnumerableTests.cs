@@ -45,7 +45,7 @@ namespace IRO.UnitTests.Common
                 Console.WriteLine($"Item: {item}, position: {position}");
                 lock (locker)
                     ThreadsCount--;
-            }, 5);
+            }, AsyncLinqContext.Create(maxThreadsCount: 5));
 
             Console.WriteLine("Async foreach finished.");
             Assert.AreEqual(10, counter);
@@ -66,7 +66,7 @@ namespace IRO.UnitTests.Common
             {
                 Console.WriteLine($"Item: {item}, position: {position}");
                 newList.Add(item);
-            }, 1);
+            }, AsyncLinqContext.Create(maxThreadsCount: 1));
 
             Console.WriteLine("Async foreach finished.");
             for (int i = 0; i < newList.Count; i++)
@@ -86,7 +86,7 @@ namespace IRO.UnitTests.Common
             var newList = await list.SelectAsync(async (item, position) =>
             {
                 return 1000 + item;
-            }, 100);
+            });
 
             for (int i = 0; i < newList.Count; i++)
             {
@@ -105,9 +105,48 @@ namespace IRO.UnitTests.Common
             var newList = await list.WhereAsync(async (item, position) =>
             {
                 return item % 2 == 0;
-            }, 100);
+            });
 
             Assert.AreEqual(5, newList.Count);
+        }
+
+        [Test]
+        public async Task NestingTest()
+        {
+            var twoDimensionalArray = new int[10][];
+            for (int i = 0; i < twoDimensionalArray.Length; i++)
+            {
+                var innerArray = new int[10];
+                twoDimensionalArray[i] = innerArray;
+                for (int j = 0; j < innerArray.Length; j++)
+                {
+                    innerArray[j] = 5;
+                }
+            }
+
+            var locker = new object();
+            //var elementsSum1 = 0;
+            //await twoDimensionalArray.ForEachAsync(async (innerArray, position) =>
+            //{
+            //    await innerArray.ForEachAsync(async (item, position) =>
+            //    {
+            //        lock (locker)
+            //            elementsSum1 += item;
+            //    });
+            //});
+            //Assert.AreEqual(500, elementsSum1);
+
+            var context = AsyncLinqContext.Create(2);
+            var elementsSum2 = 0;
+            await twoDimensionalArray.ForEachAsync(async (innerArray, position) =>
+            {
+                await innerArray.ForEachAsync(async (item, position) =>
+                {
+                    lock (locker)
+                        elementsSum2 += item;
+                }, context);
+            }, context);
+            Assert.AreEqual(500, elementsSum2);
         }
     }
 }

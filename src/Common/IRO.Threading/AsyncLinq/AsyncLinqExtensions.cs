@@ -2,23 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IRO.Threading.AsyncLinq;
 
 namespace IRO.Threading
 {
-    public delegate Task ForEachAsyncDelegate<T>(T item, int position);
-
-    public delegate Task<R> SelectAsyncDelegate<T, R>(T item, int position);
-
-    public delegate Task<bool> WhereAsyncDelegate<T>(T item, int position);
-
-    public static class AsyncEnumerableExtensions
+    public static class AsyncLinqExtensions
     {
-        const int DefaultThreadsCount = 16;
-
         public static async Task<IList<T>> WhereAsync<T>(
             this ICollection<T> @this,
             WhereAsyncDelegate<T> act,
-            int threadsCount = DefaultThreadsCount
+            AsyncLinqContext asyncLinqContext = null
             )
         {
             if (act == null)
@@ -37,14 +30,14 @@ namespace IRO.Threading
                         resList.Add(item);
                     }
                 }
-            }, threadsCount);
+            }, asyncLinqContext);
             return resList;
         }
 
         public static async Task<IList<R>> SelectAsync<T, R>(
             this ICollection<T> @this,
             SelectAsyncDelegate<T, R> act,
-            int threadsCount = DefaultThreadsCount
+            AsyncLinqContext asyncLinqContext = null
             )
         {
             if (act == null)
@@ -60,7 +53,7 @@ namespace IRO.Threading
                 {
                     resArray[position] = selectedRes;
                 }
-            }, threadsCount);
+            }, asyncLinqContext);
             return resArray;
         }
 
@@ -69,60 +62,63 @@ namespace IRO.Threading
         public static async Task ForEachAsync<T>(
             this IEnumerable<T> @this,
             ForEachAsyncDelegate<T> act,
-            int threadsCount = DefaultThreadsCount
+            AsyncLinqContext asyncLinqContext = null
             )
         {
-            await Task.Run(async () =>
+            asyncLinqContext ??= AsyncLinqContext.Create();
+            var maxThreadsCount = asyncLinqContext.MaxThreadsCount;
+            var cancelToken = asyncLinqContext.CancellationToken;
+            var tasksHashSet = asyncLinqContext.RunningTasksHashSet;
+
+            if (act == null)
             {
-                if (threadsCount < 1)
+                throw new ArgumentNullException(nameof(act));
+            }
+            var position = 0;
+            foreach (var item in @this)
+            {
+                cancelToken.ThrowIfCancellationRequested();
+                while (Lock_HashSetGetCount(tasksHashSet) >= maxThreadsCount)
                 {
-                    throw new ArgumentException($"Value is '{threadsCount}'. Must be bigger than 1.", nameof(threadsCount));
-                }
-
-                if (act == null)
-                {
-                    throw new ArgumentNullException(nameof(act));
-                }
-
-                var position = 0;
-                var tasksHashSet = new HashSet<Task>();
-                foreach (var item in @this)
-                {
-                    while (Lock_HashSetGetCount(tasksHashSet) >= threadsCount)
-                    {
-                        var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
-                        if (firstTask != null)
-                            await firstTask;
-                    }
-
-                    Task newTask = null;
-                    var positionLocal = position;
-                    newTask = new Task(async () =>
-                    {
-                        try
-                        {
-                            await act(item, positionLocal);
-                        }
-                        finally
-                        {
-                            Lock_HashSetRemove(tasksHashSet, newTask);
-                        }
-                    });
-                    lock (tasksHashSet)
-                    {
-                        tasksHashSet.Add(newTask);
-                        newTask.Start();
-                    }
-                    position++;
-                }
-
-                while (Lock_HashSetGetCount(tasksHashSet) > 0)
-                {
+                    cancelToken.ThrowIfCancellationRequested();
                     var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
                     if (firstTask != null)
+                    {
                         await firstTask;
+                    }
                 }
-            });
+
+                Task newTask = null;
+                var positionLocal = position;
+                newTask = new Task(async () =>
+                {
+                    try
+                    {
+                        await act(item, positionLocal);
+                    }
+                    finally
+                    {
+                        Lock_HashSetRemove(tasksHashSet, newTask);
+                    }
+                }, cancelToken);
+                lock (tasksHashSet)
+                {
+                    tasksHashSet.Add(newTask);
+                    newTask.Start();
+                }
+                position++;
+            }
+
+            while (Lock_HashSetGetCount(tasksHashSet) > 0)
+            {
+                cancelToken.ThrowIfCancellationRequested();
+                var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
+                if (firstTask != null)
+                {
+                    await firstTask;
+                }
+            }
+
         }
 
         static int Lock_HashSetGetCount<T>(HashSet<T> hashSet)
