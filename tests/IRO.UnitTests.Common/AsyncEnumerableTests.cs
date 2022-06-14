@@ -20,11 +20,11 @@ namespace IRO.UnitTests.Common
             int counter = 0;
             await list.ForEachAsync(async (item, position) =>
             {
-                await Task.Delay(1000);
+                await Task.Delay(3000);
                 Assert.AreEqual(item, position);
                 counter++;
                 Console.WriteLine($"Item: {item}, position: {position}");
-            }, 100);
+            }, 2);
 
             Assert.AreEqual(10, counter);
             Console.WriteLine("Async foreach finished.");

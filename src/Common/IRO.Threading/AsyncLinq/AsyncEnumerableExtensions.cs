@@ -65,6 +65,20 @@ namespace IRO.Threading
             return resArray;
         }
 
+        static int _threadsCount;
+        static int ThreadsCount
+        {
+            get
+            {
+                return _threadsCount;
+            }
+            set
+            {
+                _threadsCount = value;
+                Console.WriteLine($"Threads count: {_threadsCount}.");
+            }
+        }
+
         public static async Task ForEachAsync<T>(
             this IEnumerable<T> @this,
             ForEachAsyncDelegate<T> act,
@@ -98,7 +112,9 @@ namespace IRO.Threading
                         firstTask = tasksHashSet.FirstOrDefault();
                     }
                     if (firstTask != null)
+                    {
                         await firstTask;
+                    }
                 }
 
 
@@ -106,6 +122,7 @@ namespace IRO.Threading
                 var positionLocal = position;
                 newTask = new Task(async () =>
                   {
+                      ThreadsCount++;
                       try
                       {
                           await act(item, positionLocal);
@@ -117,6 +134,7 @@ namespace IRO.Threading
                               tasksHashSet.Remove(newTask);
                           }
                       }
+                      ThreadsCount--;
                   });
                 lock (tasksHashSet)
                 {
@@ -133,8 +151,9 @@ namespace IRO.Threading
                 {
                     taskToWait = tasksHashSet.FirstOrDefault();
                 }
-                if (taskToWait != null)
-                    await taskToWait;
+                if (taskToWait == null)
+                    break;
+                await taskToWait;
 
             }
         }
