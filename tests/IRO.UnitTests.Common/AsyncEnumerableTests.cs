@@ -9,6 +9,22 @@ namespace IRO.UnitTests.Common
 {
     internal class AsyncEnumerableTests
     {
+        static object _locker = new object();
+        static int _threadsCount;
+        static int ThreadsCount
+        {
+            get
+            {
+                return _threadsCount;
+            }
+            set
+            {
+                _threadsCount = value;
+                Console.WriteLine($"Threads count: {_threadsCount}.");
+
+            }
+        }
+
         [Test]
         public async Task AsyncForeachTest()
         {
@@ -20,14 +36,18 @@ namespace IRO.UnitTests.Common
             int counter = 0;
             await list.ForEachAsync(async (item, position) =>
             {
+                lock (_locker)
+                    ThreadsCount++;
                 await Task.Delay(3000);
                 Assert.AreEqual(item, position);
                 counter++;
                 Console.WriteLine($"Item: {item}, position: {position}");
-            }, 2);
+                lock (_locker)
+                    ThreadsCount--;
+            }, 5);
 
-            Assert.AreEqual(10, counter);
             Console.WriteLine("Async foreach finished.");
+            Assert.AreEqual(10, counter);
         }
 
 

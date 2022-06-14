@@ -65,19 +65,7 @@ namespace IRO.Threading
             return resArray;
         }
 
-        static int _threadsCount;
-        static int ThreadsCount
-        {
-            get
-            {
-                return _threadsCount;
-            }
-            set
-            {
-                _threadsCount = value;
-                Console.WriteLine($"Threads count: {_threadsCount}.");
-            }
-        }
+
 
         public static async Task ForEachAsync<T>(
             this IEnumerable<T> @this,
@@ -85,76 +73,86 @@ namespace IRO.Threading
             int threadsCount = DefaultThreadsCount
             )
         {
-            if (threadsCount < 1)
+            await Task.Run(async () =>
             {
-                throw new ArgumentException($"Value is '{threadsCount}'. Must be bigger than 1.", nameof(threadsCount));
-            }
-
-            if (act == null)
-            {
-                throw new ArgumentNullException(nameof(act));
-            }
-
-            var position = 0;
-            var tasksHashSet = new HashSet<Task>();
-            int tasksHashSetCount = 0;
-            foreach (var item in @this)
-            {
-                lock (tasksHashSet)
+                if (threadsCount < 1)
                 {
-                    tasksHashSetCount = tasksHashSet.Count;
+                    throw new ArgumentException($"Value is '{threadsCount}'. Must be bigger than 1.", nameof(threadsCount));
                 }
-                if (tasksHashSetCount >= threadsCount)
+
+                if (act == null)
                 {
-                    Task firstTask;
+                    throw new ArgumentNullException(nameof(act));
+                }
+
+                var position = 0;
+                var tasksHashSet = new HashSet<Task>();
+                foreach (var item in @this)
+                {
+                    while (Lock_HashSetGetCount(tasksHashSet) >= threadsCount)
+                    {
+                        var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
+                        if (firstTask != null)
+                        {
+                            await firstTask;
+                        }
+                        Lock_HashSetRemove(tasksHashSet, firstTask);
+                    }
+
+                    Task newTask = null;
+                    newTask = new Task(async () =>
+                    {
+                        try
+                        {
+                            await act(item, position);
+                        }
+                        finally
+                        {
+                            Lock_HashSetRemove(tasksHashSet, newTask);
+                        }
+                    });
                     lock (tasksHashSet)
                     {
-                        firstTask = tasksHashSet.FirstOrDefault();
+                        tasksHashSet.Add(newTask);
+                        newTask.Start();
                     }
+                    position++;
+                }
+
+                while (Lock_HashSetGetCount(tasksHashSet) > 0)
+                {
+                    var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
                     if (firstTask != null)
                     {
                         await firstTask;
                     }
+                    Lock_HashSetRemove(tasksHashSet, firstTask);
                 }
+            });
+        }
 
-
-                Task newTask = null;
-                var positionLocal = position;
-                newTask = new Task(async () =>
-                  {
-                      ThreadsCount++;
-                      try
-                      {
-                          await act(item, positionLocal);
-                      }
-                      finally
-                      {
-                          lock (tasksHashSet)
-                          {
-                              tasksHashSet.Remove(newTask);
-                          }
-                      }
-                      ThreadsCount--;
-                  });
-                lock (tasksHashSet)
-                {
-                    tasksHashSet.Add(newTask);
-                }
-                newTask.Start();
-                position++;
-            }
-
-            while (true)
+        static int Lock_HashSetGetCount<T>(HashSet<T> hashSet)
+        {
+            lock (hashSet)
             {
-                Task taskToWait = null;
-                lock (tasksHashSet)
-                {
-                    taskToWait = tasksHashSet.FirstOrDefault();
-                }
-                if (taskToWait == null)
-                    break;
-                await taskToWait;
+                return hashSet.Count;
+            }
+        }
 
+        static void Lock_HashSetRemove<T>(HashSet<T> hashSet, T item)
+        {
+            lock (hashSet)
+            {
+                if (!hashSet.Remove(item))
+                    throw new Exception();
+            }
+        }
+
+        static T Lock_HashSetFirstOrDefault<T>(HashSet<T> hashSet)
+        {
+            lock (hashSet)
+            {
+                return hashSet.FirstOrDefault();
             }
         }
     }
