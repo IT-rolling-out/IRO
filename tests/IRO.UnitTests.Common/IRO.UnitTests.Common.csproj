@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Common\IRO.LoggingExt\IRO.LoggingExt.csproj" />
+    <ProjectReference Include="..\..\src\Common\IRO.Threading\IRO.Threading.csproj" />
     <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.CodeGen\IRO.Reflection.CodeGen.csproj" />
     <ProjectReference Include="..\..\src\Reflection\IRO.Reflection.Core\IRO.Reflection.Core.csproj" />
   </ItemGroup>

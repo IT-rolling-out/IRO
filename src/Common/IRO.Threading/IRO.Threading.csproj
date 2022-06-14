@@ -6,4 +6,9 @@
     <Description>Thread synchroniztion context that help you invoke delegates in specific thread and get results or exceptions from that delegates.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ConcurrentHashSet" Version="1.3.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+  </ItemGroup>
+
 </Project>

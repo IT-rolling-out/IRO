@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IRO.Common.Services
 {
-    public static class TaskExt
+    public static class TaskExtensions
     {
         /// <summary>
         /// WhenAll with timeout.
