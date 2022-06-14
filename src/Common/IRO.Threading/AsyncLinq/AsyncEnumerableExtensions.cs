@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ConcurrentCollections;
 
 namespace IRO.Threading
 {
@@ -42,7 +41,7 @@ namespace IRO.Threading
             return resList;
         }
 
-        public static async Task<ICollection<R>> SelectAsync<T, R>(
+        public static async Task<IList<R>> SelectAsync<T, R>(
             this ICollection<T> @this,
             SelectAsyncDelegate<T, R> act,
             int threadsCount = DefaultThreadsCount
@@ -93,18 +92,16 @@ namespace IRO.Threading
                     {
                         var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
                         if (firstTask != null)
-                        {
                             await firstTask;
-                        }
-                        Lock_HashSetRemove(tasksHashSet, firstTask);
                     }
 
                     Task newTask = null;
+                    var positionLocal = position;
                     newTask = new Task(async () =>
                     {
                         try
                         {
-                            await act(item, position);
+                            await act(item, positionLocal);
                         }
                         finally
                         {
@@ -123,10 +120,7 @@ namespace IRO.Threading
                 {
                     var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
                     if (firstTask != null)
-                    {
                         await firstTask;
-                    }
-                    Lock_HashSetRemove(tasksHashSet, firstTask);
                 }
             });
         }
@@ -144,7 +138,9 @@ namespace IRO.Threading
             lock (hashSet)
             {
                 if (!hashSet.Remove(item))
+                {
                     throw new Exception();
+                }
             }
         }
 

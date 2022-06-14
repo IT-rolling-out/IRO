@@ -9,7 +9,6 @@ namespace IRO.UnitTests.Common
 {
     internal class AsyncEnumerableTests
     {
-        static object _locker = new object();
         static int _threadsCount;
         static int ThreadsCount
         {
@@ -32,17 +31,19 @@ namespace IRO.UnitTests.Common
             {
                 0,1,2,3,4,5,6,7,8,9
             };
-
+            object locker = new object();
             int counter = 0;
+
             await list.ForEachAsync(async (item, position) =>
             {
-                lock (_locker)
+                lock (locker)
                     ThreadsCount++;
-                await Task.Delay(3000);
+                //await Task.Delay(2000);
                 Assert.AreEqual(item, position);
-                counter++;
+                lock (locker)
+                    counter++;
                 Console.WriteLine($"Item: {item}, position: {position}");
-                lock (_locker)
+                lock (locker)
                     ThreadsCount--;
             }, 5);
 
@@ -60,9 +61,9 @@ namespace IRO.UnitTests.Common
             };
 
             var newList = new List<int>();
-            
+
             await list.ForEachAsync(async (item, position) =>
-            {              
+            {
                 Console.WriteLine($"Item: {item}, position: {position}");
                 newList.Add(item);
             }, 1);
@@ -72,6 +73,41 @@ namespace IRO.UnitTests.Common
             {
                 Assert.AreEqual(i, newList[i]);
             }
+        }
+
+        [Test]
+        public async Task SelectAsyncTest()
+        {
+            var list = new List<int>()
+            {
+                0,1,2,3,4,5,6,7,8,9
+            };
+
+            var newList = await list.SelectAsync(async (item, position) =>
+            {
+                return 1000 + item;
+            }, 100);
+
+            for (int i = 0; i < newList.Count; i++)
+            {
+                Assert.AreEqual(1000 + i, newList[i]);
+            }
+        }
+
+        [Test]
+        public async Task WhereAsyncTest()
+        {
+            var list = new List<int>()
+            {
+                0,1,2,3,4,5,6,7,8,9
+            };
+
+            var newList = await list.WhereAsync(async (item, position) =>
+            {
+                return item % 2 == 0;
+            }, 100);
+
+            Assert.AreEqual(5, newList.Count);
         }
     }
 }
