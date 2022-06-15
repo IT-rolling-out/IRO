@@ -6,6 +6,13 @@ using IRO.Threading.AsyncLinq;
 namespace IRO.Threading.AsyncLinq
 {
 
+    internal struct WhereSelectionTuple<T>
+    {
+        public T Item { get; set; }
+
+        public bool IsIncluded { get; set; }
+    }
+
     public static class AsyncLinqExtensions
     {
         public static async Task<IList<T>> WhereAsync<T>(
@@ -67,10 +74,12 @@ namespace IRO.Threading.AsyncLinq
         {
             asyncLinqContext ??= AsyncLinqContext.Create();
             var maxThreadsCount = asyncLinqContext.MaxThreadsCount;
+
             //Because last thread run synchronously.
             maxThreadsCount--;
+
             var cancelToken = asyncLinqContext.CancellationToken;
-            var runCtx = new RunningTasksContext(asyncLinqContext.RunningTasksHashSet);
+            var runCtx = new RunningTasksContext(asyncLinqContext);
 
             if (act == null)
             {
@@ -99,21 +108,21 @@ namespace IRO.Threading.AsyncLinq
                         }
                         finally
                         {
-                            runCtx.RemoveTaskFromLocalAndGlobal(newTask);
+                            runCtx.Remove(newTask);
                         }
                     }, cancelToken);
-                    runCtx.AddTaskToLocalAndGlobal(newTask, andStart: true);
+
+                    newTask.Start();
+                    runCtx.Add(newTask);
                 }
             }
 
-            while (runCtx.GetLocalCount() > 0)
+            var taskToWait = runCtx.FirstOrDefault();
+            while (taskToWait != null)
             {
                 cancelToken.ThrowIfCancellationRequested();
-                var firstTask = runCtx.FirstOrDefaultLocal();
-                if (firstTask != null)
-                {
-                    await firstTask;
-                }
+                await taskToWait;
+                taskToWait = runCtx.FirstOrDefault();
             }
         }
 

@@ -10,11 +10,9 @@ namespace IRO.Threading.AsyncLinq
     {
         public int MaxThreadsCount { get; private set; }
 
-        internal bool IsNesting { get; set; } 
+        public int RunningTasksCount { get; internal set; }
 
         internal CancellationToken CancellationToken { get; private set; }
-
-        internal HashSet<Task> RunningTasksHashSet { get; } = new HashSet<Task>();
 
         private AsyncLinqContext() { }
 

@@ -6,56 +6,48 @@ namespace IRO.Threading.AsyncLinq
 {
     internal class RunningTasksContext
     {
-        public HashSet<Task> LocalTasksHashSet { get; } = new HashSet<Task>();
+        private readonly AsyncLinqContext _asyncLinqContext;
+        private readonly HashSet<Task> _localTasksHashSet = new HashSet<Task>();
 
-        public HashSet<Task> GlobalTasksHashSet { get; }
-
-        public RunningTasksContext(HashSet<Task> globalTasksHashSet)
+        public RunningTasksContext(AsyncLinqContext asyncLinqContext)
         {
-            GlobalTasksHashSet = globalTasksHashSet;
+            this._asyncLinqContext = asyncLinqContext;
         }
 
         public int GetGlobalCount()
         {
-            lock (this)
+            return _asyncLinqContext.RunningTasksCount;
+        }
+
+        public void Remove(Task t)
+        {
+            lock (_localTasksHashSet)
             {
-                return GlobalTasksHashSet.Count;
+                _localTasksHashSet.Remove(t);
+                lock (_asyncLinqContext)
+                {
+                    _asyncLinqContext.RunningTasksCount--;
+                }
             }
         }
 
-        public int GetLocalCount()
+        public void Add(Task t)
         {
-            lock (this)
+            lock (_localTasksHashSet)
             {
-                return LocalTasksHashSet.Count;
+                _localTasksHashSet.Add(t);
+                lock (_asyncLinqContext)
+                {
+                    _asyncLinqContext.RunningTasksCount++;
+                }
             }
         }
 
-        public void RemoveTaskFromLocalAndGlobal( Task t)
+        public Task FirstOrDefault()
         {
-            lock (this)
+            lock (_localTasksHashSet)
             {
-                LocalTasksHashSet.Remove(t);
-                GlobalTasksHashSet.Remove(t);
-            }
-        }
-
-        public void AddTaskToLocalAndGlobal(Task t, bool andStart)
-        {
-            lock (this)
-            {
-                LocalTasksHashSet.Add(t);
-                GlobalTasksHashSet.Add(t);
-                if (andStart)
-                    t.Start();
-            }
-        }
-
-        public Task FirstOrDefaultLocal()
-        {
-            lock (this)
-            {
-                return LocalTasksHashSet.FirstOrDefault();
+                return _localTasksHashSet.FirstOrDefault();
             }
         }
     }

@@ -162,9 +162,6 @@ namespace IRO.UnitTests.Common
                         twoDLevelCounter++;
                     }, context);
                     await Task.Delay(5);
-
-
-                    twoDLevelCounter++;
                 }, context);
                 await Task.Delay(5);
 
