@@ -24,6 +24,6 @@
     <!-- Use current same version for all or define special for category-->
     <VersionPostfix></VersionPostfix>
 	
-    <DefaultAsmVersion>5.0.7$(VersionPostfix)</DefaultAsmVersion>
+    <DefaultAsmVersion>5.0.8$(VersionPostfix)</DefaultAsmVersion>
   </PropertyGroup>
 </Project>

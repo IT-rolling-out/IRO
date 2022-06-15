@@ -146,6 +146,7 @@ namespace IRO.UnitTests.Common
 
             await threeD.ForEachAsync(async (twoD, position) =>
             {
+                int twoDLevelCounter = 0;
                 await twoD.ForEachAsync(async (oneD, position) =>
                 {
                     await oneD.ForEachAsync(async (item, position) =>
@@ -157,10 +158,18 @@ namespace IRO.UnitTests.Common
                             elementsSum2 += item;
                         lock (locker)
                             ThreadsCount--;
+
+                        twoDLevelCounter++;
                     }, context);
                     await Task.Delay(5);
+
+
+                    twoDLevelCounter++;
                 }, context);
                 await Task.Delay(5);
+
+                //100 means that all iterations throuh threeD[i] completed
+                Assert.AreEqual(100, twoDLevelCounter);
             }, context);
             Console.WriteLine($"Max threads count: {MaxThreadsCount}.");
             Assert.AreEqual(5000, elementsSum2);

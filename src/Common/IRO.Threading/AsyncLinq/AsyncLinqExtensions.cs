@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using IRO.Threading.AsyncLinq;
 
 namespace IRO.Threading.AsyncLinq
 {
+
     public static class AsyncLinqExtensions
     {
         public static async Task<IList<T>> WhereAsync<T>(
@@ -70,10 +70,7 @@ namespace IRO.Threading.AsyncLinq
             //Because last thread run synchronously.
             maxThreadsCount--;
             var cancelToken = asyncLinqContext.CancellationToken;
-            var tasksHashSet = asyncLinqContext.RunningTasksHashSet;
-
-            var isCurrentLevelNested = asyncLinqContext.IsNesting;
-            asyncLinqContext.IsNesting = true;
+            var runCtx = new RunningTasksContext(asyncLinqContext.RunningTasksHashSet);
 
             if (act == null)
             {
@@ -86,7 +83,7 @@ namespace IRO.Threading.AsyncLinq
                 position++;
                 cancelToken.ThrowIfCancellationRequested();
 
-                if (Lock_HashSetGetCount(tasksHashSet) >= maxThreadsCount)
+                if (runCtx.GetGlobalCount() >= maxThreadsCount)
                 {
                     await act(item, positionLocal);
                 }
@@ -102,58 +99,23 @@ namespace IRO.Threading.AsyncLinq
                         }
                         finally
                         {
-                            Lock_HashSetRemove(tasksHashSet, newTask);
+                            runCtx.RemoveTaskFromLocalAndGlobal(newTask);
                         }
                     }, cancelToken);
-                    lock (tasksHashSet)
-                    {
-                        tasksHashSet.Add(newTask);
-                        newTask.Start();
-                    }
+                    runCtx.AddTaskToLocalAndGlobal(newTask, andStart: true);
                 }
             }
 
-            if (!isCurrentLevelNested)
+            while (runCtx.GetLocalCount() > 0)
             {
-                while (Lock_HashSetGetCount(tasksHashSet) > 0)
+                cancelToken.ThrowIfCancellationRequested();
+                var firstTask = runCtx.FirstOrDefaultLocal();
+                if (firstTask != null)
                 {
-                    cancelToken.ThrowIfCancellationRequested();
-                    var firstTask = Lock_HashSetFirstOrDefault(tasksHashSet);
-                    if (firstTask != null)
-                    {
-                        await firstTask;
-                    }
-                }
-                asyncLinqContext.IsNesting = false;
-            }
-
-        }
-
-        static int Lock_HashSetGetCount<T>(HashSet<T> hashSet)
-        {
-            lock (hashSet)
-            {
-                return hashSet.Count;
-            }
-        }
-
-        static void Lock_HashSetRemove<T>(HashSet<T> hashSet, T item)
-        {
-            lock (hashSet)
-            {
-                if (!hashSet.Remove(item))
-                {
-                    throw new Exception();
+                    await firstTask;
                 }
             }
         }
 
-        static T Lock_HashSetFirstOrDefault<T>(HashSet<T> hashSet)
-        {
-            lock (hashSet)
-            {
-                return hashSet.FirstOrDefault();
-            }
-        }
     }
 }
