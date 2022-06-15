@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using IRO.Threading.AsyncLinq;
 
-namespace IRO.Threading
+namespace IRO.Threading.AsyncLinq
 {
     public class AsyncLinqContext
     {

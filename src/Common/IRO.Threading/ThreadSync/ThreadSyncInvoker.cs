@@ -1,6 +1,7 @@
 ﻿using System;
+using IRO.Threading.ThreadSync;
 
-namespace IRO.Threading
+namespace IRO.Threading.ThreadSync
 {
     public class ThreadSyncInvoker:IThreadSyncInvoker
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IRO.Threading
+namespace IRO.Threading.ThreadSync
 {
     public class ThreadSyncException : Exception
     {

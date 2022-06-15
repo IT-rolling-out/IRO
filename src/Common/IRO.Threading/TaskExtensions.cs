@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IRO.Common.Services
+namespace IRO.Threading
 {
     public static class TaskExtensions
     {

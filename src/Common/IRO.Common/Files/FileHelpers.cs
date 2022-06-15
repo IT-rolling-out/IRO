@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using IRO.Common.Services;
 
-namespace IRO.Common.Services
+namespace IRO.Common.Files
 {
     public static class FileHelpers
     {

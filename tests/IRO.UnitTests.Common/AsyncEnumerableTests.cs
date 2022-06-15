@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
-using IRO.Threading;
 using NUnit.Framework;
+using IRO.Threading.AsyncLinq;
 
 namespace IRO.UnitTests.Common
 {
@@ -121,7 +121,7 @@ namespace IRO.UnitTests.Common
         [Test]
         public async Task NestingTest()
         {
-            //Expected time is 2500ms
+            //Expected time is 3000ms
 
             //Make three-dimensional array 10x10x10, filled with 5
             var threeD = new int[10][][];
@@ -158,7 +158,9 @@ namespace IRO.UnitTests.Common
                         lock (locker)
                             ThreadsCount--;
                     }, context);
+                    await Task.Delay(5);
                 }, context);
+                await Task.Delay(5);
             }, context);
             Console.WriteLine($"Max threads count: {MaxThreadsCount}.");
             Assert.AreEqual(5000, elementsSum2);

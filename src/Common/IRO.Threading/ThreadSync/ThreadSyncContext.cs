@@ -2,8 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using IRO.Threading.ThreadSync;
 
-namespace IRO.Threading
+namespace IRO.Threading.ThreadSync
 {
     /// <summary>
     /// Class that help execute code on specific thread.

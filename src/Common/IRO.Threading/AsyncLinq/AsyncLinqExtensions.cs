@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IRO.Threading.AsyncLinq;
 
-namespace IRO.Threading
+namespace IRO.Threading.AsyncLinq
 {
     public static class AsyncLinqExtensions
     {
