@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using IRO.Threading.AsyncLinq;
 
 namespace IRO.Threading.AsyncLinq
 {
 
-    internal struct WhereSelectionTuple<T>
-    {
-        public T Item { get; set; }
-
-        public bool IsIncluded { get; set; }
-    }
-
     public static class AsyncLinqExtensions
     {
-        public static async Task<IList<T>> WhereAsync<T>(
+        public static async Task<IEnumerable<T>> WhereAsync<T>(
             this ICollection<T> @this,
             WhereAsyncDelegate<T> act,
             AsyncLinqContext asyncLinqContext = null
@@ -26,19 +20,21 @@ namespace IRO.Threading.AsyncLinq
                 throw new ArgumentNullException(nameof(act));
             }
 
-            var resList = new List<T>();
+            var intermediateList = new WhereSelectionTuple<T>[@this.Count];
             await @this.ForEachAsync(async (item, position) =>
             {
                 var isIncluded = await act(item, position);
-                if (isIncluded)
+                intermediateList[position] = new WhereSelectionTuple<T>()
                 {
-                    lock (resList)
-                    {
-                        resList.Add(item);
-                    }
-                }
+                    IsIncluded = isIncluded,
+                    Item = item
+                };
             }, asyncLinqContext);
-            return resList;
+
+            var resEnum = intermediateList
+                .Where(r => r.IsIncluded)
+                .Select(r => r.Item);
+            return resEnum;
         }
 
         public static async Task<IList<R>> SelectAsync<T, R>(
