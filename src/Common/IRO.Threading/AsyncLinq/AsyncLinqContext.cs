@@ -29,6 +29,7 @@ namespace IRO.Threading.AsyncLinq
             }
             else
             {
+                //alc.MaxThreadsCount = (Environment.ProcessorCount > 1 ? Environment.ProcessorCount - 1 : 1);
                 alc.MaxThreadsCount = Environment.ProcessorCount;
             }
             alc.CancellationToken = cancellationToken;

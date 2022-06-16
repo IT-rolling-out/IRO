@@ -7,6 +7,17 @@ namespace IRO.Common.Collections
 {
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// If collection has 'Count' property - return it. Otherwise use 'Count()'. 
+        /// </summary>
+        public static int GetCount<T>(this IEnumerable<T> enumerable)
+        {
+            if (enumerable is ICollection<T> col)
+                return col.Count;
+            else
+                return enumerable.Count();
+        }
+
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> enumerable)
         {
             if (enumerable == null)

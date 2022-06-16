@@ -92,10 +92,7 @@ namespace IRO.UnitTests.Common
                 0,1,2,3,4,5,6,7,8,9
             };
 
-            var newList = await list.SelectAsync(async (item, position) =>
-            {
-                return 1000 + item;
-            });
+            var newList = (await list.SelectAsync(item => 1000 + item)).ToList();
 
             for (int i = 0; i < newList.Count; i++)
             {
@@ -111,12 +108,7 @@ namespace IRO.UnitTests.Common
                 0,1,2,3,4,5,6,7,8,9
             };
 
-            var newEnum= await list.WhereAsync(async (item, position) =>
-            {
-                return item % 2 == 0;
-            });
-            var newList = newEnum.ToList();
-
+            var newList = (await list.WhereAsync(item => item % 2 == 0)).ToList();
             Assert.AreEqual(5, newList.Count);
             //Check order
             for (int i = 0; i < newList.Count; i++)
