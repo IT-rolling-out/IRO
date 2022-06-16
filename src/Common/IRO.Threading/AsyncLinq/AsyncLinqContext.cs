@@ -8,30 +8,21 @@ namespace IRO.Threading.AsyncLinq
 {
     public class AsyncLinqContext
     {
-        public int MaxThreadsCount { get; private set; }
-
-        public int RunningTasksCount { get; internal set; }
+        public TaskPool TaskPool { get; private set; }
 
         internal CancellationToken CancellationToken { get; private set; }
 
         private AsyncLinqContext() { }
 
-        public static AsyncLinqContext Create(int? maxThreadsCount = null, CancellationToken cancellationToken = default)
+        public static AsyncLinqContext Create(int maxThreadsCount, CancellationToken cancellationToken = default)
+        {
+            return Create(new TaskPool(maxThreadsCount), cancellationToken);
+        }
+
+        public static AsyncLinqContext Create(TaskPool taskPool = null, CancellationToken cancellationToken = default)
         {
             var alc = new AsyncLinqContext();
-            if (maxThreadsCount.HasValue)
-            {
-                if (maxThreadsCount < 1)
-                {
-                    throw new ArgumentException($"Value is '{maxThreadsCount}'. Must be bigger than 1.", nameof(maxThreadsCount));
-                }
-                alc.MaxThreadsCount = maxThreadsCount.Value;
-            }
-            else
-            {
-                //alc.MaxThreadsCount = (Environment.ProcessorCount > 1 ? Environment.ProcessorCount - 1 : 1);
-                alc.MaxThreadsCount = Environment.ProcessorCount;
-            }
+            alc.TaskPool = taskPool ?? new TaskPool();
             alc.CancellationToken = cancellationToken;
             return alc;
         }

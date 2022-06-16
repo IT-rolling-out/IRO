@@ -106,57 +106,33 @@ namespace IRO.Threading.AsyncLinq
         AsyncLinqContext asyncLinqContext = null
         )
         {
-            asyncLinqContext ??= AsyncLinqContext.Create();
-            var maxThreadsCount = asyncLinqContext.MaxThreadsCount;
-
-            //Because last thread run synchronously.
-            maxThreadsCount--;
-
-            var cancelToken = asyncLinqContext.CancellationToken;
-            var runCtx = new RunningTasksContext(asyncLinqContext);
-
             if (act == null)
             {
                 throw new ArgumentNullException(nameof(act));
             }
+            asyncLinqContext ??= AsyncLinqContext.Create();
+            var cancelToken = asyncLinqContext.CancellationToken;           
             var position = 0;
+            var taskPool = asyncLinqContext.TaskPool;
+            var tasksList = new List<Task>();
+
             foreach (var item in @this)
             {
                 var positionLocal = position;
                 position++;
                 cancelToken.ThrowIfCancellationRequested();
 
-                if (runCtx.GetGlobalCount() >= maxThreadsCount)
+                var newTask=taskPool.Run<object>(async () =>
                 {
-                    await act(item, positionLocal).ConfigureAwait(false);
-                }
-                else
-                {
-
-                    Task newTask = null;
-                    newTask = new Task(async () =>
-                    {
-                        try
-                        {
-                            await act(item, positionLocal);
-                        }
-                        finally
-                        {
-                            runCtx.Remove(newTask);
-                        }
-                    }, cancelToken);
-
-                    newTask.Start();
-                    runCtx.Add(newTask);
-                }
+                    await act(item, positionLocal);
+                    return null;
+                }, cancelToken);
+                tasksList.Add(newTask);
             }
 
-            var taskToWait = runCtx.FirstOrDefault();
-            while (taskToWait != null)
+            foreach(var task in tasksList)
             {
-                cancelToken.ThrowIfCancellationRequested();
-                await taskToWait.ConfigureAwait(false);
-                taskToWait = runCtx.FirstOrDefault();
+                await task.ConfigureAwait(false);
             }
         }
     }
