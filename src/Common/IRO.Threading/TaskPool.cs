@@ -35,7 +35,7 @@ namespace IRO.Threading
             }
         }
 
-        public async Task<T> Run<T>(Func<Task<T>> func, CancellationToken cancellationToken = default)
+        public Task Start<T>(Func<Task<T>> func, CancellationToken cancellationToken = default)
         {
             if (func is null)
             {
@@ -43,67 +43,37 @@ namespace IRO.Threading
             }
 
 
-            Thread threadToBeStarted = null;
-            Task<T> currentFuncTask = null;
-            Task firstTaskFromPool = null;
-            var isPoolStarving = false;
+            (Func<Task> wrapActionToStart, Task<T> newTask) = WrapToTaskCompletionSource(func, cancellationToken);
 
             //Must synchronously check and synchronously write to HashSet.
             lock (_locker)
             {
                 if (RunningTasksCount < MaxThreadsCount)
                 {
-                    (threadToBeStarted, currentFuncTask) = GenerateThreadAndTask(func, cancellationToken);
-                    Add(currentFuncTask);
+                    Add(newTask);
+                    wrapActionToStart();
                 }
                 else
                 {
-                    isPoolStarving = true;
-                    if (!_isCurrentThreadInPool.Value)
+                    if (_isCurrentThreadInPool.Value)
                     {
-                        firstTaskFromPool = TryPeekOne();
-                        (threadToBeStarted, currentFuncTask) = GenerateThreadAndTask(func, cancellationToken);
-                        Add(currentFuncTask);
-                    }
-                }
-            }
-
-            if (isPoolStarving)
-            {
-                if (_isCurrentThreadInPool.Value)
-                {
-                    //If pool is starving and current thread is already in pool.
-                    //Just run it without creating new thread.
-                    return await func().ConfigureAwait(false);
-                }
-                else
-                {
-                    //If pool is starving but current thread is not in this pool.
-                    try
-                    {
-                        if (firstTaskFromPool != null)
+                        var firstTaskFromPool = FirstOrDefault();
+                        firstTaskFromPool.ContinueWith((t) =>
                         {
-                            await firstTaskFromPool.ConfigureAwait(false);
-                        }
+                            wrapActionToStart();
+                        });
                     }
-                    catch { }
-
-                    threadToBeStarted.Start();
-                    return await currentFuncTask.ConfigureAwait(false);
+                    else
+                    {
+                        return wrapActionToStart();
+                    }
                 }
             }
-            else
-            {
-                //If pool not starving.
-                threadToBeStarted.Start();
-                return await currentFuncTask.ConfigureAwait(false);
-            }
-
-
+            return Task.FromResult<object>(null);
         }
 
 
-        (Thread ThreadToBeStarted, Task<T> NewTask) GenerateThreadAndTask<T>(Func<Task<T>> func, CancellationToken cancellationToken)
+        (Func<Task> WrapActionToStart, Task<T> NewTask) WrapToTaskCompletionSource<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<T>();
             var newTask = tcs.Task;
@@ -114,33 +84,33 @@ namespace IRO.Threading
                 Remove(newTask);
             });
 
-            var thread = new Thread(async () =>
-              {
-                  _isCurrentThreadInPool.Value = true;
-                  try
-                  {
-                      if (cancellationToken.IsCancellationRequested)
-                      {
-                          tcs.TrySetCanceled();
-                      }
-                      else
-                      {
-                          var res = await func();
-                          tcs.TrySetResult(res);
-                      }
-                  }
-                  catch (Exception ex)
-                  {
-                      tcs.TrySetException(ex);
-                  }
-                  finally
-                  {
-                      Remove(newTask);
-                      _isCurrentThreadInPool.Value = false;
-                  }
-              });
+            Func<Task> actionToStart = async () =>
+               {
+                   _isCurrentThreadInPool.Value = true;
+                   try
+                   {
+                       if (cancellationToken.IsCancellationRequested)
+                       {
+                           tcs.TrySetCanceled();
+                       }
+                       else
+                       {
+                           var res = await func();
+                           tcs.TrySetResult(res);
+                       }
+                   }
+                   catch (Exception ex)
+                   {
+                       tcs.TrySetException(ex);
+                   }
+                   finally
+                   {
+                       Remove(newTask);
+                       _isCurrentThreadInPool.Value = false;
+                   }
+               };
 
-            return (thread, newTask);
+            return (actionToStart, newTask);
         }
 
         Task FirstOrDefault()
