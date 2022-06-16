@@ -2,7 +2,7 @@
 
 namespace IRO.Common.Abstractions
 {
-    public interface IInformativeDisposable:IDisposable
+    public interface IInformativeDisposable : IDisposable
     {
         bool IsDisposed { get; }
     }

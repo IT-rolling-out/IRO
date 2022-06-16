@@ -7,6 +7,7 @@ namespace IRO.Common.Files
 {
     public static class FileHelpers
     {
+        #region Try read|write.
         public static bool TryReadAllText(string filePath, out string readedText, int tryingTimeoutSeconds = 30)
         {
             return _TryReadAllText(filePath, out readedText, tryingTimeoutSeconds, DateTime.Now);
@@ -53,5 +54,6 @@ namespace IRO.Common.Files
             }
             return false;
         }
+        #endregion
     }
 }
