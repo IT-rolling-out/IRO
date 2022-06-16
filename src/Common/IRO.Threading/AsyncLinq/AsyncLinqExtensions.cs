@@ -101,9 +101,9 @@ namespace IRO.Threading.AsyncLinq
         }
 
         public static async Task ForEachAsync<T>(
-        this IEnumerable<T> @this,
-        ForEachAsyncDelegate<T> act,
-        AsyncLinqContext asyncLinqContext = null
+            this IEnumerable<T> @this,
+            ForEachAsyncDelegate<T> act,
+            AsyncLinqContext asyncLinqContext = null
         )
         {
             if (act == null)
@@ -122,12 +122,13 @@ namespace IRO.Threading.AsyncLinq
                 position++;
                 cancelToken.ThrowIfCancellationRequested();
 
-                var newTask = taskPool.Run<object>(async () =>
+                var (startTask, runTask) = taskPool.Start<object>(async () =>
                   {
                       await act(item, positionLocal);
                       return null;
                   }, cancelToken);
-                tasksList.Add(newTask);
+                tasksList.Add(runTask);
+                await startTask;
             }
 
             foreach (var task in tasksList)

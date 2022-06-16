@@ -35,7 +35,7 @@ namespace IRO.Threading
             }
         }
 
-        public Task Start<T>(Func<Task<T>> func, CancellationToken cancellationToken = default)
+        public (Task StartTask, Task<T> RunTask) Start<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
             if (func is null)
             {
@@ -43,37 +43,39 @@ namespace IRO.Threading
             }
 
 
-            (Func<Task> wrapActionToStart, Task<T> newTask) = WrapToTaskCompletionSource(func, cancellationToken);
+            (Func<Task> wrapActionToStart, Task<T> runTask) = WrapToTaskCompletionSource(func, cancellationToken);
+            Task startTask = Task.FromResult<object>(null);
 
             //Must synchronously check and synchronously write to HashSet.
             lock (_locker)
             {
                 if (RunningTasksCount < MaxThreadsCount)
                 {
-                    Add(newTask);
-                    wrapActionToStart();
+                    Add(runTask);
+                    Task.Run(wrapActionToStart);
                 }
                 else
                 {
                     if (_isCurrentThreadInPool.Value)
                     {
                         var firstTaskFromPool = FirstOrDefault();
-                        firstTaskFromPool.ContinueWith((t) =>
+                        firstTaskFromPool.ContinueWith(async (t) =>
                         {
-                            wrapActionToStart();
+                            await wrapActionToStart();
                         });
                     }
                     else
                     {
-                        return wrapActionToStart();
+                        startTask = wrapActionToStart();
                     }
                 }
             }
-            return Task.FromResult<object>(null);
+
+            return (startTask, runTask);
         }
 
 
-        (Func<Task> WrapActionToStart, Task<T> NewTask) WrapToTaskCompletionSource<T>(Func<Task<T>> func, CancellationToken cancellationToken)
+        (Func<Task> WrapActionToStart, Task<T> RunTask) WrapToTaskCompletionSource<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<T>();
             var newTask = tcs.Task;
