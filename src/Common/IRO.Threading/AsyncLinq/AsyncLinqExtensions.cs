@@ -111,7 +111,7 @@ namespace IRO.Threading.AsyncLinq
                 throw new ArgumentNullException(nameof(act));
             }
             asyncLinqContext ??= AsyncLinqContext.Create();
-            var cancelToken = asyncLinqContext.CancellationToken;           
+            var cancelToken = asyncLinqContext.CancellationToken;
             var position = 0;
             var taskPool = asyncLinqContext.TaskPool;
             var tasksList = new List<Task>();
@@ -122,15 +122,15 @@ namespace IRO.Threading.AsyncLinq
                 position++;
                 cancelToken.ThrowIfCancellationRequested();
 
-                var newTask=taskPool.Run<object>(async () =>
-                {
-                    await act(item, positionLocal);
-                    return null;
-                }, cancelToken);
+                var newTask = taskPool.Run<object>(async () =>
+                  {
+                      await act(item, positionLocal);
+                      return null;
+                  }, cancelToken);
                 tasksList.Add(newTask);
             }
 
-            foreach(var task in tasksList)
+            foreach (var task in tasksList)
             {
                 await task.ConfigureAwait(false);
             }

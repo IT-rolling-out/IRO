@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,51 +42,64 @@ namespace IRO.Threading
                 throw new ArgumentNullException(nameof(func));
             }
 
-            while (true)
-            {
-                Thread threadToBeStarted = null;
-                Task<T> currentFuncTask = null;
-                Task firstTaskFromPool = null;
-                bool runInCurrentThread = false;
 
-                //Must synchronously check.
-                lock (_locker)
+            Thread threadToBeStarted = null;
+            Task<T> currentFuncTask = null;
+            Task firstTaskFromPool = null;
+            var isPoolStarving = false;
+
+            //Must synchronously check and synchronously write to HashSet.
+            lock (_locker)
+            {
+                if (RunningTasksCount < MaxThreadsCount)
                 {
-                    if (RunningTasksCount < MaxThreadsCount)
+                    (threadToBeStarted, currentFuncTask) = GenerateThreadAndTask(func, cancellationToken);
+                    Add(currentFuncTask);
+                }
+                else
+                {
+                    isPoolStarving = true;
+                    if (!_isCurrentThreadInPool.Value)
                     {
+                        firstTaskFromPool = TryPeekOne();
                         (threadToBeStarted, currentFuncTask) = GenerateThreadAndTask(func, cancellationToken);
                         Add(currentFuncTask);
-                        threadToBeStarted.Start();
                     }
-                    else
-                    {
-                        if (_isCurrentThreadInPool.Value)
-                        {
-                            runInCurrentThread = true;
-                        }
-                        else
-                        {
-                            firstTaskFromPool = FirstOrDefault();
-                        }
-                    }
-                }
-
-                //If pool is starving and current thread is already in pool.
-                if (runInCurrentThread)
-                {
-                    return await func().ConfigureAwait(false);
-                }
-                //If pool place free and can run current task async.
-                if (currentFuncTask != null)
-                {
-                    return await currentFuncTask.ConfigureAwait(false);
-                }
-                //If pool is starving but current thread is not in this pool.
-                if (firstTaskFromPool != null)
-                {
-                    await firstTaskFromPool.ConfigureAwait(false);
                 }
             }
+
+            if (isPoolStarving)
+            {
+                if (_isCurrentThreadInPool.Value)
+                {
+                    //If pool is starving and current thread is already in pool.
+                    //Just run it without creating new thread.
+                    return await func().ConfigureAwait(false);
+                }
+                else
+                {
+                    //If pool is starving but current thread is not in this pool.
+                    try
+                    {
+                        if (firstTaskFromPool != null)
+                        {
+                            await firstTaskFromPool.ConfigureAwait(false);
+                        }
+                    }
+                    catch { }
+
+                    threadToBeStarted.Start();
+                    return await currentFuncTask.ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                //If pool not starving.
+                threadToBeStarted.Start();
+                return await currentFuncTask.ConfigureAwait(false);
+            }
+
+
         }
 
 
@@ -136,6 +148,17 @@ namespace IRO.Threading
             lock (_locker)
             {
                 return _tasksHashSet.FirstOrDefault();
+            }
+        }
+
+        Task TryPeekOne()
+        {
+            lock (_locker)
+            {
+                var firstTask = _tasksHashSet.First();
+                _tasksHashSet.Remove(firstTask);
+                RunningTasksCount--;
+                return firstTask;
             }
         }
 
