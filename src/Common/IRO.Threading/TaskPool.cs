@@ -16,14 +16,6 @@ namespace IRO.Threading
 
         readonly HashSet<Task> _tasksHashSet = new HashSet<Task>();
 
-        readonly ThreadLocal<int> _currentThreadNestingLevel = new ThreadLocal<int>();
-        int CurrentThreadNestingLevel
-        {
-            get => _currentThreadNestingLevel.Value;
-            set => _currentThreadNestingLevel.Value = value;
-        }
-
-
 
         public int MaxThreadsCount { get; }
 
@@ -44,11 +36,6 @@ namespace IRO.Threading
                 MaxThreadsCount = (Environment.ProcessorCount > 1 ? Environment.ProcessorCount - 1 : 1);
                 //MaxThreadsCount = Environment.ProcessorCount;
             }
-        }
-
-        public bool IsCurrentThreadInPool()
-        {
-            return CurrentThreadNestingLevel > 0;
         }
 
         public Task Run(Func<Task> func, CancellationToken cancellationToken = default)
@@ -86,30 +73,17 @@ namespace IRO.Threading
             //Must synchronously check and synchronously write to HashSet.
             lock (_locker)
             {
+                Add(runTask);
+                var startedTask = Task.Run(wrapActionToStart);
                 if (IsStarving())
                 {
-                    if (IsCurrentThreadInPool())
-                    {
-                        startTask = wrapActionToStart();
-                    }
-                    else
-                    {
-                        var previousTaskFromPool = TryPeekOne();
-                        Add(runTask);
-                        previousTaskFromPool.ContinueWith(async (t) =>
-                        {
-                            await wrapActionToStart();
-                        });
-                        startTask = previousTaskFromPool;
-                    }
+                    startTask = startedTask;
                 }
                 else
                 {
-                    Add(runTask);
-                    Task.Run(wrapActionToStart);
+
                 }
             }
-
             return (startTask, runTask);
         }
 
@@ -142,7 +116,6 @@ namespace IRO.Threading
 
             Func<Task> actionToStart = async () =>
             {
-                CurrentThreadNestingLevel++;
                 try
                 {
                     //Console.WriteLine(
@@ -156,7 +129,6 @@ namespace IRO.Threading
 
 
                     var res = await func();
-                    CurrentThreadNestingLevel--;
                     Remove(newTask);
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -169,7 +141,6 @@ namespace IRO.Threading
                 }
                 catch (Exception ex)
                 {
-                    CurrentThreadNestingLevel--;
                     Remove(newTask);
                     tcs.TrySetException(ex);
                 }
