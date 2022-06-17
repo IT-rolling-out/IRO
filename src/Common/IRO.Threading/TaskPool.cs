@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NeoSmart.AsyncLock;
 
 namespace IRO.Threading
 {
@@ -10,9 +12,21 @@ namespace IRO.Threading
     {
         readonly object _locker = new object();
 
+        readonly AsyncLock _asyncLock = new AsyncLock();
+
         readonly HashSet<Task> _tasksHashSet = new HashSet<Task>();
 
-        readonly ThreadLocal<bool> _isCurrentThreadInPool = new ThreadLocal<bool>();
+        readonly ThreadLocal<int> _currentThreadNestingLevel = new ThreadLocal<int>();
+        int CurrentThreadNestingLevel
+        {
+            get => _currentThreadNestingLevel.Value;
+            set => _currentThreadNestingLevel.Value = value;
+        }
+        bool IsCurrentThreadInPool
+        {
+            get => CurrentThreadNestingLevel > 0;
+        }
+
 
         public int MaxThreadsCount { get; }
 
@@ -35,7 +49,7 @@ namespace IRO.Threading
             }
         }
 
-        public async Task<T> Run<T>(Func<Task<T>> func, CancellationToken cancellationToken = default)
+        public (Task StartTask, Task<T> RunTask) Start<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
             if (func is null)
             {
@@ -43,67 +57,60 @@ namespace IRO.Threading
             }
 
 
-            Thread threadToBeStarted = null;
-            Task<T> currentFuncTask = null;
-            Task firstTaskFromPool = null;
-            var isPoolStarving = false;
+            (var wrapActionToStart, var runTask) = WrapToTaskCompletionSource(func, cancellationToken);
+            Task startTask;
 
             //Must synchronously check and synchronously write to HashSet.
             lock (_locker)
             {
-                if (RunningTasksCount < MaxThreadsCount)
+                if (IsStarving())
                 {
-                    (threadToBeStarted, currentFuncTask) = GenerateThreadAndTask(func, cancellationToken);
-                    Add(currentFuncTask);
-                }
-                else
-                {
-                    isPoolStarving = true;
-                    if (!_isCurrentThreadInPool.Value)
+                    if (IsCurrentThreadInPool)
                     {
-                        firstTaskFromPool = TryPeekOne();
-                        (threadToBeStarted, currentFuncTask) = GenerateThreadAndTask(func, cancellationToken);
-                        Add(currentFuncTask);
+                        startTask = wrapActionToStart();
+                        //startTask = Task.FromResult<object>(null);
                     }
-                }
-            }
-
-            if (isPoolStarving)
-            {
-                if (_isCurrentThreadInPool.Value)
-                {
-                    //If pool is starving and current thread is already in pool.
-                    //Just run it without creating new thread.
-                    return await func().ConfigureAwait(false);
-                }
-                else
-                {
-                    //If pool is starving but current thread is not in this pool.
-                    try
+                    else
                     {
-                        if (firstTaskFromPool != null)
+                        var previousTaskFromPool = TryPeekOne();
+                        Add(runTask);
+                        previousTaskFromPool.ContinueWith(async (t) =>
                         {
-                            await firstTaskFromPool.ConfigureAwait(false);
-                        }
+                            await wrapActionToStart();
+                        });
+                        startTask = previousTaskFromPool;
                     }
-                    catch { }
-
-                    threadToBeStarted.Start();
-                    return await currentFuncTask.ConfigureAwait(false);
+                }
+                else
+                {
+                    Add(runTask);
+                    Task.Run(wrapActionToStart);
+                    startTask = Task.FromResult<object>(null);
                 }
             }
-            else
-            {
-                //If pool not starving.
-                threadToBeStarted.Start();
-                return await currentFuncTask.ConfigureAwait(false);
-            }
+
+            return (startTask, runTask);
         }
 
+        //public async Task WaitWhilePoolStarving()
+        //{
+        //    Task taskToWait = null;
+        //    lock (_locker)
+        //    {
+        //        if (IsStarving() && !IsCurrentThreadInPool)
+        //        {
+        //            taskToWait = FirstOrDefault();
+        //        }
+        //    }
+        //    if (taskToWait != null)
+        //        await taskToWait;
+        //}
 
-        (Thread ThreadToBeStarted, Task<T> NewTask) GenerateThreadAndTask<T>(Func<Task<T>> func, CancellationToken cancellationToken)
+        bool IsStarving() => RunningTasksCount >= MaxThreadsCount;
+
+        (Func<Task> WrapActionToStart, Task<T> RunTask) WrapToTaskCompletionSource<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<T>();
+            var tcs = new TaskCompletionSource<T>(TaskContinuationOptions.ExecuteSynchronously);
             var newTask = tcs.Task;
 
             cancellationToken.Register(() =>
@@ -112,11 +119,19 @@ namespace IRO.Threading
                 Remove(newTask);
             });
 
-            var thread = new Thread(async () =>
+            Func<Task> actionToStart = async () =>
             {
-                _isCurrentThreadInPool.Value = true;
+                CurrentThreadNestingLevel++;
                 try
                 {
+                    Console.WriteLine(
+                        $"---{{\n" +
+                        //$"Thread id: {Thread.CurrentThread.ManagedThreadId}\n" +
+                        //$"Task id: {Task.CurrentId}\n" +
+                        //$"Delegate name: '{func.Method.Name}'\n" +
+                        $"Nesting: {CurrentThreadNestingLevel}\n" +
+                        $"}}---"
+                        );
                     if (cancellationToken.IsCancellationRequested)
                     {
                         tcs.TrySetCanceled();
@@ -124,38 +139,30 @@ namespace IRO.Threading
                     else
                     {
                         var res = await func();
+                        CurrentThreadNestingLevel--;
+                        Remove(newTask);
                         tcs.TrySetResult(res);
                     }
                 }
                 catch (Exception ex)
                 {
+                    CurrentThreadNestingLevel--;
+                    Remove(newTask);
                     tcs.TrySetException(ex);
                 }
-                finally
-                {
-                    Remove(newTask);
-                    _isCurrentThreadInPool.Value = false;
-                }
-            });
+            };
 
-            return (thread, newTask);
+            return (actionToStart, newTask);
         }
 
-        Task FirstOrDefault()
-        {
-            lock (_locker)
-            {
-                return _tasksHashSet.FirstOrDefault();
-            }
-        }
 
         Task TryPeekOne()
         {
             lock (_locker)
             {
                 var firstTask = _tasksHashSet.First();
-                _tasksHashSet.Remove(firstTask);
-                RunningTasksCount--;
+                if (_tasksHashSet.Remove(firstTask))
+                    RunningTasksCount--;
                 return firstTask;
             }
         }
@@ -164,8 +171,8 @@ namespace IRO.Threading
         {
             lock (_locker)
             {
-                _tasksHashSet.Remove(t);
-                RunningTasksCount--;
+                if (_tasksHashSet.Remove(t))
+                    RunningTasksCount--;
             }
         }
 

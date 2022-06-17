@@ -152,7 +152,7 @@ namespace IRO.UnitTests.Common
                     {
                         lock (locker)
                             ThreadsCount++;
-                        await Task.Delay(50);
+                        //await Task.Delay(50);
                         lock (locker)
                             elementsSum2 += item;
                         lock (locker)
@@ -160,9 +160,9 @@ namespace IRO.UnitTests.Common
 
                         twoDLevelCounter++;
                     }, context);
-                    await Task.Delay(5);
+                    //await Task.Delay(5);
                 }, context);
-                await Task.Delay(5);
+                //await Task.Delay(5);
 
                 //100 means that all iterations throuh threeD[i] completed
                 Assert.AreEqual(100, twoDLevelCounter);
