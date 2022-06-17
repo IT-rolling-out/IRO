@@ -22,10 +22,7 @@ namespace IRO.Threading
             get => _currentThreadNestingLevel.Value;
             set => _currentThreadNestingLevel.Value = value;
         }
-        bool IsCurrentThreadInPool
-        {
-            get => CurrentThreadNestingLevel > 0;
-        }
+
 
 
         public int MaxThreadsCount { get; }
@@ -49,7 +46,33 @@ namespace IRO.Threading
             }
         }
 
-        public (Task StartTask, Task<T> RunTask) Start<T>(Func<Task<T>> func, CancellationToken cancellationToken)
+        public bool IsCurrentThreadInPool()
+        {
+            return CurrentThreadNestingLevel > 0;
+        }
+
+        public Task Run(Func<Task> func, CancellationToken cancellationToken = default)
+        {
+            Func<Task<bool>> funcWithRes = async () =>
+             {
+                 await func();
+                 return false;
+             };
+            var (startTask, runTask) = Start(funcWithRes, cancellationToken);
+            if (startTask != null)
+                startTask.Wait();
+            return runTask;
+        }
+
+        public Task<T> Run<T>(Func<Task<T>> func, CancellationToken cancellationToken = default)
+        {
+            var (startTask, runTask) = Start(func, cancellationToken);
+            if (startTask != null)
+                startTask.Wait();
+            return runTask;
+        }
+
+        (Task StartTask, Task<T> RunTask) Start<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
             if (func is null)
             {
@@ -58,17 +81,16 @@ namespace IRO.Threading
 
 
             (var wrapActionToStart, var runTask) = WrapToTaskCompletionSource(func, cancellationToken);
-            Task startTask;
+            Task startTask = null;
 
             //Must synchronously check and synchronously write to HashSet.
             lock (_locker)
             {
                 if (IsStarving())
                 {
-                    if (IsCurrentThreadInPool)
+                    if (IsCurrentThreadInPool())
                     {
                         startTask = wrapActionToStart();
-                        //startTask = Task.FromResult<object>(null);
                     }
                     else
                     {
@@ -85,7 +107,6 @@ namespace IRO.Threading
                 {
                     Add(runTask);
                     Task.Run(wrapActionToStart);
-                    startTask = Task.FromResult<object>(null);
                 }
             }
 
@@ -124,23 +145,25 @@ namespace IRO.Threading
                 CurrentThreadNestingLevel++;
                 try
                 {
-                    Console.WriteLine(
-                        $"---{{\n" +
-                        //$"Thread id: {Thread.CurrentThread.ManagedThreadId}\n" +
-                        //$"Task id: {Task.CurrentId}\n" +
-                        //$"Delegate name: '{func.Method.Name}'\n" +
-                        $"Nesting: {CurrentThreadNestingLevel}\n" +
-                        $"}}---"
-                        );
+                    //Console.WriteLine(
+                    //            $"---{{\n" +
+                    //            $"Thread id: {Thread.CurrentThread.ManagedThreadId}\n" +
+                    //            $"Task id: {Task.CurrentId}\n" +
+                    //            $"Delegate name: '{func.Method.Name}'\n" +
+                    //            $"Nesting: {CurrentThreadNestingLevel}\n"
+                    //            $"}}---"
+                    //    );
+
+
+                    var res = await func();
+                    CurrentThreadNestingLevel--;
+                    Remove(newTask);
                     if (cancellationToken.IsCancellationRequested)
                     {
                         tcs.TrySetCanceled();
                     }
                     else
                     {
-                        var res = await func();
-                        CurrentThreadNestingLevel--;
-                        Remove(newTask);
                         tcs.TrySetResult(res);
                     }
                 }
@@ -154,7 +177,6 @@ namespace IRO.Threading
 
             return (actionToStart, newTask);
         }
-
 
         Task TryPeekOne()
         {

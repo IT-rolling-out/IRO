@@ -122,12 +122,11 @@ namespace IRO.Threading.AsyncLinq
                 position++;
                 cancelToken.ThrowIfCancellationRequested();
 
-                var (startTask, runTask) = taskPool.Start<object>(async () =>
+                var runTask = taskPool.Run<object>(async () =>
                   {
                       await act(item, positionLocal);
                       return null;
                   }, cancelToken);
-                await startTask;
                 tasksList.Add(runTask);
             }
 
