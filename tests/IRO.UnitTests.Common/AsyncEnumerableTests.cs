@@ -12,6 +12,13 @@ namespace IRO.UnitTests.Common
 
     internal class AsyncEnumerableTests
     {
+        ThreadsCounter _threadsCounter;
+
+        [SetUp]
+        public void Init()
+        {
+            _threadsCounter = new ThreadsCounter();
+        }
 
 
         [Test]
@@ -23,24 +30,25 @@ namespace IRO.UnitTests.Common
             {
                 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
             };
-            var threadsCounter = new ThreadsCounter();
             int counter = 0;
             var locker = new object();
+            int expectedThreadsCount = 5;
 
             await list.ForEachAsync(async (item, position) =>
             {
-                threadsCounter.ThreadStart();
-                await Task.Delay(100);
+                _threadsCounter.ThreadStart();
+                await HardWait.Delay(100);
                 Assert.AreEqual(item, position);
                 lock (locker)
                     counter++;
                 Console.WriteLine($"Item: {item}, position: {position}");
-                threadsCounter.ThreadEnd();
-            }, AsyncLinqContext.Create(maxThreadsCount: 5));
+                _threadsCounter.ThreadEnd();
+            }, AsyncLinqContext.Create(expectedThreadsCount));
 
             Console.WriteLine("Async foreach finished.");
-            threadsCounter.PrintMsg();
+            _threadsCounter.PrintMsg();
             Assert.AreEqual(20, counter);
+            Assert.AreEqual(expectedThreadsCount, _threadsCounter.MaxThreadsCount);
         }
 
 
@@ -122,11 +130,10 @@ namespace IRO.UnitTests.Common
                 }
             }
 
-
-            var threadsCounter = new ThreadsCounter();
             var locker = new object();
             var context = AsyncLinqContext.Create(20);
             var elementsSum2 = 0;
+            int expectedThreadsCount = 20;
 
             await threeD.ForEachAsync(async (twoD, position) =>
             {
@@ -135,23 +142,24 @@ namespace IRO.UnitTests.Common
                 {
                     await oneD.ForEachAsync(async (item, position) =>
                     {
-                        threadsCounter.ThreadStart();
-                        //await Task.Delay(50);
+                        _threadsCounter.ThreadStart();
+                        await HardWait.Delay(50);
                         lock (locker)
                             elementsSum2 += item;
-                        threadsCounter.ThreadEnd();
-
+                        _threadsCounter.ThreadEnd();
+                        lock (locker)
                             twoDLevelCounter++;
                     }, context);
-                    //await Task.Delay(5);
+                    await HardWait.Delay(5);
                 }, context);
-                //await Task.Delay(5);
+                await HardWait.Delay(5);
 
                 //100 means that all iterations throuh threeD[i] completed
                 Assert.AreEqual(100, twoDLevelCounter);
             }, context);
-            threadsCounter.PrintMsg();
+            _threadsCounter.PrintMsg();
             Assert.AreEqual(5000, elementsSum2);
+            Assert.AreEqual(expectedThreadsCount, _threadsCounter.MaxThreadsCount);
         }
     }
 }

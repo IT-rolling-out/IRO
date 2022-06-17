@@ -21,9 +21,10 @@ namespace IRO.UnitTests.Common
         public async Task Test1()
         {
             int counter = 0;
+            int expectedThreadsCount = 10;
 
             var tasksList1 = new List<Task>();
-            var taskPool = new TaskPool(1);
+            var taskPool = new TaskPool(expectedThreadsCount);
             for (var i = 0; i < 100; i++)
             {
                 var t1 = taskPool.Run(async () =>
@@ -36,19 +37,20 @@ namespace IRO.UnitTests.Common
                                  _threadsCounter.ThreadStart();
                                  lock (_threadsCounter)
                                      counter++;
-                                 await Task.Delay(2);
+                                 await HardWait.Delay(2);
                                  _threadsCounter.ThreadEnd();
 
                              });
                              tasksList2.Add(t2);
                          }
-                         //await Task.WhenAll(tasksList2);
+                         await Task.WhenAll(tasksList2);
                      });
                 tasksList1.Add(t1);
             }
             await Task.WhenAll(tasksList1);
             _threadsCounter.PrintMsg();
             Assert.AreEqual(1000, counter);
+            Assert.AreEqual(expectedThreadsCount, _threadsCounter.MaxThreadsCount);
         }
     }
 }
