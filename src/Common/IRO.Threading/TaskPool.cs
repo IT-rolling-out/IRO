@@ -1,42 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amib.Threading;
-using NeoSmart.AsyncLock;
 
 namespace IRO.Threading
 {
     public class TaskPool
     {
+        public static TaskPool Global { get; } = new TaskPool();
+
         readonly SmartThreadPool _smartThreadPool;
 
-        public int MaxThreadsCount { get; }
-
-        public TaskPool(int? maxThreadsCount = null)
+        public TaskPool(SmartThreadPool smartThreadPool = null)
         {
-            if (maxThreadsCount.HasValue)
-            {
-                if (maxThreadsCount < 1)
-                {
-                    throw new ArgumentException($"Value is '{maxThreadsCount}'. Must be bigger than 1.", nameof(maxThreadsCount));
-                }
-                MaxThreadsCount = maxThreadsCount.Value;
-            }
-            else
-            {
-                MaxThreadsCount = (Environment.ProcessorCount > 1 ? Environment.ProcessorCount - 1 : 1);
-                //MaxThreadsCount = Environment.ProcessorCount;
-            }
-
-            _smartThreadPool = new SmartThreadPool(new STPStartInfo()
-            {
-
-            });
-            _smartThreadPool.MaxThreads = MaxThreadsCount;
-
+            _smartThreadPool = smartThreadPool ?? ThreadPool.Global;
         }
 
         public Task Run(Func<Task> func, CancellationToken cancellationToken = default)
@@ -59,30 +38,15 @@ namespace IRO.Threading
             {
                 throw new ArgumentNullException(nameof(func));
             }
-            WaitWhileActiveThreadRun();
-            //Console.WriteLine($"Active: {_smartThreadPool.ActiveThreads} | InUse {_smartThreadPool.InUseThreads}");
+
             (var wrapActionToStart, var runTask) = WrapToTaskCompletionSource(func, cancellationToken);
-
-            //Must synchronously check and synchronously write to HashSet.
-            _smartThreadPool.QueueWorkItem(wrapActionToStart);
+            _smartThreadPool.QueueWorkItem(wrapActionToStart);           
             return runTask;
-        }
-
-        void WaitWhileActiveThreadRun()
-        {
-            if (_smartThreadPool.ActiveThreads >= MaxThreadsCount)
-            {
-                try
-                {
-                    _smartThreadPool.WaitForIdle();
-                }
-                catch { }
-            }
         }
 
         (Func<Task> WrapActionToStart, Task<T> RunTask) WrapToTaskCompletionSource<T>(Func<Task<T>> func, CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<T>(TaskContinuationOptions.ExecuteSynchronously);
+            var tcs = new TaskCompletionSource<T>();
             var newTask = tcs.Task;
 
             cancellationToken.Register(() =>
@@ -94,17 +58,8 @@ namespace IRO.Threading
             {
                 try
                 {
-                    //Console.WriteLine(
-                    //            $"---{{\n" +
-                    //            $"Thread id: {Thread.CurrentThread.ManagedThreadId}\n" +
-                    //            $"Task id: {Task.CurrentId}\n" +
-                    //            $"Delegate name: '{func.Method.Name}'\n" +
-                    //            $"Nesting: {CurrentThreadNestingLevel}\n"
-                    //            $"}}---"
-                    //    );
-
                     if (cancellationToken.IsCancellationRequested)
-                    {                       
+                    {
                         tcs.TrySetCanceled();
                         return;
                     }
@@ -115,7 +70,6 @@ namespace IRO.Threading
                         return;
                     }
                     tcs.TrySetResult(res);
-
                 }
                 catch (Exception ex)
                 {

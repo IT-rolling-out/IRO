@@ -1,6 +1,7 @@
 ﻿using System;
+using IRO.UnitTests.Common;
 
-namespace IRO.UnitTests.Common
+namespace IRO.UnitTests.Common.Helpers
 {
     public class ThreadsCounter
     {

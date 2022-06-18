@@ -4,56 +4,44 @@ using System.Linq;
 using System.Threading.Tasks;
 using IRO.Threading.AsyncLinq;
 using IRO.Common.Collections;
+using System.Threading;
 
 namespace IRO.Threading.AsyncLinq
 {
 
     public static class AsyncLinqExtensions
     {
-        public static async Task ForEachAsync<T>(
-            this IEnumerable<T> @this,
-            Action<T> act,
-            AsyncLinqContext asyncLinqContext = null
-            )
-        {
-            await @this.ForEachAsync((item, position) =>
-            {
-                act(item);
-                return Task.FromResult<object>(null);
-            }, asyncLinqContext);
-        }
-
         public static async Task<IEnumerable<R>> SelectAsync<T, R>(
             this IEnumerable<T> @this,
             Func<T, R> act,
-            AsyncLinqContext asyncLinqContext = null
+            CancellationToken cancellationToken = default
             )
         {
             return await @this.SelectAsync((item, position) =>
             {
                 var res = act(item);
                 return Task.FromResult<R>(res);
-            }, asyncLinqContext);
+            }, cancellationToken);
         }
 
         public static async Task<IEnumerable<T>> WhereAsync<T>(
             this IEnumerable<T> @this,
             Func<T, bool> act,
-            AsyncLinqContext asyncLinqContext = null
+            CancellationToken cancellationToken = default
             )
         {
             return await @this.WhereAsync((item, position) =>
             {
                 var isInclude = act(item);
                 return Task.FromResult<bool>(isInclude);
-            }, asyncLinqContext);
+            }, cancellationToken);
         }
 
 
         public static async Task<IEnumerable<T>> WhereAsync<T>(
             this IEnumerable<T> @this,
             WhereAsyncDelegate<T> act,
-            AsyncLinqContext asyncLinqContext = null
+            CancellationToken cancellationToken = default
             )
         {
             if (act == null)
@@ -69,7 +57,7 @@ namespace IRO.Threading.AsyncLinq
                     IsIncluded = isIncluded,
                     Item = item
                 };
-            }, asyncLinqContext);
+            }, cancellationToken);
 
             var resEnum = intermediateList
                 .Where(r => r.IsIncluded)
@@ -80,7 +68,7 @@ namespace IRO.Threading.AsyncLinq
         public static async Task<IEnumerable<R>> SelectAsync<T, R>(
             this IEnumerable<T> @this,
             SelectAsyncDelegate<T, R> act,
-            AsyncLinqContext asyncLinqContext = null
+            CancellationToken cancellationToken = default
             )
         {
             if (act == null)
@@ -96,37 +84,45 @@ namespace IRO.Threading.AsyncLinq
                 {
                     resArray[position] = selectedRes;
                 }
-            }, asyncLinqContext);
+            }, cancellationToken);
             return resArray;
         }
 
         public static async Task ForEachAsync<T>(
             this IEnumerable<T> @this,
+            Func<T, Task> act,
+            CancellationToken cancellationToken = default
+        )
+        {
+            await @this.ForEachAsync(async (item, position) =>
+            {
+                await act(item);
+            }, cancellationToken);
+        }
+
+        public static async Task ForEachAsync<T>(
+            this IEnumerable<T> @this,
             ForEachAsyncDelegate<T> act,
-            AsyncLinqContext asyncLinqContext = null
+            CancellationToken cancellationToken = default
         )
         {
             if (act == null)
             {
                 throw new ArgumentNullException(nameof(act));
             }
-            asyncLinqContext ??= AsyncLinqContext.Create();
-            var cancelToken = asyncLinqContext.CancellationToken;
-            var position = 0;
-            var taskPool = asyncLinqContext.TaskPool;
             var tasksList = new List<Task>();
+            var position = 0;
 
             foreach (var item in @this)
             {
                 var positionLocal = position;
                 position++;
-                cancelToken.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                var runTask = taskPool.Run<object>(async () =>
-                  {
-                      await act(item, positionLocal);
-                      return null;
-                  }, cancelToken);
+                var runTask = TaskPool.Global.Run(async () =>
+                {
+                    await act(item, positionLocal);
+                }, cancellationToken);
                 tasksList.Add(runTask);
             }
 

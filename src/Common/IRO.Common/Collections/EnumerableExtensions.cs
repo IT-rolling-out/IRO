@@ -5,8 +5,37 @@ using System.Text;
 
 namespace IRO.Common.Collections
 {
+
     public static class EnumerableExtensions
     {
+        public static void ForEach<T>(this IEnumerable<T> enumerable, ForEachDelegate<T> act)
+        {
+            if (act is null)
+            {
+                throw new ArgumentNullException(nameof(act));
+            }
+            var position = 0;
+            foreach (var item in enumerable)
+            {
+                act(item);
+                position++;
+            }
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> enumerable, ForEachWithPosDelegate<T> act)
+        {
+            if (act is null)
+            {
+                throw new ArgumentNullException(nameof(act));
+            }
+            var position = 0;
+            foreach (var item in enumerable)
+            {
+                act(item, position);
+                position++;
+            }
+        }
+
         /// <summary>
         /// If collection has 'Count' property - return it. Otherwise use 'Count()'. 
         /// </summary>
